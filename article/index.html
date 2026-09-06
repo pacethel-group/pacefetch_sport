@@ -1,0 +1,3157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <!-- =====================================================
+       SEO — UPDATED DYNAMICALLY BY JAVASCRIPT
+  ====================================================== -->
+
+  <title>PaceFetch Football News</title>
+
+  <meta
+    name="description"
+    id="metaDescription"
+    content="Latest football news, transfers, predictions and updates from PaceFetch."
+  >
+
+  <meta
+    name="robots"
+    content="index, follow, max-image-preview:large"
+  >
+
+  <link
+    rel="canonical"
+    id="canonicalLink"
+    href="https://pacefetch.com/article/"
+  >
+
+
+  <!-- OPEN GRAPH -->
+
+  <meta
+    property="og:type"
+    content="article"
+  >
+
+  <meta
+    property="og:title"
+    id="ogTitle"
+    content="PaceFetch Football News"
+  >
+
+  <meta
+    property="og:description"
+    id="ogDescription"
+    content="Latest football news from PaceFetch."
+  >
+
+  <meta
+    property="og:url"
+    id="ogUrl"
+    content="https://pacefetch.com/article/"
+  >
+
+  <meta
+    property="og:site_name"
+    content="PaceFetch"
+  >
+
+  <meta
+    property="og:image"
+    id="ogImage"
+    content="https://pacefetch.com/assets/pacefetch-share.jpg"
+  >
+
+
+  <!-- TWITTER -->
+
+  <meta
+    name="twitter:card"
+    content="summary_large_image"
+  >
+
+  <meta
+    name="twitter:title"
+    id="twitterTitle"
+    content="PaceFetch Football News"
+  >
+
+  <meta
+    name="twitter:description"
+    id="twitterDescription"
+    content="Latest football news from PaceFetch."
+  >
+
+  <meta
+    name="twitter:image"
+    id="twitterImage"
+    content="https://pacefetch.com/assets/pacefetch-share.jpg"
+  >
+
+
+  <meta
+    name="theme-color"
+    content="#071c17"
+  >
+
+
+  <style>
+
+    /* =====================================================
+       PACEFETCH ARTICLE PAGE
+    ===================================================== */
+
+    :root {
+
+      --green: #087f5b;
+      --green-dark: #056044;
+      --green-light: #e9f7f2;
+
+      --black: #071c17;
+      --black-2: #0d2b23;
+
+      --white: #ffffff;
+
+      --text: #111827;
+      --muted: #6b7280;
+
+      --border: #e6ebe9;
+
+      --background: #f5f7f6;
+
+      --red: #dc2626;
+
+      --radius: 18px;
+
+      --shadow:
+        0 10px 35px rgba(0,0,0,.06);
+
+    }
+
+
+    * {
+
+      margin: 0;
+      padding: 0;
+
+      box-sizing: border-box;
+
+    }
+
+
+    html {
+
+      scroll-behavior: smooth;
+
+    }
+
+
+    body {
+
+      background: var(--background);
+
+      color: var(--text);
+
+      font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+      line-height: 1.6;
+
+      overflow-x: hidden;
+
+    }
+
+
+    a {
+
+      color: inherit;
+
+      text-decoration: none;
+
+    }
+
+
+    button {
+
+      font: inherit;
+
+      cursor: pointer;
+
+    }
+
+
+    /* =====================================================
+       HEADER
+    ===================================================== */
+
+    .site-header {
+
+      position: sticky;
+
+      top: 0;
+
+      z-index: 1000;
+
+      height: 70px;
+
+      background:
+        rgba(7,28,23,.97);
+
+      color: white;
+
+      border-bottom:
+        1px solid rgba(255,255,255,.07);
+
+      backdrop-filter: blur(12px);
+
+    }
+
+
+    .header-inner {
+
+      max-width: 1180px;
+
+      height: 100%;
+
+      margin: auto;
+
+      padding: 0 18px;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-between;
+
+      gap: 15px;
+
+    }
+
+
+    .logo {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 10px;
+
+      flex-shrink: 0;
+
+    }
+
+
+    .logo-mark {
+
+      width: 42px;
+
+      height: 42px;
+
+      border-radius: 13px;
+
+      display: grid;
+
+      place-items: center;
+
+      font-size: 20px;
+
+      font-weight: 950;
+
+      background:
+        linear-gradient(
+          135deg,
+          #0bb67c,
+          #056044
+        );
+
+    }
+
+
+    .logo-name {
+
+      font-size: 20px;
+
+      font-weight: 900;
+
+      letter-spacing: -.5px;
+
+    }
+
+
+    .logo-tag {
+
+      display: block;
+
+      font-size: 8px;
+
+      color: #89a59c;
+
+      text-transform: uppercase;
+
+      letter-spacing: 1px;
+
+      margin-top: -3px;
+
+    }
+
+
+    .desktop-nav {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 4px;
+
+    }
+
+
+    .desktop-nav a {
+
+      padding: 8px 11px;
+
+      border-radius: 8px;
+
+      color: #bdd0ca;
+
+      font-size: 12px;
+
+      font-weight: 650;
+
+      transition: .2s;
+
+    }
+
+
+    .desktop-nav a:hover {
+
+      background:
+        rgba(255,255,255,.08);
+
+      color: white;
+
+    }
+
+
+    .header-actions {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 8px;
+
+    }
+
+
+    .clock {
+
+      padding: 6px 9px;
+
+      border:
+        1px solid rgba(255,255,255,.1);
+
+      border-radius: 8px;
+
+      text-align: right;
+
+      white-space: nowrap;
+
+    }
+
+
+    .clock strong {
+
+      display: block;
+
+      font-size: 10px;
+
+    }
+
+
+    .clock span {
+
+      display: block;
+
+      color: #7e9990;
+
+      font-size: 8px;
+
+    }
+
+
+    .search-button {
+
+      width: 41px;
+
+      height: 41px;
+
+      border:
+        1px solid rgba(255,255,255,.1);
+
+      border-radius: 11px;
+
+      background:
+        rgba(255,255,255,.06);
+
+      color: white;
+
+      display: grid;
+
+      place-items: center;
+
+      transition: .2s;
+
+    }
+
+
+    .search-button:hover {
+
+      background: var(--green);
+
+    }
+
+
+    .search-icon {
+
+      width: 18px;
+
+      height: 18px;
+
+      fill: none;
+
+      stroke: currentColor;
+
+      stroke-width: 2;
+
+      stroke-linecap: round;
+
+    }
+
+
+    /* =====================================================
+       BREADCRUMBS
+    ===================================================== */
+
+    .breadcrumbs {
+
+      max-width: 1180px;
+
+      margin: auto;
+
+      padding:
+        20px 18px 10px;
+
+      color: var(--muted);
+
+      font-size: 11px;
+
+    }
+
+
+    .breadcrumbs a {
+
+      color: var(--green);
+
+      font-weight: 700;
+
+    }
+
+
+    .breadcrumbs span {
+
+      margin: 0 6px;
+
+      color: #aeb7b4;
+
+    }
+
+
+    /* =====================================================
+       PAGE LAYOUT
+    ===================================================== */
+
+    .page-container {
+
+      max-width: 1180px;
+
+      margin: auto;
+
+      padding:
+        10px 18px 50px;
+
+      display: grid;
+
+      grid-template-columns:
+        minmax(0, 1fr)
+        320px;
+
+      gap: 25px;
+
+      align-items: start;
+
+    }
+
+
+    /* =====================================================
+       ARTICLE
+    ===================================================== */
+
+    .article-card {
+
+      background: white;
+
+      border:
+        1px solid var(--border);
+
+      border-radius: var(--radius);
+
+      overflow: hidden;
+
+      box-shadow: var(--shadow);
+
+    }
+
+
+    .article-header {
+
+      padding:
+        30px 34px 22px;
+
+    }
+
+
+    .category {
+
+      display: inline-flex;
+
+      padding:
+        6px 9px;
+
+      background: var(--green-light);
+
+      color: var(--green);
+
+      border-radius: 7px;
+
+      font-size: 9px;
+
+      font-weight: 900;
+
+      text-transform: uppercase;
+
+      letter-spacing: .4px;
+
+      margin-bottom: 14px;
+
+    }
+
+
+    .article-title {
+
+      font-size:
+        clamp(30px, 4vw, 48px);
+
+      line-height: 1.08;
+
+      letter-spacing: -1.8px;
+
+      font-weight: 900;
+
+      color: #101916;
+
+    }
+
+
+    .article-subtitle {
+
+      color: var(--muted);
+
+      font-size: 15px;
+
+      line-height: 1.6;
+
+      margin-top: 14px;
+
+      max-width: 850px;
+
+    }
+
+
+    .article-meta {
+
+      display: flex;
+
+      flex-wrap: wrap;
+
+      align-items: center;
+
+      gap: 9px;
+
+      margin-top: 19px;
+
+      color: var(--muted);
+
+      font-size: 10px;
+
+    }
+
+
+    .meta-divider {
+
+      color: #c5cdca;
+
+    }
+
+
+    .author {
+
+      color: var(--green);
+
+      font-weight: 800;
+
+    }
+
+
+    /* =====================================================
+       ARTICLE HERO
+    ===================================================== */
+
+    .article-image {
+
+      height: 360px;
+
+      margin: 0 22px;
+
+      border-radius: 15px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #123e31,
+          #087f5b
+        );
+
+      display: grid;
+
+      place-items: center;
+
+      overflow: hidden;
+
+      position: relative;
+
+    }
+
+
+    .article-image::before {
+
+      content: "";
+
+      position: absolute;
+
+      width: 430px;
+
+      height: 430px;
+
+      border-radius: 50%;
+
+      background:
+        rgba(255,255,255,.045);
+
+      right: -130px;
+
+      top: -160px;
+
+    }
+
+
+    .article-image::after {
+
+      content: "";
+
+      position: absolute;
+
+      width: 250px;
+
+      height: 250px;
+
+      border-radius: 50%;
+
+      border:
+        1px solid rgba(255,255,255,.08);
+
+      left: -100px;
+
+      bottom: -100px;
+
+    }
+
+
+    .article-image-content {
+
+      position: relative;
+
+      z-index: 2;
+
+      text-align: center;
+
+      color: white;
+
+    }
+
+
+    .football-symbol {
+
+      font-size: 85px;
+
+      opacity: .9;
+
+      margin-bottom: 5px;
+
+    }
+
+
+    .image-label {
+
+      font-size: 11px;
+
+      color: #b8d8ce;
+
+      text-transform: uppercase;
+
+      letter-spacing: 2px;
+
+      font-weight: 800;
+
+    }
+
+
+    /* =====================================================
+       ARTICLE BODY
+    ===================================================== */
+
+    .article-body {
+
+      padding:
+        28px 34px 35px;
+
+    }
+
+
+    .article-body p {
+
+      font-size: 16px;
+
+      line-height: 1.85;
+
+      color: #293530;
+
+      margin-bottom: 19px;
+
+    }
+
+
+    .article-body h2 {
+
+      font-size: 23px;
+
+      line-height: 1.25;
+
+      margin:
+        30px 0 12px;
+
+      color: #10211b;
+
+    }
+
+
+    .article-body h3 {
+
+      font-size: 18px;
+
+      margin:
+        25px 0 10px;
+
+    }
+
+
+    .article-body ul {
+
+      padding-left: 22px;
+
+      margin:
+        15px 0 22px;
+
+    }
+
+
+    .article-body li {
+
+      margin-bottom: 9px;
+
+      color: #35413d;
+
+    }
+
+
+    .article-body blockquote {
+
+      margin:
+        25px 0;
+
+      padding:
+        17px 20px;
+
+      border-left:
+        4px solid var(--green);
+
+      background: var(--green-light);
+
+      border-radius:
+        0 11px 11px 0;
+
+      color: #245044;
+
+      font-weight: 650;
+
+    }
+
+
+    /* =====================================================
+       ARTICLE FOOTER
+    ===================================================== */
+
+    .article-footer {
+
+      border-top:
+        1px solid var(--border);
+
+      padding:
+        22px 34px;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-between;
+
+      gap: 15px;
+
+    }
+
+
+    .source {
+
+      color: var(--muted);
+
+      font-size: 10px;
+
+    }
+
+
+    .share-buttons {
+
+      display: flex;
+
+      gap: 7px;
+
+    }
+
+
+    .share-button {
+
+      width: 35px;
+
+      height: 35px;
+
+      border:
+        1px solid var(--border);
+
+      border-radius: 9px;
+
+      background: white;
+
+      display: grid;
+
+      place-items: center;
+
+      color: var(--green);
+
+      font-size: 13px;
+
+      font-weight: 850;
+
+    }
+
+
+    .share-button:hover {
+
+      background: var(--green-light);
+
+    }
+
+
+    /* =====================================================
+       SIDEBAR
+    ===================================================== */
+
+    .sidebar-card {
+
+      background: white;
+
+      border:
+        1px solid var(--border);
+
+      border-radius: var(--radius);
+
+      padding: 20px;
+
+      margin-bottom: 17px;
+
+      box-shadow: var(--shadow);
+
+    }
+
+
+    .sidebar-heading {
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-between;
+
+      margin-bottom: 13px;
+
+    }
+
+
+    .sidebar-heading h3 {
+
+      font-size: 15px;
+
+    }
+
+
+    .sidebar-heading a {
+
+      color: var(--green);
+
+      font-size: 10px;
+
+      font-weight: 800;
+
+    }
+
+
+    /* RELATED */
+
+    .related-story {
+
+      display: flex;
+
+      gap: 10px;
+
+      padding:
+        12px 0;
+
+      border-bottom:
+        1px solid #eef1ef;
+
+    }
+
+
+    .related-story:last-child {
+
+      border-bottom: 0;
+
+      padding-bottom: 0;
+
+    }
+
+
+    .related-thumb {
+
+      width: 60px;
+
+      height: 54px;
+
+      border-radius: 9px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #e7f1ed,
+          #cddfd8
+        );
+
+      display: grid;
+
+      place-items: center;
+
+      flex-shrink: 0;
+
+      font-size: 19px;
+
+    }
+
+
+    .related-story h4 {
+
+      font-size: 11px;
+
+      line-height: 1.35;
+
+    }
+
+
+    .related-story p {
+
+      color: var(--muted);
+
+      font-size: 8px;
+
+      margin-top: 4px;
+
+    }
+
+
+    /* TRENDING */
+
+    .trending-number {
+
+      width: 25px;
+
+      height: 25px;
+
+      border-radius: 7px;
+
+      background: var(--green-light);
+
+      color: var(--green);
+
+      display: grid;
+
+      place-items: center;
+
+      font-weight: 900;
+
+      font-size: 10px;
+
+      flex-shrink: 0;
+
+    }
+
+
+    .trending-item {
+
+      display: flex;
+
+      align-items: flex-start;
+
+      gap: 10px;
+
+      padding:
+        11px 0;
+
+      border-bottom:
+        1px solid #eef1ef;
+
+    }
+
+
+    .trending-item:last-child {
+
+      border-bottom: 0;
+
+    }
+
+
+    .trending-item h4 {
+
+      font-size: 11px;
+
+      line-height: 1.4;
+
+    }
+
+
+    /* PREDICTION CARD */
+
+    .prediction-card {
+
+      background:
+        linear-gradient(
+          135deg,
+          #087f5b,
+          #075b45
+        );
+
+      color: white;
+
+      border-radius: 15px;
+
+      padding: 20px;
+
+    }
+
+
+    .prediction-card small {
+
+      color: #b5d8cc;
+
+      font-size: 9px;
+
+    }
+
+
+    .prediction-card h3 {
+
+      font-size: 20px;
+
+      margin-top: 5px;
+
+    }
+
+
+    .prediction-card p {
+
+      color: #b5d8cc;
+
+      font-size: 10px;
+
+      margin-top: 5px;
+
+    }
+
+
+    .prediction-button {
+
+      display: block;
+
+      margin-top: 15px;
+
+      text-align: center;
+
+      padding: 10px;
+
+      border-radius: 9px;
+
+      background: white;
+
+      color: var(--green);
+
+      font-size: 11px;
+
+      font-weight: 850;
+
+    }
+
+
+    /* =====================================================
+       NEWSLETTER / CTA
+    ===================================================== */
+
+    .cta {
+
+      background: var(--black);
+
+      color: white;
+
+      border-radius: 17px;
+
+      padding: 23px;
+
+    }
+
+
+    .cta h3 {
+
+      font-size: 17px;
+
+    }
+
+
+    .cta p {
+
+      color: #8ca79e;
+
+      font-size: 10px;
+
+      margin-top: 6px;
+
+    }
+
+
+    .cta a {
+
+      display: block;
+
+      margin-top: 14px;
+
+      text-align: center;
+
+      background: var(--green);
+
+      padding: 10px;
+
+      border-radius: 9px;
+
+      font-size: 10px;
+
+      font-weight: 800;
+
+    }
+
+
+    /* =====================================================
+       FOOTER
+    ===================================================== */
+
+    .site-footer {
+
+      background: var(--black);
+
+      color: white;
+
+      text-align: center;
+
+      padding:
+        45px 20px 80px;
+
+    }
+
+
+    .footer-logo {
+
+      font-size: 20px;
+
+      font-weight: 900;
+
+    }
+
+
+    .footer-description {
+
+      max-width: 470px;
+
+      margin:
+        8px auto 22px;
+
+      color: #809991;
+
+      font-size: 10px;
+
+    }
+
+
+    .footer-links {
+
+      display: flex;
+
+      justify-content: center;
+
+      flex-wrap: wrap;
+
+      gap: 17px;
+
+      margin-bottom: 27px;
+
+    }
+
+
+    .footer-links a {
+
+      color: #a3b9b2;
+
+      font-size: 10px;
+
+    }
+
+
+    .designer-credit {
+
+      color: #78928a;
+
+      font-size: 11px;
+
+      font-weight: 750;
+
+      animation:
+        designerPulse 3s ease-in-out infinite;
+
+    }
+
+
+    @keyframes designerPulse {
+
+      0%,
+      100% {
+
+        opacity: .65;
+
+        transform: translateY(0);
+
+      }
+
+      50% {
+
+        opacity: 1;
+
+        transform: translateY(-2px);
+
+      }
+
+    }
+
+
+    /* =====================================================
+       SEARCH OVERLAY
+    ===================================================== */
+
+    .search-overlay {
+
+      position: fixed;
+
+      inset: 0;
+
+      background:
+        rgba(7,28,23,.96);
+
+      backdrop-filter: blur(10px);
+
+      z-index: 3000;
+
+      display: none;
+
+      padding: 20px;
+
+    }
+
+
+    .search-overlay.show {
+
+      display: block;
+
+    }
+
+
+    .search-container {
+
+      max-width: 700px;
+
+      margin:
+        90px auto;
+
+    }
+
+
+    .search-form {
+
+      display: flex;
+
+      gap: 8px;
+
+    }
+
+
+    .search-input {
+
+      flex: 1;
+
+      height: 55px;
+
+      border: 0;
+
+      outline: 0;
+
+      border-radius: 12px;
+
+      padding:
+        0 16px;
+
+      font-size: 15px;
+
+    }
+
+
+    .search-submit {
+
+      width: 55px;
+
+      border: 0;
+
+      border-radius: 12px;
+
+      background: var(--green);
+
+      color: white;
+
+    }
+
+
+    .close-search {
+
+      margin-top: 13px;
+
+      background: transparent;
+
+      border: 0;
+
+      color: #9ab0a9;
+
+      font-size: 11px;
+
+    }
+
+
+    /* =====================================================
+       MOBILE
+    ===================================================== */
+
+    @media (max-width: 900px) {
+
+      .desktop-nav {
+
+        display: none;
+
+      }
+
+
+      .page-container {
+
+        grid-template-columns: 1fr;
+
+      }
+
+
+      .sidebar {
+
+        display: grid;
+
+        grid-template-columns:
+          1fr 1fr;
+
+        gap: 15px;
+
+      }
+
+    }
+
+
+    @media (max-width: 600px) {
+
+      .site-header {
+
+        height: 64px;
+
+      }
+
+
+      .header-inner {
+
+        padding: 0 13px;
+
+      }
+
+
+      .logo-name {
+
+        font-size: 18px;
+
+      }
+
+
+      .logo-mark {
+
+        width: 39px;
+
+        height: 39px;
+
+      }
+
+
+      .clock {
+
+        display: none;
+
+      }
+
+
+      .breadcrumbs {
+
+        padding:
+          15px 14px 7px;
+
+      }
+
+
+      .page-container {
+
+        padding:
+          7px 13px 35px;
+
+      }
+
+
+      .article-header {
+
+        padding:
+          23px 19px 18px;
+
+      }
+
+
+      .article-title {
+
+        font-size: 30px;
+
+        letter-spacing: -1.2px;
+
+      }
+
+
+      .article-subtitle {
+
+        font-size: 13px;
+
+      }
+
+
+      .article-image {
+
+        height: 235px;
+
+        margin:
+          0 13px;
+
+      }
+
+
+      .football-symbol {
+
+        font-size: 65px;
+
+      }
+
+
+      .article-body {
+
+        padding:
+          22px 19px 28px;
+
+      }
+
+
+      .article-body p {
+
+        font-size: 15px;
+
+        line-height: 1.75;
+
+      }
+
+
+      .article-body h2 {
+
+        font-size: 20px;
+
+      }
+
+
+      .article-footer {
+
+        padding:
+          17px 19px;
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+      }
+
+
+      .sidebar {
+
+        display: block;
+
+      }
+
+
+      .site-footer {
+
+        padding-bottom: 80px;
+
+      }
+
+    }
+
+
+    @media (prefers-reduced-motion: reduce) {
+
+      html {
+
+        scroll-behavior: auto;
+
+      }
+
+
+      .designer-credit {
+
+        animation: none;
+
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+  <!-- =====================================================
+       HEADER
+  ===================================================== -->
+
+  <header class="site-header">
+
+    <div class="header-inner">
+
+
+      <a href="/" class="logo">
+
+        <div class="logo-mark">
+          P
+        </div>
+
+        <div>
+
+          <div class="logo-name">
+            PaceFetch
+          </div>
+
+          <span class="logo-tag">
+            Football Intelligence
+          </span>
+
+        </div>
+
+      </a>
+
+
+      <nav class="desktop-nav">
+
+        <a href="/">
+          Home
+        </a>
+
+        <a href="/news/">
+          News
+        </a>
+
+        <a href="/predictions/">
+          Predictions
+        </a>
+
+        <a href="/transfers/">
+          Transfers
+        </a>
+
+        <a href="/leagues/">
+          Leagues
+        </a>
+
+        <a href="/teams/">
+          Teams
+        </a>
+
+      </nav>
+
+
+      <div class="header-actions">
+
+
+        <div class="clock">
+
+          <strong id="currentTime">
+            --:--:--
+          </strong>
+
+          <span>
+            GMT +1 • Nigeria
+          </span>
+
+        </div>
+
+
+        <button
+          class="search-button"
+          id="openSearch"
+          aria-label="Search PaceFetch"
+        >
+
+          <svg
+            class="search-icon"
+            viewBox="0 0 24 24"
+          >
+
+            <circle
+              cx="11"
+              cy="11"
+              r="6.5"
+            ></circle>
+
+            <path
+              d="M16 16l5 5"
+            ></path>
+
+          </svg>
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </header>
+
+
+  <!-- =====================================================
+       BREADCRUMBS
+  ===================================================== -->
+
+  <div class="breadcrumbs">
+
+    <a href="/">
+      Home
+    </a>
+
+    <span>›</span>
+
+    <a href="/news/">
+      Football News
+    </a>
+
+    <span>›</span>
+
+    <span id="breadcrumbTitle">
+      Article
+    </span>
+
+  </div>
+
+
+  <!-- =====================================================
+       MAIN
+  ===================================================== -->
+
+  <main class="page-container">
+
+
+    <!-- ===================================================
+         ARTICLE
+    =================================================== -->
+
+    <article class="article-card">
+
+
+      <header class="article-header">
+
+
+        <div
+          class="category"
+          id="articleCategory"
+        >
+          FOOTBALL
+        </div>
+
+
+        <h1
+          class="article-title"
+          id="articleTitle"
+        >
+          Latest Football News
+        </h1>
+
+
+        <p
+          class="article-subtitle"
+          id="articleSubtitle"
+        >
+          The latest football stories, updates and developments
+          from around the world.
+        </p>
+
+
+        <div class="article-meta">
+
+          <span>
+            By
+            <span class="author">
+              PaceFetch Sports Desk
+            </span>
+          </span>
+
+          <span class="meta-divider">
+            •
+          </span>
+
+          <time id="articleDate">
+            September 6, 2026
+          </time>
+
+          <span class="meta-divider">
+            •
+          </span>
+
+          <span id="articleReadTime">
+            3 min read
+          </span>
+
+        </div>
+
+      </header>
+
+
+      <!-- ARTICLE VISUAL -->
+
+      <div class="article-image">
+
+        <div class="article-image-content">
+
+          <div
+            class="football-symbol"
+            id="articleEmoji"
+          >
+            ⚽
+          </div>
+
+          <div
+            class="image-label"
+            id="imageLabel"
+          >
+            PaceFetch Football
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ARTICLE BODY -->
+
+      <div
+        class="article-body"
+        id="articleBody"
+      >
+
+        <!-- Content inserted by JavaScript -->
+
+      </div>
+
+
+      <!-- ARTICLE FOOTER -->
+
+      <div class="article-footer">
+
+        <div class="source">
+
+          Source:
+          <strong id="articleSource">
+            PaceFetch Sports Desk
+          </strong>
+
+        </div>
+
+
+        <div class="share-buttons">
+
+          <button
+            class="share-button"
+            id="shareButton"
+            title="Share article"
+          >
+            ↗
+          </button>
+
+        </div>
+
+      </div>
+
+
+    </article>
+
+
+    <!-- ===================================================
+         SIDEBAR
+    ===================================================== -->
+
+    <aside class="sidebar">
+
+
+      <!-- RELATED -->
+
+      <div class="sidebar-card">
+
+        <div class="sidebar-heading">
+
+          <h3>
+            Related Stories
+          </h3>
+
+          <a href="/news/">
+            View all
+          </a>
+
+        </div>
+
+
+        <div id="relatedStories">
+
+
+          <a
+            href="/article/index.html?slug=transfer-centre"
+            class="related-story"
+          >
+
+            <div class="related-thumb">
+              🔄
+            </div>
+
+            <div>
+
+              <h4>
+                Transfer Centre: Latest football developments
+              </h4>
+
+              <p>
+                Transfers • 18 min ago
+              </p>
+
+            </div>
+
+          </a>
+
+
+          <a
+            href="/article/index.html?slug=premier-league-roundup"
+            class="related-story"
+          >
+
+            <div class="related-thumb">
+              🏆
+            </div>
+
+            <div>
+
+              <h4>
+                Premier League roundup and latest results
+              </h4>
+
+              <p>
+                Premier League • 32 min ago
+              </p>
+
+            </div>
+
+          </a>
+
+
+          <a
+            href="/article/index.html?slug=champions-league"
+            class="related-story"
+          >
+
+            <div class="related-thumb">
+              ⚽
+            </div>
+
+            <div>
+
+              <h4>
+                Champions League clubs prepare for Europe
+              </h4>
+
+              <p>
+                Champions League • 1 hr ago
+              </p>
+
+            </div>
+
+          </a>
+
+
+        </div>
+
+      </div>
+
+
+      <!-- PREDICTION -->
+
+      <div class="sidebar-card">
+
+        <div class="prediction-card">
+
+          <small>
+            TODAY'S FEATURE
+          </small>
+
+          <h3>
+            PaceFetch 25
+          </h3>
+
+          <p>
+            See today's strongest statistical predictions.
+          </p>
+
+          <a
+            href="/predictions/"
+            class="prediction-button"
+          >
+            View Predictions →
+          </a>
+
+        </div>
+
+      </div>
+
+
+      <!-- TRENDING -->
+
+      <div class="sidebar-card">
+
+        <div class="sidebar-heading">
+
+          <h3>
+            Trending
+          </h3>
+
+        </div>
+
+
+        <div class="trending-item">
+
+          <div class="trending-number">
+            1
+          </div>
+
+          <h4>
+            Latest football transfer developments
+          </h4>
+
+        </div>
+
+
+        <div class="trending-item">
+
+          <div class="trending-number">
+            2
+          </div>
+
+          <h4>
+            Today's major football fixtures
+          </h4>
+
+        </div>
+
+
+        <div class="trending-item">
+
+          <div class="trending-number">
+            3
+          </div>
+
+          <h4>
+            PaceFetch 25 prediction results
+          </h4>
+
+        </div>
+
+
+        <div class="trending-item">
+
+          <div class="trending-number">
+            4
+          </div>
+
+          <h4>
+            African football latest updates
+          </h4>
+
+        </div>
+
+      </div>
+
+
+      <!-- CTA -->
+
+      <div class="cta">
+
+        <h3>
+          Never miss a football update.
+        </h3>
+
+        <p>
+          Follow PaceFetch for the latest stories,
+          predictions and football intelligence.
+        </p>
+
+        <a href="/predictions/">
+          Explore PaceFetch
+        </a>
+
+      </div>
+
+
+    </aside>
+
+  </main>
+
+
+  <!-- =====================================================
+       FOOTER
+  ===================================================== -->
+
+  <footer class="site-footer">
+
+
+    <div class="footer-logo">
+      PaceFetch
+    </div>
+
+
+    <p class="footer-description">
+
+      Football predictions, news, scores, transfers
+      and football intelligence — completely free.
+
+    </p>
+
+
+    <div class="footer-links">
+
+      <a href="/">
+        Home
+      </a>
+
+      <a href="/news/">
+        News
+      </a>
+
+      <a href="/predictions/">
+        Predictions
+      </a>
+
+      <a href="/transfers/">
+        Transfers
+      </a>
+
+      <a href="/leagues/">
+        Leagues
+      </a>
+
+      <a href="/admin/">
+        Admin
+      </a>
+
+    </div>
+
+
+    <div class="designer-credit">
+      Designed by Pacethel
+    </div>
+
+
+  </footer>
+
+
+  <!-- =====================================================
+       SEARCH OVERLAY
+  ===================================================== -->
+
+  <div
+    class="search-overlay"
+    id="searchOverlay"
+  >
+
+    <div class="search-container">
+
+
+      <form
+        class="search-form"
+        id="searchForm"
+      >
+
+        <input
+          type="search"
+          id="searchInput"
+          class="search-input"
+          placeholder="Search football news, teams, players..."
+          autocomplete="off"
+        >
+
+
+        <button
+          type="submit"
+          class="search-submit"
+          aria-label="Search"
+        >
+
+          <svg
+            class="search-icon"
+            viewBox="0 0 24 24"
+          >
+
+            <circle
+              cx="11"
+              cy="11"
+              r="6.5"
+            ></circle>
+
+            <path
+              d="M16 16l5 5"
+            ></path>
+
+          </svg>
+
+        </button>
+
+      </form>
+
+
+      <button
+        class="close-search"
+        id="closeSearch"
+      >
+        ✕ Close search
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       JAVASCRIPT
+  ===================================================== -->
+
+  <script>
+
+    /* =====================================================
+       ARTICLE DATABASE
+       
+       This is temporary frontend data.
+
+       Later the Python backend/database will supply
+       these articles automatically.
+    ===================================================== */
+
+
+    const articles = {
+
+
+      "premier-league-latest": {
+
+        category:
+          "Premier League",
+
+        title:
+          "The Latest Football Stories Making Headlines Today",
+
+        subtitle:
+          "A look at the biggest developments, talking points and stories currently shaping the football conversation.",
+
+        date:
+          "September 6, 2026",
+
+        readTime:
+          "4 min read",
+
+        emoji:
+          "⚽",
+
+        source:
+          "PaceFetch Sports Desk",
+
+        description:
+          "Stay up to date with the latest Premier League and football developments, including results, performances and the stories attracting attention.",
+
+        body: `
+
+          <p>
+            Football never stops moving, and today's biggest stories
+            are already generating plenty of discussion among supporters.
+            PaceFetch brings together the important developments in one
+            place so football fans can quickly understand what matters.
+          </p>
+
+          <p>
+            From league action and team performances to player developments
+            and the latest transfer conversations, the football landscape
+            continues to change throughout the season.
+          </p>
+
+          <h2>
+            What football fans are watching
+          </h2>
+
+          <p>
+            League results remain one of the biggest talking points.
+            Teams are competing for points at both ends of the table,
+            while individual performances are beginning to shape the
+            narrative around the new campaign.
+          </p>
+
+          <blockquote>
+            PaceFetch focuses on the information football fans need,
+            while keeping predictions separate from confirmed news.
+          </blockquote>
+
+          <p>
+            The PaceFetch newsroom will continue tracking developments
+            from major European competitions as well as important stories
+            from African football.
+          </p>
+
+          <h2>
+            Follow the developing stories
+          </h2>
+
+          <p>
+            As more information becomes available, this story can be
+            updated with confirmed developments and additional context.
+            Readers can also explore the PaceFetch prediction centre
+            for statistical match analysis.
+          </p>
+
+        `
+
+      },
+
+
+      "transfer-centre": {
+
+        category:
+          "Transfers",
+
+        title:
+          "Transfer Centre: Latest Completed Deals and Developing Moves",
+
+        subtitle:
+          "The latest player movement, official announcements and transfer developments being monitored by PaceFetch.",
+
+        date:
+          "September 6, 2026",
+
+        readTime:
+          "3 min read",
+
+        emoji:
+          "🔄",
+
+        source:
+          "PaceFetch Transfer Desk",
+
+        description:
+          "Follow the latest football transfer developments, completed deals and confirmed player movements.",
+
+        body: `
+
+          <p>
+            The PaceFetch Transfer Centre tracks important developments
+            involving clubs and players across major football competitions.
+            Official announcements are separated from developing reports
+            so readers can quickly understand the status of a move.
+          </p>
+
+          <h2>
+            Confirmed transfers
+          </h2>
+
+          <p>
+            Once a club officially confirms a signing, PaceFetch records
+            the development and provides the relevant context around the
+            player's move.
+          </p>
+
+          <h2>
+            Developing moves
+          </h2>
+
+          <p>
+            Transfer stories can change quickly. For that reason,
+            developing reports are clearly identified until the relevant
+            club or another reliable source confirms the move.
+          </p>
+
+          <blockquote>
+            Transfer information can develop rapidly. Always distinguish
+            confirmed announcements from reports that are still developing.
+          </blockquote>
+
+          <p>
+            PaceFetch will continue monitoring the transfer landscape
+            throughout the season and updating its transfer centre as
+            reliable information becomes available.
+          </p>
+
+        `
+
+      },
+
+
+      "premier-league-roundup": {
+
+        category:
+          "Premier League",
+
+        title:
+          "Premier League Roundup: Everything You Need to Know From Today's Action",
+
+        subtitle:
+          "Key results, performances and talking points from the latest Premier League action.",
+
+        date:
+          "September 6, 2026",
+
+        readTime:
+          "4 min read",
+
+        emoji:
+          "🏆",
+
+        source:
+          "PaceFetch Sports Desk",
+
+        description:
+          "Premier League results, performances and major talking points from today's football action.",
+
+        body: `
+
+          <p>
+            Another round of Premier League football brings new results,
+            performances and questions for clubs across the table.
+          </p>
+
+          <h2>
+            The race for points
+          </h2>
+
+          <p>
+            Every match can have a major impact on the table, particularly
+            early in a campaign when teams are still establishing their
+            form and identity.
+          </p>
+
+          <p>
+            Supporters will also be watching how managers rotate their
+            squads as fixture congestion begins to influence team selection.
+          </p>
+
+          <h2>
+            What comes next?
+          </h2>
+
+          <p>
+            The next fixtures will provide another opportunity for teams
+            to build momentum, respond to disappointing results or continue
+            strong runs of form.
+          </p>
+
+        `
+
+      },
+
+
+      "champions-league": {
+
+        category:
+          "Champions League",
+
+        title:
+          "Champions League Clubs Prepare for Another Major European Campaign",
+
+        subtitle:
+          "European football returns to the spotlight as clubs prepare for another demanding Champions League campaign.",
+
+        date:
+          "September 6, 2026",
+
+        readTime:
+          "3 min read",
+
+        emoji:
+          "🏆",
+
+        source:
+          "PaceFetch Europe Desk",
+
+        description:
+          "The latest Champions League developments, team preparations and European football stories.",
+
+        body: `
+
+          <p>
+            Europe's biggest clubs are preparing for another demanding
+            campaign, with the Champions League once again providing the
+            stage for some of football's most competitive fixtures.
+          </p>
+
+          <h2>
+            European ambitions
+          </h2>
+
+          <p>
+            Clubs will be looking to establish themselves early while
+            managing domestic commitments alongside European football.
+            Squad depth and consistency can become especially important
+            as the season develops.
+          </p>
+
+          <p>
+            PaceFetch will follow the competition with fixtures, results,
+            team information, statistics and prediction analysis.
+          </p>
+
+        `
+
+      },
+
+
+      "african-football": {
+
+        category:
+          "African Football",
+
+        title:
+          "African Football: Latest Updates From Across the Continent",
+
+        subtitle:
+          "Important developments from African football, including clubs, competitions and players attracting attention.",
+
+        date:
+          "September 6, 2026",
+
+        readTime:
+          "3 min read",
+
+        emoji:
+          "🌍",
+
+        source:
+          "PaceFetch Africa Desk",
+
+        description:
+          "Latest African football news, club developments, competitions and player stories.",
+
+        body: `
+
+          <p>
+            African football continues to produce major stories across
+            domestic leagues, continental competitions and the international
+            game.
+          </p>
+
+          <h2>
+            Clubs and competitions
+          </h2>
+
+          <p>
+            Clubs across the continent are competing for domestic success
+            while also preparing for the demands of continental football.
+            These competitions continue to provide opportunities for players
+            and clubs to gain international attention.
+          </p>
+
+          <h2>
+            Growing football coverage
+          </h2>
+
+          <p>
+            PaceFetch will continue expanding its African football coverage
+            alongside its reporting on Europe's major competitions.
+          </p>
+
+        `
+
+      }
+
+    };
+
+
+    /* =====================================================
+       GET ARTICLE SLUG
+    ===================================================== */
+
+    const params =
+      new URLSearchParams(
+        window.location.search
+      );
+
+
+    const slug =
+      params.get("slug")
+      || "premier-league-latest";
+
+
+    const article =
+      articles[slug];
+
+
+    /* =====================================================
+       LOAD ARTICLE
+    ===================================================== */
+
+    function loadArticle() {
+
+      if (!article) {
+
+        loadNotFoundArticle();
+
+        return;
+
+      }
+
+
+      document.title =
+        article.title +
+        " | PaceFetch";
+
+
+      document
+        .getElementById("metaDescription")
+        .setAttribute(
+          "content",
+          article.description
+        );
+
+
+      const canonical =
+        "https://pacefetch.com/article/?slug=" +
+        encodeURIComponent(slug);
+
+
+      document
+        .getElementById("canonicalLink")
+        .setAttribute(
+          "href",
+          canonical
+        );
+
+
+      document
+        .getElementById("ogTitle")
+        .setAttribute(
+          "content",
+          article.title
+        );
+
+
+      document
+        .getElementById("ogDescription")
+        .setAttribute(
+          "content",
+          article.description
+        );
+
+
+      document
+        .getElementById("ogUrl")
+        .setAttribute(
+          "content",
+          canonical
+        );
+
+
+      document
+        .getElementById("twitterTitle")
+        .setAttribute(
+          "content",
+          article.title
+        );
+
+
+      document
+        .getElementById("twitterDescription")
+        .setAttribute(
+          "content",
+          article.description
+        );
+
+
+      document
+        .getElementById("articleCategory")
+        .textContent =
+        article.category;
+
+
+      document
+        .getElementById("articleTitle")
+        .textContent =
+        article.title;
+
+
+      document
+        .getElementById("articleSubtitle")
+        .textContent =
+        article.subtitle;
+
+
+      document
+        .getElementById("articleDate")
+        .textContent =
+        article.date;
+
+
+      document
+        .getElementById("articleReadTime")
+        .textContent =
+        article.readTime;
+
+
+      document
+        .getElementById("articleEmoji")
+        .textContent =
+        article.emoji;
+
+
+      document
+        .getElementById("imageLabel")
+        .textContent =
+        article.category;
+
+
+      document
+        .getElementById("articleSource")
+        .textContent =
+        article.source;
+
+
+      document
+        .getElementById("articleBody")
+        .innerHTML =
+        article.body;
+
+
+      document
+        .getElementById("breadcrumbTitle")
+        .textContent =
+        article.title;
+
+    }
+
+
+    /* =====================================================
+       404 ARTICLE
+    ===================================================== */
+
+    function loadNotFoundArticle() {
+
+      document.title =
+        "Article Not Found | PaceFetch";
+
+
+      document
+        .getElementById("articleCategory")
+        .textContent =
+        "PACEFETCH";
+
+
+      document
+        .getElementById("articleTitle")
+        .textContent =
+        "Article Not Found";
+
+
+      document
+        .getElementById("articleSubtitle")
+        .textContent =
+        "The football story you requested could not be found.";
+
+
+      document
+        .getElementById("articleBody")
+        .innerHTML = `
+
+          <p>
+            Sorry, we couldn't find that article.
+          </p>
+
+          <p>
+            The article may have been removed, renamed or the link
+            may be incorrect.
+          </p>
+
+          <p>
+            <a
+              href="/news/"
+              style="
+                color:#087f5b;
+                font-weight:800;
+              "
+            >
+              ← Return to football news
+            </a>
+          </p>
+
+        `;
+
+    }
+
+
+    loadArticle();
+
+
+    /* =====================================================
+       GMT +1 CLOCK
+    ===================================================== */
+
+    function updateClock() {
+
+      const now =
+        new Date();
+
+
+      const formatter =
+        new Intl.DateTimeFormat(
+          "en-NG",
+          {
+            timeZone:
+              "Africa/Lagos",
+
+            hour:
+              "2-digit",
+
+            minute:
+              "2-digit",
+
+            second:
+              "2-digit",
+
+            hour12:
+              false
+
+          }
+        );
+
+
+      document
+        .getElementById("currentTime")
+        .textContent =
+        formatter.format(now);
+
+    }
+
+
+    updateClock();
+
+    setInterval(
+      updateClock,
+      1000
+    );
+
+
+    /* =====================================================
+       SEARCH
+    ===================================================== */
+
+    const searchOverlay =
+      document.getElementById(
+        "searchOverlay"
+      );
+
+
+    const searchInput =
+      document.getElementById(
+        "searchInput"
+      );
+
+
+    document
+      .getElementById("openSearch")
+      .addEventListener(
+        "click",
+        function() {
+
+          searchOverlay
+            .classList
+            .add("show");
+
+          document.body.style.overflow =
+            "hidden";
+
+          setTimeout(
+            () => searchInput.focus(),
+            100
+          );
+
+        }
+      );
+
+
+    document
+      .getElementById("closeSearch")
+      .addEventListener(
+        "click",
+        function() {
+
+          searchOverlay
+            .classList
+            .remove("show");
+
+          document.body.style.overflow =
+            "";
+
+        }
+      );
+
+
+    document
+      .getElementById("searchForm")
+      .addEventListener(
+        "submit",
+        function(event) {
+
+          event.preventDefault();
+
+
+          const query =
+            searchInput.value.trim();
+
+
+          if (!query) {
+
+            searchInput.focus();
+
+            return;
+
+          }
+
+
+          window.location.href =
+            "/news/?search=" +
+            encodeURIComponent(query);
+
+        }
+      );
+
+
+    searchOverlay
+      .addEventListener(
+        "click",
+        function(event) {
+
+          if (
+            event.target ===
+            searchOverlay
+          ) {
+
+            searchOverlay
+              .classList
+              .remove("show");
+
+            document.body.style.overflow =
+              "";
+
+          }
+
+        }
+      );
+
+
+    /* =====================================================
+       ESCAPE SEARCH
+    ===================================================== */
+
+    document.addEventListener(
+      "keydown",
+      function(event) {
+
+        if (
+          event.key === "Escape"
+        ) {
+
+          searchOverlay
+            .classList
+            .remove("show");
+
+          document.body.style.overflow =
+            "";
+
+        }
+
+      }
+    );
+
+
+    /* =====================================================
+       SHARE
+    ===================================================== */
+
+    document
+      .getElementById("shareButton")
+      .addEventListener(
+        "click",
+        async function() {
+
+          const shareData = {
+
+            title:
+              article
+                ? article.title
+                : "PaceFetch Football News",
+
+            text:
+              article
+                ? article.description
+                : "Latest football news from PaceFetch.",
+
+            url:
+              window.location.href
+
+          };
+
+
+          try {
+
+            if (
+              navigator.share
+            ) {
+
+              await navigator.share(
+                shareData
+              );
+
+            } else {
+
+              await navigator
+                .clipboard
+                .writeText(
+                  window.location.href
+                );
+
+              alert(
+                "Article link copied."
+              );
+
+            }
+
+          } catch (error) {
+
+            console.log(
+              "Share cancelled."
+            );
+
+          }
+
+        }
+      );
+
+
+  </script>
+
+
+  <!-- =====================================================
+       ARTICLE STRUCTURED DATA
+       Generated dynamically
+  ===================================================== -->
+
+  <script>
+
+    if (article) {
+
+      const structuredData = {
+
+        "@context":
+          "https://schema.org",
+
+        "@type":
+          "NewsArticle",
+
+        "headline":
+          article.title,
+
+        "description":
+          article.description,
+
+        "datePublished":
+          "2026-09-06T10:00:00+01:00",
+
+        "dateModified":
+          "2026-09-06T10:00:00+01:00",
+
+        "author": {
+
+          "@type":
+            "Organization",
+
+          "name":
+            "PaceFetch Sports Desk"
+
+        },
+
+        "publisher": {
+
+          "@type":
+            "Organization",
+
+          "name":
+            "PaceFetch"
+
+        },
+
+        "mainEntityOfPage": {
+
+          "@type":
+            "WebPage",
+
+          "@id":
+            window.location.href
+
+        }
+
+      };
+
+
+      const script =
+        document.createElement(
+          "script"
+        );
+
+
+      script.type =
+        "application/ld+json";
+
+
+      script.textContent =
+        JSON.stringify(
+          structuredData
+        );
+
+
+      document.head.appendChild(
+        script
+      );
+
+    }
+
+  </script>
+
+
+</body>
+</html>
