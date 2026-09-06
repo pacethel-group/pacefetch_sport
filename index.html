@@ -1,1559 +1,3801 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>PaceFetch — Football Predictions & Sports News</title>
-
-<meta name="description" content="PaceFetch — fetch the latest football news, transfer updates, live scores, fixtures and daily football predictions.">
-
-<meta name="theme-color" content="#07111f">
-
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-:root{
-    --bg:#07111f;
-    --bg2:#0b1728;
-    --card:#0e1d31;
-    --card2:#12243b;
-    --text:#f5f8fc;
-    --muted:#8fa2ba;
-    --line:rgba(255,255,255,.08);
-    --green:#29e07f;
-    --green2:#16b866;
-    --red:#ff4d67;
-    --yellow:#ffc857;
-    --blue:#4da3ff;
-    --purple:#9b7bff;
-}
-
-html{
-    scroll-behavior:smooth;
-}
-
-body{
-    font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-    background:
-        radial-gradient(circle at 10% 0%,rgba(41,224,127,.09),transparent 28%),
-        radial-gradient(circle at 90% 10%,rgba(77,163,255,.08),transparent 25%),
-        var(--bg);
-    color:var(--text);
-    min-height:100vh;
-}
-
-button,
-input{
-    font:inherit;
-}
-
-button{
-    cursor:pointer;
-}
-
-/* ================= HEADER ================= */
-
-header{
-    position:sticky;
-    top:0;
-    z-index:1000;
-    backdrop-filter:blur(18px);
-    background:rgba(7,17,31,.88);
-    border-bottom:1px solid var(--line);
-}
-
-.nav{
-    max-width:1250px;
-    margin:auto;
-    height:72px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 22px;
-}
-
-.logo{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    font-weight:900;
-    font-size:23px;
-    letter-spacing:-1px;
-}
-
-.logo-mark{
-    width:38px;
-    height:38px;
-    border-radius:12px;
-    display:grid;
-    place-items:center;
-    background:linear-gradient(135deg,var(--green),#5cffad);
-    color:#06131e;
-    box-shadow:0 8px 25px rgba(41,224,127,.2);
-}
-
-.nav-links{
-    display:flex;
-    gap:25px;
-    align-items:center;
-}
-
-.nav-links a{
-    color:var(--muted);
-    text-decoration:none;
-    font-size:14px;
-    font-weight:700;
-}
-
-.nav-links a:hover{
-    color:var(--text);
-}
-
-.search-btn{
-    width:42px;
-    height:42px;
-    border-radius:12px;
-    border:1px solid var(--line);
-    background:var(--card);
-    color:white;
-    font-size:18px;
-}
-
-/* ================= HERO ================= */
-
-.hero{
-    max-width:1250px;
-    margin:auto;
-    padding:55px 22px 30px;
-    display:grid;
-    grid-template-columns:1.25fr .75fr;
-    gap:25px;
-}
-
-.hero-main{
-    padding:38px;
-    border-radius:28px;
-    background:
-        linear-gradient(135deg,rgba(41,224,127,.15),rgba(41,224,127,.02)),
-        var(--card);
-    border:1px solid var(--line);
-    position:relative;
-    overflow:hidden;
-}
-
-.hero-main:after{
-    content:"⚽";
-    position:absolute;
-    right:-35px;
-    bottom:-55px;
-    font-size:190px;
-    opacity:.045;
-}
-
-.eyebrow{
-    color:var(--green);
-    font-size:12px;
-    font-weight:900;
-    letter-spacing:1.8px;
-    text-transform:uppercase;
-    margin-bottom:12px;
-}
-
-.hero h1{
-    font-size:clamp(38px,5vw,66px);
-    line-height:.98;
-    letter-spacing:-3px;
-    max-width:720px;
-}
-
-.hero h1 span{
-    color:var(--green);
-}
-
-.hero p{
-    color:var(--muted);
-    max-width:620px;
-    margin-top:20px;
-    line-height:1.7;
-    font-size:16px;
-}
-
-.hero-actions{
-    display:flex;
-    gap:12px;
-    margin-top:28px;
-    flex-wrap:wrap;
-}
-
-.primary-btn,
-.secondary-btn{
-    border:0;
-    border-radius:13px;
-    padding:13px 19px;
-    font-weight:800;
-}
-
-.primary-btn{
-    background:var(--green);
-    color:#06131e;
-}
-
-.secondary-btn{
-    background:rgba(255,255,255,.05);
-    color:white;
-    border:1px solid var(--line);
-}
-
-/* ================= PERFORMANCE CARD ================= */
-
-.performance{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:28px;
-    padding:28px;
-}
-
-.performance-top{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
-
-.performance h3{
-    font-size:18px;
-}
-
-.live-pill{
-    color:var(--green);
-    background:rgba(41,224,127,.1);
-    border:1px solid rgba(41,224,127,.18);
-    padding:6px 9px;
-    border-radius:20px;
-    font-size:10px;
-    font-weight:900;
-}
-
-.big-stat{
-    margin-top:27px;
-}
-
-.big-stat strong{
-    display:block;
-    font-size:52px;
-    letter-spacing:-3px;
-}
-
-.big-stat span{
-    color:var(--muted);
-    font-size:13px;
-}
-
-.stat-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:10px;
-    margin-top:25px;
-}
-
-.stat{
-    background:rgba(255,255,255,.035);
-    padding:13px;
-    border-radius:13px;
-}
-
-.stat b{
-    display:block;
-    font-size:18px;
-}
-
-.stat small{
-    color:var(--muted);
-    font-size:10px;
-}
-
-/* ================= MAIN ================= */
-
-.container{
-    max-width:1250px;
-    margin:auto;
-    padding:10px 22px 100px;
-}
-
-.section{
-    margin-top:45px;
-}
-
-.section-head{
-    display:flex;
-    justify-content:space-between;
-    align-items:end;
-    margin-bottom:18px;
-}
-
-.section-title{
-    font-size:25px;
-    letter-spacing:-1px;
-}
-
-.section-subtitle{
-    color:var(--muted);
-    margin-top:5px;
-    font-size:13px;
-}
-
-.view-all{
-    color:var(--green);
-    font-size:12px;
-    font-weight:800;
-}
-
-/* ================= LIVE ================= */
-
-.live-strip{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:15px;
-}
-
-.match-card{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:18px;
-    padding:18px;
-    transition:.25s;
-}
-
-.match-card:hover{
-    transform:translateY(-3px);
-    border-color:rgba(41,224,127,.3);
-}
-
-.match-head{
-    display:flex;
-    justify-content:space-between;
-    color:var(--muted);
-    font-size:10px;
-    font-weight:800;
-}
-
-.live{
-    color:var(--red);
-}
-
-.teams{
-    margin-top:20px;
-    display:grid;
-    grid-template-columns:1fr auto 1fr;
-    align-items:center;
-    gap:10px;
-    text-align:center;
-}
-
-.team{
-    font-weight:800;
-    font-size:13px;
-}
-
-.score{
-    font-size:24px;
-    font-weight:900;
-}
-
-.match-footer{
-    display:flex;
-    justify-content:space-between;
-    margin-top:18px;
-    color:var(--muted);
-    font-size:11px;
-}
-
-/* ================= PREDICTIONS ================= */
-
-.prediction-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:15px;
-}
-
-.prediction{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:20px;
-    padding:19px;
-}
-
-.pred-top{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
-
-.league{
-    font-size:10px;
-    color:var(--muted);
-    font-weight:800;
-}
-
-.confidence{
-    padding:5px 8px;
-    border-radius:20px;
-    background:rgba(41,224,127,.1);
-    color:var(--green);
-    font-size:10px;
-    font-weight:900;
-}
-
-.pred-match{
-    margin-top:18px;
-    font-weight:800;
-}
-
-.pred-time{
-    color:var(--muted);
-    font-size:11px;
-    margin-top:5px;
-}
-
-.prediction-line{
-    margin-top:18px;
-    padding-top:14px;
-    border-top:1px solid var(--line);
-    display:flex;
-    justify-content:space-between;
-}
-
-.pick{
-    font-weight:900;
-    color:var(--green);
-}
-
-.pick-label{
-    font-size:10px;
-    color:var(--muted);
-}
-
-/* ================= NEWS ================= */
-
-.content-grid{
-    display:grid;
-    grid-template-columns:1.4fr .6fr;
-    gap:20px;
-}
-
-.news-list{
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-}
-
-.news{
-    display:grid;
-    grid-template-columns:115px 1fr;
-    gap:15px;
-    background:var(--card);
-    border:1px solid var(--line);
-    padding:12px;
-    border-radius:17px;
-}
-
-.news-image{
-    min-height:90px;
-    border-radius:12px;
-    background:
-        linear-gradient(135deg,#152a42,#0b1728);
-    display:grid;
-    place-items:center;
-    font-size:30px;
-}
-
-.news h3{
-    font-size:14px;
-    line-height:1.4;
-}
-
-.news p{
-    color:var(--muted);
-    font-size:11px;
-    margin-top:7px;
-    line-height:1.5;
-}
-
-.news-meta{
-    color:var(--green);
-    font-size:9px;
-    font-weight:900;
-    margin-top:8px;
-}
-
-/* ================= TRANSFERS ================= */
-
-.transfer-box{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:20px;
-    padding:20px;
-}
-
-.transfer{
-    display:grid;
-    grid-template-columns:1fr 35px 1fr;
-    align-items:center;
-    gap:8px;
-    padding:15px 0;
-    border-bottom:1px solid var(--line);
-}
-
-.transfer:last-child{
-    border-bottom:0;
-}
-
-.player{
-    font-weight:800;
-    font-size:12px;
-}
-
-.club{
-    color:var(--muted);
-    font-size:10px;
-    margin-top:3px;
-}
-
-.arrow{
-    text-align:center;
-    color:var(--green);
-}
-
-/* ================= LEAGUES ================= */
-
-.league-grid{
-    display:grid;
-    grid-template-columns:repeat(6,1fr);
-    gap:12px;
-}
-
-.league-card{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:16px;
-    padding:17px 10px;
-    text-align:center;
-    font-weight:800;
-    font-size:12px;
-    transition:.2s;
-}
-
-.league-card:hover{
-    background:var(--card2);
-    transform:translateY(-2px);
-}
-
-.league-icon{
-    font-size:24px;
-    display:block;
-    margin-bottom:8px;
-}
-
-/* ================= AD ================= */
-
-.ad-box{
-    min-height:90px;
-    border:1px dashed rgba(255,255,255,.1);
-    border-radius:15px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:#50627a;
-    font-size:10px;
-    margin-top:30px;
-}
-
-/* ================= FOOTER ================= */
-
-footer{
-    border-top:1px solid var(--line);
-    margin-top:40px;
-}
-
-.footer-inner{
-    max-width:1250px;
-    margin:auto;
-    padding:30px 22px;
-    display:flex;
-    justify-content:space-between;
-    gap:20px;
-}
-
-.footer-brand{
-    font-weight:900;
-}
-
-.footer-text{
-    color:var(--muted);
-    font-size:11px;
-    margin-top:7px;
-}
-
-.footer-links{
-    display:flex;
-    gap:20px;
-}
-
-.footer-links a{
-    color:var(--muted);
-    text-decoration:none;
-    font-size:11px;
-}
-
-/* ================= MOBILE NAV ================= */
-
-.mobile-nav{
-    display:none;
-}
-
-/* ================= RESPONSIVE ================= */
-
-@media(max-width:900px){
-
-    .nav-links{
-        display:none;
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>PaceFetch — Football Predictions, News, Scores & Transfers</title>
+
+  <meta
+    name="description"
+    content="PaceFetch brings you football predictions, latest football news, live scores, fixtures, results, transfers and league updates."
+  >
+
+  <meta
+    name="keywords"
+    content="football predictions, football news, soccer predictions, live scores, football transfers, Premier League, Champions League, La Liga, Serie A, Bundesliga"
+  >
+
+  <meta name="author" content="PaceFetch">
+
+  <meta
+    name="robots"
+    content="index, follow, max-image-preview:large"
+  >
+
+  <link
+    rel="canonical"
+    href="https://pacefetch.com/"
+  >
+
+  <!-- OPEN GRAPH -->
+
+  <meta
+    property="og:type"
+    content="website"
+  >
+
+  <meta
+    property="og:title"
+    content="PaceFetch — Football Intelligence"
+  >
+
+  <meta
+    property="og:description"
+    content="Fetch predictions. Fetch sports. Stay ahead."
+  >
+
+  <meta
+    property="og:url"
+    content="https://pacefetch.com/"
+  >
+
+  <meta
+    property="og:site_name"
+    content="PaceFetch"
+  >
+
+  <!-- TWITTER -->
+
+  <meta
+    name="twitter:card"
+    content="summary_large_image"
+  >
+
+  <meta
+    name="twitter:title"
+    content="PaceFetch — Football Intelligence"
+  >
+
+  <meta
+    name="twitter:description"
+    content="Football predictions, news, scores and transfers."
+  >
+
+  <!-- THEME -->
+
+  <meta
+    name="theme-color"
+    content="#071c17"
+  >
+
+  <style>
+
+    /* =====================================================
+       PACEFETCH
+       MAIN HOMEPAGE
+    ===================================================== */
+
+    :root {
+
+      --green: #087f5b;
+      --green-dark: #056044;
+      --green-light: #e9f7f2;
+
+      --black: #071c17;
+      --black-2: #0c2821;
+
+      --white: #ffffff;
+
+      --text: #111827;
+      --muted: #6b7280;
+
+      --border: #e7ebe9;
+
+      --bg: #f5f7f6;
+
+      --red: #e53935;
+      --orange: #f59e0b;
+
+      --shadow:
+        0 10px 30px rgba(0,0,0,.06);
+
+      --radius: 18px;
+
     }
 
-    .hero{
-        grid-template-columns:1fr;
-        padding-top:25px;
+
+    * {
+
+      margin: 0;
+      padding: 0;
+
+      box-sizing: border-box;
+
     }
 
-    .live-strip,
-    .prediction-grid{
-        grid-template-columns:1fr 1fr;
+
+    html {
+
+      scroll-behavior: smooth;
+
     }
 
-    .content-grid{
-        grid-template-columns:1fr;
+
+    body {
+
+      font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+      background: var(--bg);
+
+      color: var(--text);
+
+      line-height: 1.5;
+
+      overflow-x: hidden;
+
     }
 
-    .league-grid{
-        grid-template-columns:repeat(3,1fr);
+
+    a {
+
+      color: inherit;
+
+      text-decoration: none;
+
     }
 
-    .mobile-nav{
-        display:flex;
-        position:fixed;
-        bottom:0;
-        left:0;
-        right:0;
-        z-index:2000;
-        background:rgba(7,17,31,.96);
-        backdrop-filter:blur(18px);
-        border-top:1px solid var(--line);
-        justify-content:space-around;
-        padding:9px 4px calc(9px + env(safe-area-inset-bottom));
+
+    button {
+
+      font: inherit;
+
+      cursor: pointer;
+
     }
 
-    .mobile-nav button{
-        background:none;
-        border:0;
-        color:var(--muted);
-        font-size:10px;
-        display:flex;
-        flex-direction:column;
-        align-items:center;
-        gap:4px;
+
+    img {
+
+      max-width: 100%;
+
+      display: block;
+
     }
 
-    .mobile-nav button.active{
-        color:var(--green);
+
+    /* =====================================================
+       HEADER
+    ===================================================== */
+
+    .site-header {
+
+      position: sticky;
+
+      top: 0;
+
+      z-index: 1000;
+
+      background:
+        rgba(7,28,23,.97);
+
+      color: white;
+
+      border-bottom:
+        1px solid rgba(255,255,255,.07);
+
+      backdrop-filter: blur(12px);
+
     }
 
-    footer{
-        padding-bottom:70px;
-    }
-}
 
-@media(max-width:600px){
+    .header-inner {
 
-    .nav{
-        height:64px;
-        padding:0 15px;
-    }
+      max-width: 1250px;
 
-    .logo{
-        font-size:20px;
-    }
+      height: 72px;
 
-    .hero{
-        padding:18px 14px;
-    }
+      margin: auto;
 
-    .hero-main{
-        padding:26px 22px;
-        border-radius:22px;
+      padding: 0 20px;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-between;
+
+      gap: 20px;
+
     }
 
-    .hero h1{
-        font-size:43px;
-        letter-spacing:-2.5px;
+
+    /* LOGO */
+
+    .logo {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 10px;
+
+      flex-shrink: 0;
+
     }
 
-    .performance{
-        border-radius:22px;
+
+    .logo-mark {
+
+      width: 43px;
+
+      height: 43px;
+
+      border-radius: 13px;
+
+      display: grid;
+
+      place-items: center;
+
+      font-size: 20px;
+
+      font-weight: 950;
+
+      background:
+        linear-gradient(
+          135deg,
+          #0bb67c,
+          #056044
+        );
+
+      box-shadow:
+        0 7px 20px rgba(8,127,91,.25);
+
     }
 
-    .container{
-        padding:5px 14px 90px;
+
+    .logo-name {
+
+      font-size: 21px;
+
+      font-weight: 900;
+
+      letter-spacing: -.5px;
+
     }
 
-    .section{
-        margin-top:34px;
+
+    .logo-tag {
+
+      font-size: 9px;
+
+      color: #91aaa2;
+
+      display: block;
+
+      margin-top: -2px;
+
+      letter-spacing: .8px;
+
+      text-transform: uppercase;
+
     }
 
-    .live-strip,
-    .prediction-grid{
-        grid-template-columns:1fr;
+
+    /* DESKTOP NAV */
+
+    .desktop-nav {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 5px;
+
     }
 
-    .league-grid{
-        grid-template-columns:repeat(3,1fr);
+
+    .desktop-nav a {
+
+      padding: 9px 12px;
+
+      border-radius: 9px;
+
+      color: #c8d8d3;
+
+      font-size: 13px;
+
+      font-weight: 650;
+
+      transition: .2s;
+
     }
 
-    .news{
-        grid-template-columns:90px 1fr;
+
+    .desktop-nav a:hover,
+    .desktop-nav a.active {
+
+      color: white;
+
+      background:
+        rgba(255,255,255,.08);
+
     }
 
-    .news-image{
-        min-height:80px;
+
+    /* HEADER RIGHT */
+
+    .header-right {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 8px;
+
     }
 
-    .footer-inner{
-        flex-direction:column;
+
+    .time-box {
+
+      padding: 7px 10px;
+
+      border:
+        1px solid rgba(255,255,255,.1);
+
+      background:
+        rgba(255,255,255,.05);
+
+      border-radius: 9px;
+
+      text-align: right;
+
+      white-space: nowrap;
+
     }
-}
-</style>
+
+
+    .time-box strong {
+
+      display: block;
+
+      font-size: 11px;
+
+      color: white;
+
+    }
+
+
+    .time-box span {
+
+      font-size: 9px;
+
+      color: #8fa9a1;
+
+    }
+
+
+    /* SEARCH */
+
+    .search-button {
+
+      width: 42px;
+
+      height: 42px;
+
+      border: 1px solid rgba(255,255,255,.1);
+
+      border-radius: 12px;
+
+      background:
+        rgba(255,255,255,.06);
+
+      color: white;
+
+      display: grid;
+
+      place-items: center;
+
+      transition: .2s;
+
+    }
+
+
+    .search-button:hover {
+
+      background: var(--green);
+
+      transform: translateY(-1px);
+
+    }
+
+
+    .search-svg {
+
+      width: 19px;
+
+      height: 19px;
+
+      stroke: currentColor;
+
+      fill: none;
+
+      stroke-width: 2;
+
+      stroke-linecap: round;
+
+    }
+
+
+    /* =====================================================
+       HERO
+    ===================================================== */
+
+    .hero {
+
+      background:
+
+        radial-gradient(
+          circle at 90% 20%,
+          rgba(17,190,130,.20),
+          transparent 30%
+        ),
+
+        linear-gradient(
+          135deg,
+          #071c17,
+          #0b3026
+        );
+
+      color: white;
+
+      padding:
+        55px 20px 65px;
+
+    }
+
+
+    .hero-inner {
+
+      max-width: 1250px;
+
+      margin: auto;
+
+      display: grid;
+
+      grid-template-columns:
+        1.15fr
+        .85fr;
+
+      align-items: center;
+
+      gap: 45px;
+
+    }
+
+
+    .hero-badge {
+
+      display: inline-flex;
+
+      align-items: center;
+
+      gap: 8px;
+
+      padding: 7px 11px;
+
+      background:
+        rgba(255,255,255,.07);
+
+      border:
+        1px solid rgba(255,255,255,.1);
+
+      border-radius: 100px;
+
+      color: #a8c9be;
+
+      font-size: 11px;
+
+      font-weight: 750;
+
+      margin-bottom: 18px;
+
+    }
+
+
+    .live-dot {
+
+      width: 7px;
+
+      height: 7px;
+
+      border-radius: 50%;
+
+      background: #22c55e;
+
+      box-shadow:
+        0 0 0 5px rgba(34,197,94,.1);
+
+    }
+
+
+    .hero h1 {
+
+      font-size:
+        clamp(38px, 6vw, 67px);
+
+      line-height: 1.02;
+
+      letter-spacing: -2.8px;
+
+      max-width: 750px;
+
+    }
+
+
+    .hero h1 span {
+
+      color: #19b980;
+
+    }
+
+
+    .hero-description {
+
+      max-width: 650px;
+
+      color: #aac0ba;
+
+      margin-top: 19px;
+
+      font-size: 16px;
+
+    }
+
+
+    .hero-actions {
+
+      display: flex;
+
+      flex-wrap: wrap;
+
+      gap: 10px;
+
+      margin-top: 27px;
+
+    }
+
+
+    .primary-btn {
+
+      padding: 13px 19px;
+
+      background: var(--green);
+
+      color: white;
+
+      border: 0;
+
+      border-radius: 11px;
+
+      font-weight: 800;
+
+      transition: .2s;
+
+    }
+
+
+    .primary-btn:hover {
+
+      background: #0a986c;
+
+      transform: translateY(-2px);
+
+    }
+
+
+    .secondary-btn {
+
+      padding: 13px 19px;
+
+      background:
+        rgba(255,255,255,.06);
+
+      color: white;
+
+      border:
+        1px solid rgba(255,255,255,.12);
+
+      border-radius: 11px;
+
+      font-weight: 700;
+
+    }
+
+
+    .hero-card {
+
+      padding: 24px;
+
+      border-radius: 22px;
+
+      background:
+        rgba(255,255,255,.055);
+
+      border:
+        1px solid rgba(255,255,255,.1);
+
+      box-shadow:
+        0 30px 80px rgba(0,0,0,.18);
+
+    }
+
+
+    .hero-card-top {
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      margin-bottom: 22px;
+
+    }
+
+
+    .hero-card-title {
+
+      font-weight: 850;
+
+      font-size: 16px;
+
+    }
+
+
+    .hero-card-date {
+
+      color: #86a39a;
+
+      font-size: 11px;
+
+    }
+
+
+    .accuracy {
+
+      font-size: 58px;
+
+      font-weight: 950;
+
+      letter-spacing: -3px;
+
+      color: #19c58a;
+
+    }
+
+
+    .accuracy-label {
+
+      color: #91aaa2;
+
+      font-size: 12px;
+
+    }
+
+
+    .progress {
+
+      height: 8px;
+
+      background:
+        rgba(255,255,255,.08);
+
+      border-radius: 20px;
+
+      margin-top: 17px;
+
+      overflow: hidden;
+
+    }
+
+
+    .progress span {
+
+      display: block;
+
+      width: 76%;
+
+      height: 100%;
+
+      background: #19b980;
+
+      border-radius: inherit;
+
+    }
+
+
+    .hero-card-bottom {
+
+      display: flex;
+
+      justify-content: space-between;
+
+      margin-top: 19px;
+
+      color: #8ca69e;
+
+      font-size: 11px;
+
+    }
+
+
+    .hero-card-bottom strong {
+
+      color: white;
+
+    }
+
+
+    /* =====================================================
+       MAIN
+    ===================================================== */
+
+    .container {
+
+      max-width: 1250px;
+
+      margin: auto;
+
+      padding:
+        30px 20px;
+
+    }
+
+
+    .section {
+
+      margin-bottom: 32px;
+
+    }
+
+
+    .section-heading {
+
+      display: flex;
+
+      align-items: flex-end;
+
+      justify-content: space-between;
+
+      gap: 15px;
+
+      margin-bottom: 16px;
+
+    }
+
+
+    .section-heading h2 {
+
+      font-size: 22px;
+
+      letter-spacing: -.6px;
+
+    }
+
+
+    .section-heading p {
+
+      color: var(--muted);
+
+      font-size: 12px;
+
+      margin-top: 3px;
+
+    }
+
+
+    .view-all {
+
+      color: var(--green);
+
+      font-size: 12px;
+
+      font-weight: 800;
+
+      white-space: nowrap;
+
+    }
+
+
+    /* =====================================================
+       SPONSOR CAROUSEL
+    ===================================================== */
+
+    .sponsor-wrap {
+
+      overflow: hidden;
+
+      border-radius: var(--radius);
+
+      background: white;
+
+      border: 1px solid var(--border);
+
+      box-shadow: var(--shadow);
+
+    }
+
+
+    .sponsor-track {
+
+      display: flex;
+
+      width: max-content;
+
+      animation:
+        sponsorMove 25s linear infinite;
+
+    }
+
+
+    .sponsor-card {
+
+      width: 245px;
+
+      min-height: 88px;
+
+      padding: 15px;
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 13px;
+
+      border-right: 1px solid var(--border);
+
+    }
+
+
+    .sponsor-logo {
+
+      width: 48px;
+
+      height: 48px;
+
+      border-radius: 13px;
+
+      background: var(--green-light);
+
+      color: var(--green);
+
+      display: grid;
+
+      place-items: center;
+
+      font-size: 20px;
+
+      font-weight: 900;
+
+      flex-shrink: 0;
+
+    }
+
+
+    .sponsor-card strong {
+
+      display: block;
+
+      font-size: 13px;
+
+    }
+
+
+    .sponsor-card span {
+
+      display: block;
+
+      color: var(--muted);
+
+      font-size: 10px;
+
+      margin-top: 2px;
+
+    }
+
+
+    @keyframes sponsorMove {
+
+      from {
+
+        transform: translateX(0);
+
+      }
+
+      to {
+
+        transform: translateX(-735px);
+
+      }
+
+    }
+
+
+    /* =====================================================
+       PACEFETCH 25
+    ===================================================== */
+
+    .prediction-summary {
+
+      display: grid;
+
+      grid-template-columns:
+        1.1fr
+        .9fr;
+
+      gap: 18px;
+
+    }
+
+
+    .prediction-main {
+
+      background:
+        linear-gradient(
+          135deg,
+          #087f5b,
+          #075a44
+        );
+
+      color: white;
+
+      padding: 25px;
+
+      border-radius: var(--radius);
+
+      position: relative;
+
+      overflow: hidden;
+
+    }
+
+
+    .prediction-main::after {
+
+      content: "";
+
+      position: absolute;
+
+      width: 220px;
+
+      height: 220px;
+
+      border-radius: 50%;
+
+      right: -100px;
+
+      top: -90px;
+
+      background:
+        rgba(255,255,255,.06);
+
+    }
+
+
+    .prediction-main h3 {
+
+      font-size: 24px;
+
+      margin-bottom: 5px;
+
+    }
+
+
+    .prediction-main p {
+
+      color: #b8ddd0;
+
+      font-size: 12px;
+
+    }
+
+
+    .prediction-score {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 24px;
+
+      margin-top: 28px;
+
+    }
+
+
+    .big-score {
+
+      font-size: 48px;
+
+      line-height: 1;
+
+      font-weight: 950;
+
+    }
+
+
+    .score-label {
+
+      color: #b8ddd0;
+
+      font-size: 11px;
+
+    }
+
+
+    .score-percent {
+
+      font-size: 20px;
+
+      font-weight: 900;
+
+    }
+
+
+    .prediction-side {
+
+      background: white;
+
+      border:
+        1px solid var(--border);
+
+      border-radius: var(--radius);
+
+      padding: 22px;
+
+      box-shadow: var(--shadow);
+
+    }
+
+
+    .prediction-side-row {
+
+      display: flex;
+
+      justify-content: space-between;
+
+      padding: 13px 0;
+
+      border-bottom:
+        1px solid #f0f2f1;
+
+      font-size: 12px;
+
+    }
+
+
+    .prediction-side-row:last-child {
+
+      border-bottom: 0;
+
+    }
+
+
+    .prediction-side-row span {
+
+      color: var(--muted);
+
+    }
+
+
+    .correct {
+
+      color: var(--green);
+
+      font-weight: 850;
+
+    }
+
+
+    /* =====================================================
+       MATCHES
+    ===================================================== */
+
+    .matches-grid {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap: 14px;
+
+    }
+
+
+    .match-card {
+
+      background: white;
+
+      border:
+        1px solid var(--border);
+
+      border-radius: 16px;
+
+      padding: 17px;
+
+      box-shadow: var(--shadow);
+
+    }
+
+
+    .match-top {
+
+      display: flex;
+
+      justify-content: space-between;
+
+      color: var(--muted);
+
+      font-size: 10px;
+
+      margin-bottom: 17px;
+
+    }
+
+
+    .live-label {
+
+      color: var(--red);
+
+      font-weight: 850;
+
+    }
+
+
+    .teams {
+
+      display: grid;
+
+      grid-template-columns:
+        1fr
+        auto
+        1fr;
+
+      align-items: center;
+
+      gap: 10px;
+
+      text-align: center;
+
+    }
+
+
+    .team-name {
+
+      font-weight: 750;
+
+      font-size: 12px;
+
+    }
+
+
+    .team-badge {
+
+      width: 36px;
+
+      height: 36px;
+
+      margin: 0 auto 7px;
+
+      border-radius: 50%;
+
+      background: #f1f5f3;
+
+      display: grid;
+
+      place-items: center;
+
+      font-size: 14px;
+
+      font-weight: 900;
+
+    }
+
+
+    .score {
+
+      font-size: 18px;
+
+      font-weight: 950;
+
+    }
+
+
+    .vs {
+
+      color: var(--muted);
+
+      font-size: 10px;
+
+    }
+
+
+    /* =====================================================
+       NEWS
+    ===================================================== */
+
+    .news-layout {
+
+      display: grid;
+
+      grid-template-columns:
+        1.5fr
+        1fr;
+
+      gap: 18px;
+
+    }
+
+
+    .featured-news {
+
+      min-height: 310px;
+
+      border-radius: var(--radius);
+
+      padding: 25px;
+
+      display: flex;
+
+      flex-direction: column;
+
+      justify-content: flex-end;
+
+      color: white;
+
+      background:
+        linear-gradient(
+          to top,
+          rgba(0,0,0,.85),
+          rgba(0,0,0,.12)
+        ),
+        linear-gradient(
+          135deg,
+          #164f3e,
+          #0a2920
+        );
+
+      overflow: hidden;
+
+      position: relative;
+
+    }
+
+
+    .featured-news::before {
+
+      content: "⚽";
+
+      position: absolute;
+
+      right: 30px;
+
+      top: 30px;
+
+      font-size: 90px;
+
+      opacity: .08;
+
+    }
+
+
+    .news-category {
+
+      display: inline-block;
+
+      width: max-content;
+
+      padding: 5px 8px;
+
+      border-radius: 7px;
+
+      background: var(--green);
+
+      font-size: 9px;
+
+      font-weight: 850;
+
+      margin-bottom: 10px;
+
+    }
+
+
+    .featured-news h3 {
+
+      font-size: 23px;
+
+      line-height: 1.2;
+
+      max-width: 650px;
+
+    }
+
+
+    .news-meta {
+
+      color: #bacac5;
+
+      font-size: 10px;
+
+      margin-top: 10px;
+
+    }
+
+
+    .news-list {
+
+      background: white;
+
+      border:
+        1px solid var(--border);
+
+      border-radius: var(--radius);
+
+      padding: 8px 18px;
+
+    }
+
+
+    .news-item {
+
+      display: flex;
+
+      gap: 13px;
+
+      padding: 14px 0;
+
+      border-bottom:
+        1px solid #eef1ef;
+
+    }
+
+
+    .news-item:last-child {
+
+      border-bottom: 0;
+
+    }
+
+
+    .news-thumb {
+
+      width: 70px;
+
+      height: 62px;
+
+      border-radius: 10px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #e5efeb,
+          #c9ddd5
+        );
+
+      flex-shrink: 0;
+
+      display: grid;
+
+      place-items: center;
+
+      font-size: 24px;
+
+    }
+
+
+    .news-item h4 {
+
+      font-size: 12px;
+
+      line-height: 1.35;
+
+    }
+
+
+    .news-item p {
+
+      color: var(--muted);
+
+      font-size: 9px;
+
+      margin-top: 5px;
+
+    }
+
+
+    /* =====================================================
+       TRANSFERS
+    ===================================================== */
+
+    .transfers {
+
+      background: white;
+
+      border:
+        1px solid var(--border);
+
+      border-radius: var(--radius);
+
+      overflow: hidden;
+
+      box-shadow: var(--shadow);
+
+    }
+
+
+    .transfer-row {
+
+      display: grid;
+
+      grid-template-columns:
+        1.2fr
+        1fr
+        auto;
+
+      align-items: center;
+
+      gap: 15px;
+
+      padding: 15px 18px;
+
+      border-bottom:
+        1px solid #eef1ef;
+
+    }
+
+
+    .transfer-row:last-child {
+
+      border-bottom: 0;
+
+    }
+
+
+    .player {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 10px;
+
+    }
+
+
+    .player-avatar {
+
+      width: 38px;
+
+      height: 38px;
+
+      border-radius: 50%;
+
+      background: var(--green-light);
+
+      display: grid;
+
+      place-items: center;
+
+      font-size: 15px;
+
+    }
+
+
+    .player strong {
+
+      display: block;
+
+      font-size: 12px;
+
+    }
+
+
+    .player span {
+
+      color: var(--muted);
+
+      font-size: 9px;
+
+    }
+
+
+    .club-change {
+
+      font-size: 11px;
+
+      color: var(--muted);
+
+    }
+
+
+    .transfer-status {
+
+      padding: 5px 8px;
+
+      border-radius: 7px;
+
+      background: var(--green-light);
+
+      color: var(--green);
+
+      font-size: 9px;
+
+      font-weight: 800;
+
+    }
+
+
+    /* =====================================================
+       LEAGUES
+    ===================================================== */
+
+    .league-grid {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(5, 1fr);
+
+      gap: 11px;
+
+    }
+
+
+    .league-card {
+
+      background: white;
+
+      border:
+        1px solid var(--border);
+
+      border-radius: 14px;
+
+      padding: 17px;
+
+      text-align: center;
+
+      transition: .2s;
+
+    }
+
+
+    .league-card:hover {
+
+      transform: translateY(-3px);
+
+      border-color: var(--green);
+
+      box-shadow: var(--shadow);
+
+    }
+
+
+    .league-icon {
+
+      width: 43px;
+
+      height: 43px;
+
+      margin: 0 auto 10px;
+
+      border-radius: 12px;
+
+      background: var(--green-light);
+
+      color: var(--green);
+
+      display: grid;
+
+      place-items: center;
+
+      font-size: 18px;
+
+    }
+
+
+    .league-card strong {
+
+      display: block;
+
+      font-size: 11px;
+
+    }
+
+
+    .league-card span {
+
+      display: block;
+
+      color: var(--muted);
+
+      font-size: 9px;
+
+      margin-top: 3px;
+
+    }
+
+
+    /* =====================================================
+       FOOTER
+    ===================================================== */
+
+    .site-footer {
+
+      margin-top: 20px;
+
+      padding:
+        45px 20px 95px;
+
+      background: var(--black);
+
+      color: white;
+
+      text-align: center;
+
+    }
+
+
+    .footer-brand {
+
+      font-size: 21px;
+
+      font-weight: 900;
+
+    }
+
+
+    .footer-description {
+
+      max-width: 480px;
+
+      margin: 9px auto 25px;
+
+      color: #809890;
+
+      font-size: 11px;
+
+    }
+
+
+    .footer-links {
+
+      display: flex;
+
+      justify-content: center;
+
+      flex-wrap: wrap;
+
+      gap: 18px;
+
+      margin-bottom: 30px;
+
+    }
+
+
+    .footer-links a {
+
+      color: #a8bcb6;
+
+      font-size: 11px;
+
+    }
+
+
+    .designer-credit {
+
+      display: inline-block;
+
+      color: #7f9991;
+
+      font-size: 12px;
+
+      font-weight: 700;
+
+      animation:
+        designerPulse 3s ease-in-out infinite;
+
+    }
+
+
+    .designer-credit:hover {
+
+      color: #19b980;
+
+      transform: translateY(-2px);
+
+    }
+
+
+    @keyframes designerPulse {
+
+      0%,
+      100% {
+
+        opacity: .65;
+
+        transform: translateY(0);
+
+      }
+
+      50% {
+
+        opacity: 1;
+
+        transform: translateY(-2px);
+
+      }
+
+    }
+
+
+    /* =====================================================
+       MOBILE BOTTOM NAV
+    ===================================================== */
+
+    .mobile-nav {
+
+      display: none;
+
+      position: fixed;
+
+      bottom: 0;
+
+      left: 0;
+
+      right: 0;
+
+      height: 67px;
+
+      background:
+        rgba(7,28,23,.97);
+
+      border-top:
+        1px solid rgba(255,255,255,.08);
+
+      z-index: 1500;
+
+      padding:
+        7px 8px;
+
+    }
+
+
+    .mobile-nav a {
+
+      flex: 1;
+
+      display: flex;
+
+      flex-direction: column;
+
+      align-items: center;
+
+      justify-content: center;
+
+      color: #78918a;
+
+      font-size: 9px;
+
+      gap: 3px;
+
+    }
+
+
+    .mobile-nav a.active {
+
+      color: #19b980;
+
+    }
+
+
+    .mobile-nav-icon {
+
+      font-size: 19px;
+
+    }
+
+
+    /* =====================================================
+       SEARCH OVERLAY
+    ===================================================== */
+
+    .search-overlay {
+
+      display: none;
+
+      position: fixed;
+
+      inset: 0;
+
+      z-index: 2000;
+
+      background:
+        rgba(7,28,23,.94);
+
+      backdrop-filter: blur(10px);
+
+      padding: 20px;
+
+    }
+
+
+    .search-overlay.show {
+
+      display: block;
+
+    }
+
+
+    .search-box {
+
+      max-width: 700px;
+
+      margin: 90px auto;
+
+    }
+
+
+    .search-box-top {
+
+      display: flex;
+
+      gap: 10px;
+
+    }
+
+
+    .search-input {
+
+      flex: 1;
+
+      height: 55px;
+
+      border: 0;
+
+      outline: 0;
+
+      border-radius: 13px;
+
+      padding: 0 17px;
+
+      font-size: 15px;
+
+    }
+
+
+    .search-submit {
+
+      width: 55px;
+
+      border: 0;
+
+      border-radius: 13px;
+
+      background: var(--green);
+
+      color: white;
+
+      font-size: 20px;
+
+    }
+
+
+    .close-search {
+
+      margin-top: 14px;
+
+      background: transparent;
+
+      border: 0;
+
+      color: #a7bcb6;
+
+      font-size: 12px;
+
+    }
+
+
+    /* =====================================================
+       RESPONSIVE
+    ===================================================== */
+
+    @media (max-width: 1050px) {
+
+      .desktop-nav {
+
+        display: none;
+
+      }
+
+      .hero-inner {
+
+        grid-template-columns: 1fr;
+
+      }
+
+      .hero-card {
+
+        max-width: 600px;
+
+      }
+
+      .league-grid {
+
+        grid-template-columns:
+          repeat(3, 1fr);
+
+      }
+
+    }
+
+
+    @media (max-width: 800px) {
+
+      .prediction-summary,
+      .news-layout {
+
+        grid-template-columns: 1fr;
+
+      }
+
+
+      .matches-grid {
+
+        grid-template-columns:
+          1fr 1fr;
+
+      }
+
+
+      .transfer-row {
+
+        grid-template-columns:
+          1fr auto;
+
+      }
+
+
+      .club-change {
+
+        display: none;
+
+      }
+
+    }
+
+
+    @media (max-width: 600px) {
+
+      .header-inner {
+
+        height: 65px;
+
+        padding: 0 14px;
+
+      }
+
+
+      .logo-name {
+
+        font-size: 18px;
+
+      }
+
+
+      .logo-mark {
+
+        width: 39px;
+
+        height: 39px;
+
+      }
+
+
+      .time-box {
+
+        display: none;
+
+      }
+
+
+      .hero {
+
+        padding:
+          42px 15px 48px;
+
+      }
+
+
+      .hero h1 {
+
+        letter-spacing: -1.8px;
+
+      }
+
+
+      .hero-description {
+
+        font-size: 14px;
+
+      }
+
+
+      .container {
+
+        padding:
+          23px 14px;
+
+      }
+
+
+      .section-heading h2 {
+
+        font-size: 19px;
+
+      }
+
+
+      .matches-grid {
+
+        grid-template-columns: 1fr;
+
+      }
+
+
+      .league-grid {
+
+        grid-template-columns:
+          repeat(2, 1fr);
+
+      }
+
+
+      .featured-news {
+
+        min-height: 270px;
+
+      }
+
+
+      .featured-news h3 {
+
+        font-size: 20px;
+
+      }
+
+
+      .sponsor-card {
+
+        width: 215px;
+
+      }
+
+
+      .mobile-nav {
+
+        display: flex;
+
+      }
+
+
+      .site-footer {
+
+        padding-bottom: 85px;
+
+      }
+
+    }
+
+
+    @media (prefers-reduced-motion: reduce) {
+
+      html {
+
+        scroll-behavior: auto;
+
+      }
+
+
+      .sponsor-track,
+      .designer-credit {
+
+        animation: none;
+
+      }
+
+    }
+
+  </style>
+
+
+  <!-- STRUCTURED DATA -->
+
+  <script type="application/ld+json">
+
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "PaceFetch",
+    "url": "https://pacefetch.com/",
+    "description": "Football predictions, news, scores, fixtures and transfers.",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://pacefetch.com/?search={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+
+  </script>
+
 </head>
+
 
 <body>
 
-<header>
-    <nav class="nav">
 
-        <div class="logo">
-            <div class="logo-mark">⚡</div>
+  <!-- =====================================================
+       HEADER
+  ===================================================== -->
+
+  <header class="site-header">
+
+    <div class="header-inner">
+
+
+      <a href="/" class="logo">
+
+        <div class="logo-mark">
+          P
+        </div>
+
+        <div>
+
+          <div class="logo-name">
             PaceFetch
+          </div>
+
+          <span class="logo-tag">
+            Football Intelligence
+          </span>
+
         </div>
 
-        <div class="nav-links">
-            <a href="#predictions">Predictions</a>
-            <a href="#news">News</a>
-            <a href="#transfers">Transfers</a>
-            <a href="#live">Live</a>
-            <a href="#leagues">Leagues</a>
+      </a>
+
+
+      <nav class="desktop-nav">
+
+        <a href="/" class="active">
+          Home
+        </a>
+
+        <a href="/news/">
+          News
+        </a>
+
+        <a href="/predictions/">
+          Predictions
+        </a>
+
+        <a href="/transfers/">
+          Transfers
+        </a>
+
+        <a href="/leagues/">
+          Leagues
+        </a>
+
+        <a href="/teams/">
+          Teams
+        </a>
+
+      </nav>
+
+
+      <div class="header-right">
+
+
+        <div class="time-box">
+
+          <strong id="currentTime">
+            --:--
+          </strong>
+
+          <span>
+            GMT +1 • Nigeria
+          </span>
+
         </div>
 
-        <button class="search-btn" onclick="openSearch()">⌕</button>
 
-    </nav>
-</header>
+        <button
+          class="search-button"
+          id="searchButton"
+          aria-label="Search PaceFetch"
+          title="Search PaceFetch"
+        >
+
+          <svg
+            class="search-svg"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+
+            <circle
+              cx="11"
+              cy="11"
+              r="6.5"
+            ></circle>
+
+            <path
+              d="M16 16l5 5"
+            ></path>
+
+          </svg>
+
+        </button>
 
 
-<!-- HERO -->
+      </div>
 
-<section class="hero">
+    </div>
 
-    <div class="hero-main">
+  </header>
 
-        <div class="eyebrow">Football Intelligence</div>
+
+  <!-- =====================================================
+       HERO
+  ===================================================== -->
+
+  <section class="hero">
+
+    <div class="hero-inner">
+
+
+      <div>
+
+        <div class="hero-badge">
+
+          <span class="live-dot"></span>
+
+          FOOTBALL INTELLIGENCE
+
+        </div>
+
 
         <h1>
-            Fetch the game.<br>
-            <span>Stay ahead.</span>
+
+          Fetch
+
+          <span>
+            Predictions.
+          </span>
+
+          Fetch Football.
+
         </h1>
 
-        <p>
-            Get the latest football news, transfer updates, live scores,
-            fixtures and PaceFetch's daily football predictions — completely free.
+
+        <p class="hero-description">
+
+          Stay ahead with football predictions, breaking news,
+          live scores, transfers, fixtures and league intelligence
+          — all in one place.
+
         </p>
 
+
         <div class="hero-actions">
-            <button class="primary-btn"
-                    onclick="document.getElementById('predictions').scrollIntoView()">
-                🔮 Today's Predictions
-            </button>
 
-            <button class="secondary-btn"
-                    onclick="document.getElementById('news').scrollIntoView()">
-                📰 Latest News
-            </button>
+          <a
+            href="/predictions/"
+            class="primary-btn"
+          >
+            View PaceFetch 25 →
+          </a>
+
+
+          <a
+            href="/news/"
+            class="secondary-btn"
+          >
+            Latest Football News
+          </a>
+
         </div>
+
+      </div>
+
+
+      <div class="hero-card">
+
+        <div class="hero-card-top">
+
+          <div>
+
+            <div class="hero-card-title">
+              PaceFetch 25
+            </div>
+
+            <div class="hero-card-date">
+              Today's performance
+            </div>
+
+          </div>
+
+          <span class="live-dot"></span>
+
+        </div>
+
+
+        <div class="accuracy">
+          76%
+        </div>
+
+        <div class="accuracy-label">
+          Historical accuracy
+        </div>
+
+
+        <div class="progress">
+
+          <span></span>
+
+        </div>
+
+
+        <div class="hero-card-bottom">
+
+          <span>
+            Correct:
+            <strong>19</strong>
+          </span>
+
+          <span>
+            Predictions:
+            <strong>25</strong>
+          </span>
+
+        </div>
+
+      </div>
+
 
     </div>
 
+  </section>
 
-    <div class="performance">
 
-        <div class="performance-top">
-            <h3>🔮 PaceFetch 25</h3>
-            <span class="live-pill">TRACKED</span>
-        </div>
+  <main class="container">
 
-        <div class="big-stat">
-            <strong id="accuracy">72.4%</strong>
-            <span>Current prediction accuracy</span>
-        </div>
 
-        <div class="stat-grid">
+    <!-- ===================================================
+         SPONSORS
+    =================================================== -->
 
-            <div class="stat">
-                <b>362</b>
-                <small>CORRECT</small>
+    <section class="section">
+
+      <div class="sponsor-wrap">
+
+        <div class="sponsor-track">
+
+
+          <div class="sponsor-card">
+
+            <div class="sponsor-logo">
+              PF
             </div>
 
-            <div class="stat">
-                <b>500</b>
-                <small>ANALYSED</small>
+            <div>
+              <strong>
+                PaceFetch
+              </strong>
+
+              <span>
+                Football Intelligence
+              </span>
             </div>
 
-            <div class="stat">
-                <b>25</b>
-                <small>TODAY</small>
+          </div>
+
+
+          <div class="sponsor-card">
+
+            <div class="sponsor-logo">
+              ⚡
             </div>
+
+            <div>
+              <strong>
+                Your Company
+              </strong>
+
+              <span>
+                Advertise with PaceFetch
+              </span>
+            </div>
+
+          </div>
+
+
+          <div class="sponsor-card">
+
+            <div class="sponsor-logo">
+              ⚽
+            </div>
+
+            <div>
+              <strong>
+                Football Partner
+              </strong>
+
+              <span>
+                Official sponsor slot
+              </span>
+            </div>
+
+          </div>
+
+
+          <div class="sponsor-card">
+
+            <div class="sponsor-logo">
+              ★
+            </div>
+
+            <div>
+              <strong>
+                Premium Partner
+              </strong>
+
+              <span>
+                Featured advertising
+              </span>
+            </div>
+
+          </div>
+
+
+          <div class="sponsor-card">
+
+            <div class="sponsor-logo">
+              +
+            </div>
+
+            <div>
+              <strong>
+                Advertise Here
+              </strong>
+
+              <span>
+                Reach football fans
+              </span>
+            </div>
+
+          </div>
+
+
+          <!-- DUPLICATE FOR CONTINUOUS MOTION -->
+
+          <div class="sponsor-card">
+
+            <div class="sponsor-logo">
+              PF
+            </div>
+
+            <div>
+              <strong>
+                PaceFetch
+              </strong>
+
+              <span>
+                Football Intelligence
+              </span>
+            </div>
+
+          </div>
+
+
+          <div class="sponsor-card">
+
+            <div class="sponsor-logo">
+              ⚡
+            </div>
+
+            <div>
+              <strong>
+                Your Company
+              </strong>
+
+              <span>
+                Advertise with PaceFetch
+              </span>
+            </div>
+
+          </div>
+
 
         </div>
 
-    </div>
+      </div>
 
-</section>
-
-
-<main class="container">
+    </section>
 
 
-<!-- LIVE -->
+    <!-- ===================================================
+         PACEFETCH 25
+    =================================================== -->
 
-<section class="section" id="live">
+    <section class="section">
 
-    <div class="section-head">
+      <div class="section-heading">
+
         <div>
-            <h2 class="section-title">🔴 Live Now</h2>
-            <p class="section-subtitle">Matches happening right now</p>
+
+          <h2>
+            PaceFetch 25
+          </h2>
+
+          <p>
+            Today's strongest statistical selections
+          </p>
+
         </div>
 
-        <span class="view-all">VIEW ALL →</span>
-    </div>
+
+        <a
+          href="/predictions/"
+          class="view-all"
+        >
+          Full prediction history →
+        </a>
+
+      </div>
 
 
-    <div class="live-strip">
+      <div class="prediction-summary">
+
+
+        <div class="prediction-main">
+
+          <h3>
+            Today's Record
+          </h3>
+
+          <p>
+            September 6, 2026
+          </p>
+
+
+          <div class="prediction-score">
+
+            <div>
+
+              <div class="big-score">
+                19/25
+              </div>
+
+              <div class="score-label">
+                Correct predictions
+              </div>
+
+            </div>
+
+
+            <div>
+
+              <div class="score-percent">
+                76%
+              </div>
+
+              <div class="score-label">
+                Accuracy
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="prediction-side">
+
+          <div class="prediction-side-row">
+
+            <span>
+              Highest confidence
+            </span>
+
+            <strong>
+              89%
+            </strong>
+
+          </div>
+
+
+          <div class="prediction-side-row">
+
+            <span>
+              Correct scores
+            </span>
+
+            <strong class="correct">
+              4
+            </strong>
+
+          </div>
+
+
+          <div class="prediction-side-row">
+
+            <span>
+              Double chance
+            </span>
+
+            <strong class="correct">
+              7/8
+            </strong>
+
+          </div>
+
+
+          <div class="prediction-side-row">
+
+            <span>
+              BTTS
+            </span>
+
+            <strong>
+              5/7
+            </strong>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         LIVE MATCHES
+    =================================================== -->
+
+    <section class="section">
+
+      <div class="section-heading">
+
+        <div>
+
+          <h2>
+            Live Matches
+          </h2>
+
+          <p>
+            Follow today's football action
+          </p>
+
+        </div>
+
+
+        <a
+          href="/fixtures/"
+          class="view-all"
+        >
+          All fixtures →
+        </a>
+
+      </div>
+
+
+      <div class="matches-grid">
+
 
         <div class="match-card">
 
-            <div class="match-head">
-                <span>PREMIER LEAGUE</span>
-                <span class="live">● 67'</span>
+          <div class="match-top">
+
+            <span>
+              Premier League
+            </span>
+
+            <span class="live-label">
+              ● LIVE
+            </span>
+
+          </div>
+
+
+          <div class="teams">
+
+            <div>
+
+              <div class="team-badge">
+                A
+              </div>
+
+              <div class="team-name">
+                Arsenal
+              </div>
+
             </div>
 
-            <div class="teams">
-                <div class="team">Arsenal</div>
-                <div class="score">1–0</div>
-                <div class="team">Chelsea</div>
+
+            <div>
+
+              <div class="score">
+                2 - 1
+              </div>
+
+              <div class="vs">
+                67'
+              </div>
+
             </div>
 
-            <div class="match-footer">
-                <span>LIVE</span>
-                <span>Stats →</span>
+
+            <div>
+
+              <div class="team-badge">
+                C
+              </div>
+
+              <div class="team-name">
+                Chelsea
+              </div>
+
             </div>
+
+          </div>
 
         </div>
 
 
         <div class="match-card">
 
-            <div class="match-head">
-                <span>LA LIGA</span>
-                <span class="live">● 54'</span>
+          <div class="match-top">
+
+            <span>
+              La Liga
+            </span>
+
+            <span class="live-label">
+              ● LIVE
+            </span>
+
+          </div>
+
+
+          <div class="teams">
+
+            <div>
+
+              <div class="team-badge">
+                R
+              </div>
+
+              <div class="team-name">
+                Real Madrid
+              </div>
+
             </div>
 
-            <div class="teams">
-                <div class="team">Barcelona</div>
-                <div class="score">2–0</div>
-                <div class="team">Sevilla</div>
+
+            <div>
+
+              <div class="score">
+                1 - 0
+              </div>
+
+              <div class="vs">
+                54'
+              </div>
+
             </div>
 
-            <div class="match-footer">
-                <span>LIVE</span>
-                <span>Stats →</span>
+
+            <div>
+
+              <div class="team-badge">
+                S
+              </div>
+
+              <div class="team-name">
+                Sevilla
+              </div>
+
             </div>
+
+          </div>
 
         </div>
 
 
         <div class="match-card">
 
-            <div class="match-head">
-                <span>SERIE A</span>
-                <span>20:45</span>
+          <div class="match-top">
+
+            <span>
+              Serie A
+            </span>
+
+            <span>
+              20:45
+            </span>
+
+          </div>
+
+
+          <div class="teams">
+
+            <div>
+
+              <div class="team-badge">
+                I
+              </div>
+
+              <div class="team-name">
+                Inter
+              </div>
+
             </div>
 
-            <div class="teams">
-                <div class="team">Milan</div>
-                <div class="score">–</div>
-                <div class="team">Roma</div>
+
+            <div>
+
+              <div class="score">
+                VS
+              </div>
+
+              <div class="vs">
+                Today
+              </div>
+
             </div>
 
-            <div class="match-footer">
-                <span>UPCOMING</span>
-                <span>Preview →</span>
+
+            <div>
+
+              <div class="team-badge">
+                M
+              </div>
+
+              <div class="team-name">
+                Milan
+              </div>
+
             </div>
+
+          </div>
 
         </div>
 
-    </div>
 
-</section>
+      </div>
 
-
-<!-- AD SLOT -->
-
-<div class="ad-box">
-    ADVERTISEMENT
-    <!--
-    PASTE YOUR ADSTERRA CONTAINER CODE HERE
-    -->
-</div>
+    </section>
 
 
-<!-- PREDICTIONS -->
+    <!-- ===================================================
+         NEWS
+    =================================================== -->
 
-<section class="section" id="predictions">
+    <section class="section">
 
-    <div class="section-head">
+      <div class="section-heading">
 
         <div>
-            <h2 class="section-title">🔮 PaceFetch 25</h2>
-            <p class="section-subtitle">
-                Today's strongest statistically selected predictions
-            </p>
-        </div>
 
-        <span class="view-all">25 PICKS →</span>
+          <h2>
+            Latest Football News
+          </h2>
 
-    </div>
-
-
-    <div class="prediction-grid">
-
-
-        <div class="prediction">
-
-            <div class="pred-top">
-                <span class="league">PREMIER LEAGUE</span>
-                <span class="confidence">91%</span>
-            </div>
-
-            <div class="pred-match">
-                Arsenal vs Chelsea
-            </div>
-
-            <div class="pred-time">
-                Today • 16:00
-            </div>
-
-            <div class="prediction-line">
-                <span class="pick">Arsenal / Draw</span>
-                <span class="pick-label">DOUBLE CHANCE</span>
-            </div>
+          <p>
+            The stories football fans need to know
+          </p>
 
         </div>
 
 
-        <div class="prediction">
+        <a
+          href="/news/"
+          class="view-all"
+        >
+          View all news →
+        </a>
 
-            <div class="pred-top">
-                <span class="league">LA LIGA</span>
-                <span class="confidence">87%</span>
-            </div>
-
-            <div class="pred-match">
-                Barcelona vs Sevilla
-            </div>
-
-            <div class="pred-time">
-                Today • 18:30
-            </div>
-
-            <div class="prediction-line">
-                <span class="pick">Barcelona Win</span>
-                <span class="pick-label">1X2</span>
-            </div>
-
-        </div>
+      </div>
 
 
-        <div class="prediction">
-
-            <div class="pred-top">
-                <span class="league">BUNDESLIGA</span>
-                <span class="confidence">86%</span>
-            </div>
-
-            <div class="pred-match">
-                Bayern vs Mainz
-            </div>
-
-            <div class="pred-time">
-                Today • 19:30
-            </div>
-
-            <div class="prediction-line">
-                <span class="pick">Over 1.5 Goals</span>
-                <span class="pick-label">GOALS</span>
-            </div>
-
-        </div>
+      <div class="news-layout">
 
 
-        <div class="prediction">
+        <!-- FEATURED -->
 
-            <div class="pred-top">
-                <span class="league">SERIE A</span>
-                <span class="confidence">84%</span>
-            </div>
+        <a
+          href="/article/index.html?slug=premier-league-latest"
+          class="featured-news"
+        >
 
-            <div class="pred-match">
-                Milan vs Roma
-            </div>
-
-            <div class="pred-time">
-                Today • 20:45
-            </div>
-
-            <div class="prediction-line">
-                <span class="pick">Over 1.5 Goals</span>
-                <span class="pick-label">GOALS</span>
-            </div>
-
-        </div>
+          <span class="news-category">
+            FEATURED
+          </span>
 
 
-        <div class="prediction">
-
-            <div class="pred-top">
-                <span class="league">LIGUE 1</span>
-                <span class="confidence">83%</span>
-            </div>
-
-            <div class="pred-match">
-                PSG vs Lyon
-            </div>
-
-            <div class="pred-time">
-                Today • 21:00
-            </div>
-
-            <div class="prediction-line">
-                <span class="pick">PSG / Draw</span>
-                <span class="pick-label">DOUBLE CHANCE</span>
-            </div>
-
-        </div>
+          <h3>
+            The latest football stories making headlines today
+          </h3>
 
 
-        <div class="prediction">
+          <div class="news-meta">
+            PaceFetch News • September 6, 2026
+          </div>
 
-            <div class="pred-top">
-                <span class="league">EREDIVISIE</span>
-                <span class="confidence">82%</span>
-            </div>
-
-            <div class="pred-match">
-                Ajax vs Utrecht
-            </div>
-
-            <div class="pred-time">
-                Today • 21:00
-            </div>
-
-            <div class="prediction-line">
-                <span class="pick">Over 1.5 Goals</span>
-                <span class="pick-label">GOALS</span>
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
+        </a>
 
 
-<!-- NEWS -->
-
-<section class="section" id="news">
-
-    <div class="section-head">
-
-        <div>
-            <h2 class="section-title">📰 Latest Football</h2>
-            <p class="section-subtitle">
-                Breaking news and important football updates
-            </p>
-        </div>
-
-        <span class="view-all">ALL NEWS →</span>
-
-    </div>
-
-
-    <div class="content-grid">
+        <!-- NEWS LIST -->
 
         <div class="news-list">
 
 
-            <article class="news">
+          <a
+            href="/article/index.html?slug=transfer-centre"
+            class="news-item"
+          >
 
-                <div class="news-image">⚽</div>
+            <div class="news-thumb">
+              🔄
+            </div>
 
-                <div>
-                    <h3>
-                        Premier League clubs prepare for another major weekend of action
-                    </h3>
+            <div>
 
-                    <p>
-                        Get the latest team news, match developments and important updates.
-                    </p>
+              <h4>
+                Transfer Centre: Latest completed deals and developing moves
+              </h4>
 
-                    <div class="news-meta">
-                        PREMIER LEAGUE • 12 MIN AGO
-                    </div>
-                </div>
+              <p>
+                Transfers • 18 min ago
+              </p>
 
-            </article>
+            </div>
 
-
-            <article class="news">
-
-                <div class="news-image">🚨</div>
-
-                <div>
-                    <h3>
-                        Transfer window latest: major European clubs continue negotiations
-                    </h3>
-
-                    <p>
-                        PaceFetch tracks the latest developments from trusted football sources.
-                    </p>
-
-                    <div class="news-meta">
-                        TRANSFERS • 28 MIN AGO
-                    </div>
-                </div>
-
-            </article>
+          </a>
 
 
-            <article class="news">
+          <a
+            href="/article/index.html?slug=premier-league-roundup"
+            class="news-item"
+          >
 
-                <div class="news-image">🏆</div>
+            <div class="news-thumb">
+              ⚽
+            </div>
 
-                <div>
-                    <h3>
-                        Champions League preparations intensify across Europe
-                    </h3>
+            <div>
 
-                    <p>
-                        Follow fixtures, team news, predictions and competition updates.
-                    </p>
+              <h4>
+                Premier League: Everything you need to know from today's action
+              </h4>
 
-                    <div class="news-meta">
-                        CHAMPIONS LEAGUE • 41 MIN AGO
-                    </div>
-                </div>
+              <p>
+                Premier League • 32 min ago
+              </p>
 
-            </article>
+            </div>
+
+          </a>
+
+
+          <a
+            href="/article/index.html?slug=champions-league"
+            class="news-item"
+          >
+
+            <div class="news-thumb">
+              🏆
+            </div>
+
+            <div>
+
+              <h4>
+                Champions League clubs prepare for another major European campaign
+              </h4>
+
+              <p>
+                Champions League • 1 hr ago
+              </p>
+
+            </div>
+
+          </a>
+
+
+          <a
+            href="/article/index.html?slug=african-football"
+            class="news-item"
+          >
+
+            <div class="news-thumb">
+              🌍
+            </div>
+
+            <div>
+
+              <h4>
+                African football: Latest updates from across the continent
+              </h4>
+
+              <p>
+                African Football • 2 hrs ago
+              </p>
+
+            </div>
+
+          </a>
 
 
         </div>
 
+      </div>
 
-        <!-- TRANSFERS -->
-
-        <div id="transfers">
-
-            <div class="section-head">
-                <div>
-                    <h2 class="section-title">🔄 Transfers</h2>
-                    <p class="section-subtitle">Latest transfer radar</p>
-                </div>
-            </div>
+    </section>
 
 
-            <div class="transfer-box">
+    <!-- ===================================================
+         TRANSFERS
+    =================================================== -->
 
+    <section class="section">
 
-                <div class="transfer">
-
-                    <div>
-                        <div class="player">Player One</div>
-                        <div class="club">Club A</div>
-                    </div>
-
-                    <div class="arrow">→</div>
-
-                    <div>
-                        <div class="player">Club B</div>
-                        <div class="club">Advanced</div>
-                    </div>
-
-                </div>
-
-
-                <div class="transfer">
-
-                    <div>
-                        <div class="player">Player Two</div>
-                        <div class="club">Club C</div>
-                    </div>
-
-                    <div class="arrow">→</div>
-
-                    <div>
-                        <div class="player">Club D</div>
-                        <div class="club">Confirmed</div>
-                    </div>
-
-                </div>
-
-
-                <div class="transfer">
-
-                    <div>
-                        <div class="player">Player Three</div>
-                        <div class="club">Club E</div>
-                    </div>
-
-                    <div class="arrow">→</div>
-
-                    <div>
-                        <div class="player">Club F</div>
-                        <div class="club">Rumour</div>
-                    </div>
-
-                </div>
-
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- LEAGUES -->
-
-<section class="section" id="leagues">
-
-    <div class="section-head">
+      <div class="section-heading">
 
         <div>
-            <h2 class="section-title">🏆 Explore Leagues</h2>
-            <p class="section-subtitle">
-                Follow football around the world
-            </p>
+
+          <h2>
+            Transfer Centre
+          </h2>
+
+          <p>
+            Latest player movement
+          </p>
+
         </div>
 
-    </div>
+
+        <a
+          href="/transfers/"
+          class="view-all"
+        >
+          Full transfer centre →
+        </a>
+
+      </div>
 
 
-    <div class="league-grid">
+      <div class="transfers">
 
-        <div class="league-card">
-            <span class="league-icon">🏴</span>
-            Premier League
+
+        <div class="transfer-row">
+
+
+          <div class="player">
+
+            <div class="player-avatar">
+              ⚽
+            </div>
+
+            <div>
+
+              <strong>
+                Player Transfer
+              </strong>
+
+              <span>
+                Transfer update
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <div class="club-change">
+            Club → New Club
+          </div>
+
+
+          <span class="transfer-status">
+            UPDATED
+          </span>
+
         </div>
 
-        <div class="league-card">
-            <span class="league-icon">🇪🇸</span>
-            La Liga
+
+        <div class="transfer-row">
+
+
+          <div class="player">
+
+            <div class="player-avatar">
+              ⚽
+            </div>
+
+            <div>
+
+              <strong>
+                Transfer Watch
+              </strong>
+
+              <span>
+                Latest development
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <div class="club-change">
+            Club → New Club
+          </div>
+
+
+          <span class="transfer-status">
+            DEVELOPING
+          </span>
+
         </div>
 
-        <div class="league-card">
-            <span class="league-icon">🇮🇹</span>
-            Serie A
+
+        <div class="transfer-row">
+
+
+          <div class="player">
+
+            <div class="player-avatar">
+              ⚽
+            </div>
+
+            <div>
+
+              <strong>
+                Signing Update
+              </strong>
+
+              <span>
+                Official announcement
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <div class="club-change">
+            Club → New Club
+          </div>
+
+
+          <span class="transfer-status">
+            CONFIRMED
+          </span>
+
         </div>
 
-        <div class="league-card">
-            <span class="league-icon">🇩🇪</span>
-            Bundesliga
-        </div>
 
-        <div class="league-card">
-            <span class="league-icon">🇫🇷</span>
-            Ligue 1
-        </div>
+      </div>
 
-        <div class="league-card">
-            <span class="league-icon">🌍</span>
-            Champions League
-        </div>
-
-        <div class="league-card">
-            <span class="league-icon">🇳🇬</span>
-            Nigeria
-        </div>
-
-        <div class="league-card">
-            <span class="league-icon">🇧🇷</span>
-            Brazil
-        </div>
-
-        <div class="league-card">
-            <span class="league-icon">🇺🇸</span>
-            MLS
-        </div>
-
-        <div class="league-card">
-            <span class="league-icon">🇸🇦</span>
-            Saudi Pro League
-        </div>
-
-        <div class="league-card">
-            <span class="league-icon">🌍</span>
-            CAF
-        </div>
-
-        <div class="league-card">
-            <span class="league-icon">🌎</span>
-            World Football
-        </div>
-
-    </div>
-
-</section>
+    </section>
 
 
-<!-- AD -->
+    <!-- ===================================================
+         LEAGUES
+    =================================================== -->
 
-<div class="ad-box">
-    ADVERTISEMENT
-    <!-- SECOND ADSTERRA LOCATION -->
-</div>
+    <section class="section">
 
-
-</main>
-
-
-<footer>
-
-    <div class="footer-inner">
+      <div class="section-heading">
 
         <div>
-            <div class="footer-brand">⚡ PaceFetch</div>
-            <div class="footer-text">
-                Fetch Predictions. Stay Ahead.
-            </div>
+
+          <h2>
+            Popular Leagues
+          </h2>
+
+          <p>
+            Explore football competitions
+          </p>
+
         </div>
 
-        <div class="footer-links">
-            <a href="#">About</a>
-            <a href="#">Privacy</a>
-            <a href="#">Terms</a>
-            <a href="#">Contact</a>
-        </div>
-
-    </div>
-
-</footer>
+      </div>
 
 
-<!-- MOBILE NAV -->
-
-<div class="mobile-nav">
-
-    <button class="active"
-            onclick="window.scrollTo({top:0,behavior:'smooth'})">
-        🏠
-        <span>Home</span>
-    </button>
-
-    <button
-            onclick="document.getElementById('predictions').scrollIntoView()">
-        🔮
-        <span>Predict</span>
-    </button>
-
-    <button
-            onclick="document.getElementById('live').scrollIntoView()">
-        🔴
-        <span>Live</span>
-    </button>
-
-    <button
-            onclick="document.getElementById('news').scrollIntoView()">
-        📰
-        <span>News</span>
-    </button>
-
-    <button
-            onclick="document.getElementById('transfers').scrollIntoView()">
-        🔄
-        <span>Transfers</span>
-    </button>
-
-</div>
+      <div class="league-grid">
 
 
-<!-- SEARCH -->
-
-<div id="searchOverlay"
-     style="
-     display:none;
-     position:fixed;
-     inset:0;
-     z-index:3000;
-     background:rgba(3,9,17,.96);
-     backdrop-filter:blur(20px);
-     padding:80px 20px;
-     ">
-
-    <div style="
-        max-width:700px;
-        margin:auto;
-        ">
-
-        <button onclick="closeSearch()"
-                style="
-                float:right;
-                background:none;
-                border:0;
-                color:white;
-                font-size:28px;
-                ">
-            ×
-        </button>
-
-        <div style="clear:both"></div>
-
-        <p style="
-            color:#29e07f;
-            font-size:12px;
-            font-weight:900;
-            letter-spacing:2px;
-            margin-top:40px;
-            ">
-            SEARCH PACEFETCH
-        </p>
-
-        <input
-            id="searchInput"
-            type="text"
-            placeholder="Search teams, players, leagues..."
-            style="
-            width:100%;
-            margin-top:15px;
-            padding:18px;
-            border-radius:15px;
-            border:1px solid rgba(255,255,255,.1);
-            background:#0e1d31;
-            color:white;
-            outline:none;
-            font-size:17px;
-            "
+        <a
+          href="/leagues/?league=premier-league"
+          class="league-card"
         >
 
+          <div class="league-icon">
+            🏴
+          </div>
+
+          <strong>
+            Premier League
+          </strong>
+
+          <span>
+            England
+          </span>
+
+        </a>
+
+
+        <a
+          href="/leagues/?league=la-liga"
+          class="league-card"
+        >
+
+          <div class="league-icon">
+            🇪🇸
+          </div>
+
+          <strong>
+            La Liga
+          </strong>
+
+          <span>
+            Spain
+          </span>
+
+        </a>
+
+
+        <a
+          href="/leagues/?league=serie-a"
+          class="league-card"
+        >
+
+          <div class="league-icon">
+            🇮🇹
+          </div>
+
+          <strong>
+            Serie A
+          </strong>
+
+          <span>
+            Italy
+          </span>
+
+        </a>
+
+
+        <a
+          href="/leagues/?league=bundesliga"
+          class="league-card"
+        >
+
+          <div class="league-icon">
+            🇩🇪
+          </div>
+
+          <strong>
+            Bundesliga
+          </strong>
+
+          <span>
+            Germany
+          </span>
+
+        </a>
+
+
+        <a
+          href="/leagues/?league=ligue-1"
+          class="league-card"
+        >
+
+          <div class="league-icon">
+            🇫🇷
+          </div>
+
+          <strong>
+            Ligue 1
+          </strong>
+
+          <span>
+            France
+          </span>
+
+        </a>
+
+
+      </div>
+
+    </section>
+
+
+  </main>
+
+
+  <!-- =====================================================
+       FOOTER
+  ===================================================== -->
+
+  <footer class="site-footer">
+
+
+    <div class="footer-brand">
+      PaceFetch
     </div>
 
-</div>
+
+    <p class="footer-description">
+
+      Football predictions, news, scores, transfers
+      and football intelligence — completely free.
+
+    </p>
 
 
-<script>
+    <div class="footer-links">
 
-/* ================= SEARCH ================= */
+      <a href="/">
+        Home
+      </a>
 
-function openSearch(){
+      <a href="/news/">
+        News
+      </a>
 
-    document.getElementById("searchOverlay").style.display="block";
+      <a href="/predictions/">
+        Predictions
+      </a>
 
-    setTimeout(function(){
+      <a href="/transfers/">
+        Transfers
+      </a>
 
-        document.getElementById("searchInput").focus();
+      <a href="/leagues/">
+        Leagues
+      </a>
 
-    },100);
+      <a href="/admin/">
+        Admin
+      </a>
 
-}
-
-function closeSearch(){
-
-    document.getElementById("searchOverlay").style.display="none";
-
-}
+    </div>
 
 
-/* ================= ESCAPE SEARCH ================= */
+    <div class="designer-credit">
+      Designed by Pacethel
+    </div>
 
-document.addEventListener("keydown",function(e){
 
-    if(e.key==="Escape"){
-        closeSearch();
+  </footer>
+
+
+  <!-- =====================================================
+       MOBILE NAVIGATION
+  ===================================================== -->
+
+  <nav class="mobile-nav">
+
+
+    <a
+      href="/"
+      class="active"
+    >
+
+      <span class="mobile-nav-icon">
+        ⌂
+      </span>
+
+      Home
+
+    </a>
+
+
+    <a href="/news/">
+
+      <span class="mobile-nav-icon">
+        📰
+      </span>
+
+      News
+
+    </a>
+
+
+    <a href="/predictions/">
+
+      <span class="mobile-nav-icon">
+        🎯
+      </span>
+
+      Picks
+
+    </a>
+
+
+    <a href="/transfers/">
+
+      <span class="mobile-nav-icon">
+        🔄
+      </span>
+
+      Transfers
+
+    </a>
+
+
+    <a href="/leagues/">
+
+      <span class="mobile-nav-icon">
+        🏆
+      </span>
+
+      Leagues
+
+    </a>
+
+
+  </nav>
+
+
+  <!-- =====================================================
+       SEARCH
+  ===================================================== -->
+
+  <div
+    class="search-overlay"
+    id="searchOverlay"
+  >
+
+    <div class="search-box">
+
+
+      <div class="search-box-top">
+
+        <input
+          type="search"
+          id="searchInput"
+          class="search-input"
+          placeholder="Search football news, teams, players..."
+          autocomplete="off"
+        >
+
+
+        <button
+          class="search-submit"
+          id="searchSubmit"
+          aria-label="Submit search"
+        >
+
+          <svg
+            class="search-svg"
+            viewBox="0 0 24 24"
+            style="width:22px;height:22px"
+          >
+
+            <circle
+              cx="11"
+              cy="11"
+              r="6.5"
+            ></circle>
+
+            <path
+              d="M16 16l5 5"
+            ></path>
+
+          </svg>
+
+        </button>
+
+      </div>
+
+
+      <button
+        class="close-search"
+        id="closeSearch"
+      >
+        ✕ Close search
+      </button>
+
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       JAVASCRIPT
+  ===================================================== -->
+
+  <script>
+
+    /* =====================================================
+       NIGERIA GMT +1 CLOCK
+    ===================================================== */
+
+    function updateClock() {
+
+      const now = new Date();
+
+
+      const timeFormatter =
+        new Intl.DateTimeFormat(
+          "en-NG",
+          {
+            timeZone: "Africa/Lagos",
+
+            hour: "2-digit",
+
+            minute: "2-digit",
+
+            second: "2-digit",
+
+            hour12: false
+
+          }
+        );
+
+
+      const dateFormatter =
+        new Intl.DateTimeFormat(
+          "en-NG",
+          {
+            timeZone: "Africa/Lagos",
+
+            weekday: "short",
+
+            day: "2-digit",
+
+            month: "short",
+
+            year: "numeric"
+
+          }
+        );
+
+
+      document.getElementById(
+        "currentTime"
+      ).textContent =
+        timeFormatter.format(now);
+
+
+      document.title =
+        "PaceFetch — Football Predictions, News, Scores & Transfers";
+
     }
 
-});
+
+    updateClock();
+
+    setInterval(updateClock, 1000);
 
 
-/* ================= DEMO LIVE CLOCK ================= */
+    /* =====================================================
+       SEARCH
+    ===================================================== */
 
-function updateLiveTime(){
-
-    const liveElements=document.querySelectorAll(".live");
-
-    liveElements.forEach(function(el){
-
-        // Placeholder for future live API integration.
-        // Real match minute will come from backend.
-
-    });
-
-}
-
-setInterval(updateLiveTime,30000);
+    const searchButton =
+      document.getElementById(
+        "searchButton"
+      );
 
 
-/* ================= FUTURE API ================= */
+    const searchOverlay =
+      document.getElementById(
+        "searchOverlay"
+      );
 
-/*
-PACEFETCH BACKEND WILL EVENTUALLY REPLACE THE DEMO DATA ABOVE.
 
-Example:
+    const closeSearch =
+      document.getElementById(
+        "closeSearch"
+      );
 
-fetch("/api/predictions")
-.then(response => response.json())
-.then(data => {
-    // Render real predictions
-});
 
-fetch("/api/live")
-.then(response => response.json())
-.then(data => {
-    // Render live scores
-});
+    const searchInput =
+      document.getElementById(
+        "searchInput"
+      );
 
-fetch("/api/news")
-.then(response => response.json())
-.then(data => {
-    // Render latest football news
-});
 
-fetch("/api/transfers")
-.then(response => response.json())
-.then(data => {
-    // Render transfer updates
-});
-*/
+    const searchSubmit =
+      document.getElementById(
+        "searchSubmit"
+      );
 
-</script>
+
+    function openSearch() {
+
+      searchOverlay.classList.add(
+        "show"
+      );
+
+      setTimeout(() => {
+
+        searchInput.focus();
+
+      }, 100);
+
+      document.body.style.overflow =
+        "hidden";
+
+    }
+
+
+    function closeSearchOverlay() {
+
+      searchOverlay.classList.remove(
+        "show"
+      );
+
+      document.body.style.overflow =
+        "";
+
+    }
+
+
+    searchButton.addEventListener(
+      "click",
+      openSearch
+    );
+
+
+    closeSearch.addEventListener(
+      "click",
+      closeSearchOverlay
+    );
+
+
+    searchOverlay.addEventListener(
+      "click",
+      function(event) {
+
+        if (
+          event.target ===
+          searchOverlay
+        ) {
+
+          closeSearchOverlay();
+
+        }
+
+      }
+    );
+
+
+    function performSearch() {
+
+      const query =
+        searchInput.value.trim();
+
+
+      if (!query) {
+
+        searchInput.focus();
+
+        return;
+
+      }
+
+
+      /*
+        The full backend search engine
+        will eventually process this.
+
+        For now we route the query
+        to the news/search page.
+      */
+
+      window.location.href =
+        "/news/?search=" +
+        encodeURIComponent(query);
+
+    }
+
+
+    searchSubmit.addEventListener(
+      "click",
+      performSearch
+    );
+
+
+    searchInput.addEventListener(
+      "keydown",
+      function(event) {
+
+        if (
+          event.key === "Enter"
+        ) {
+
+          performSearch();
+
+        }
+
+
+        if (
+          event.key === "Escape"
+        ) {
+
+          closeSearchOverlay();
+
+        }
+
+      }
+    );
+
+
+    /* =====================================================
+       KEYBOARD SHORTCUT
+       "/" opens search
+    ===================================================== */
+
+    document.addEventListener(
+      "keydown",
+      function(event) {
+
+        if (
+          event.key === "/" &&
+          document.activeElement.tagName !==
+          "INPUT"
+        ) {
+
+          event.preventDefault();
+
+          openSearch();
+
+        }
+
+      }
+    );
+
+
+  </script>
+
 
 </body>
 </html>
