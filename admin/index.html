@@ -1,0 +1,1901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>PaceFetch Admin Dashboard</title>
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="stylesheet" href="../css/style.css">
+
+  <style>
+    :root {
+      --admin-bg: #f5f7fb;
+      --admin-card: #ffffff;
+      --admin-text: #111827;
+      --admin-muted: #6b7280;
+      --admin-border: #e5e7eb;
+      --admin-primary: #087f5b;
+      --admin-primary-dark: #056044;
+      --admin-danger: #dc2626;
+      --admin-sidebar: #071c17;
+      --admin-sidebar-text: #d7e7e1;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Inter, Arial, sans-serif;
+      background: var(--admin-bg);
+      color: var(--admin-text);
+      min-height: 100vh;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    /* =========================
+       LOGIN SCREEN
+    ========================= */
+
+    .admin-login {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background:
+        radial-gradient(circle at top right, rgba(8,127,91,.16), transparent 35%),
+        radial-gradient(circle at bottom left, rgba(8,127,91,.10), transparent 30%),
+        #071c17;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 430px;
+      background: rgba(255,255,255,.98);
+      border-radius: 24px;
+      padding: 36px;
+      box-shadow: 0 30px 80px rgba(0,0,0,.30);
+    }
+
+    .login-logo {
+      width: 64px;
+      height: 64px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #087f5b, #05a879);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 30px;
+      font-weight: 900;
+      margin-bottom: 22px;
+      box-shadow: 0 12px 30px rgba(8,127,91,.25);
+    }
+
+    .login-card h1 {
+      font-size: 27px;
+      margin-bottom: 8px;
+    }
+
+    .login-card > p {
+      color: var(--admin-muted);
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+
+    .password-field {
+      position: relative;
+    }
+
+    .password-field input {
+      width: 100%;
+      height: 54px;
+      padding: 0 52px 0 16px;
+      border: 1px solid var(--admin-border);
+      border-radius: 13px;
+      outline: none;
+      transition: .2s;
+    }
+
+    .password-field input:focus {
+      border-color: var(--admin-primary);
+      box-shadow: 0 0 0 4px rgba(8,127,91,.10);
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 8px;
+      top: 7px;
+      width: 40px;
+      height: 40px;
+      border: 0;
+      border-radius: 10px;
+      background: transparent;
+      color: #6b7280;
+      font-size: 20px;
+    }
+
+    .password-toggle:hover {
+      background: #f3f4f6;
+      color: var(--admin-primary);
+    }
+
+    .login-button {
+      width: 100%;
+      height: 54px;
+      margin-top: 16px;
+      border: 0;
+      border-radius: 13px;
+      background: var(--admin-primary);
+      color: white;
+      font-weight: 800;
+      transition: .2s;
+    }
+
+    .login-button:hover {
+      background: var(--admin-primary-dark);
+      transform: translateY(-1px);
+    }
+
+    .login-error {
+      display: none;
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 10px;
+      background: #fef2f2;
+      color: #b91c1c;
+      font-size: 14px;
+    }
+
+    /* =========================
+       DASHBOARD
+    ========================= */
+
+    .dashboard {
+      display: none;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: fixed;
+      inset: 0 auto 0 0;
+      width: 260px;
+      background: var(--admin-sidebar);
+      color: var(--admin-sidebar-text);
+      padding: 22px 15px;
+      z-index: 100;
+      overflow-y: auto;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 7px 10px 25px;
+    }
+
+    .brand-mark {
+      width: 43px;
+      height: 43px;
+      border-radius: 13px;
+      background: linear-gradient(135deg, #08a873, #075c43);
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 900;
+      font-size: 19px;
+    }
+
+    .brand strong {
+      color: white;
+      font-size: 20px;
+    }
+
+    .brand small {
+      display: block;
+      color: #8daaa0;
+      font-size: 11px;
+      margin-top: 2px;
+    }
+
+    .menu-label {
+      color: #648077;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.3px;
+      padding: 15px 12px 8px;
+    }
+
+    .side-link {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      margin: 3px 0;
+      border: 0;
+      background: transparent;
+      color: #b9cec8;
+      border-radius: 11px;
+      text-align: left;
+      font-weight: 600;
+    }
+
+    .side-link:hover,
+    .side-link.active {
+      background: rgba(255,255,255,.08);
+      color: white;
+    }
+
+    .side-icon {
+      width: 24px;
+      text-align: center;
+      font-size: 18px;
+    }
+
+    .sidebar-bottom {
+      margin-top: 25px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255,255,255,.08);
+    }
+
+    .exit-side {
+      color: #ff8c8c;
+    }
+
+    .main {
+      margin-left: 260px;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      height: 76px;
+      background: white;
+      border-bottom: 1px solid var(--admin-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      position: sticky;
+      top: 0;
+      z-index: 80;
+    }
+
+    .topbar-title h2 {
+      font-size: 20px;
+    }
+
+    .topbar-title p {
+      color: var(--admin-muted);
+      font-size: 12px;
+      margin-top: 3px;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .icon-button {
+      width: 43px;
+      height: 43px;
+      border: 1px solid var(--admin-border);
+      background: white;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-size: 19px;
+      transition: .2s;
+    }
+
+    .icon-button:hover {
+      border-color: var(--admin-primary);
+      color: var(--admin-primary);
+      transform: translateY(-1px);
+    }
+
+    .exit-button {
+      color: var(--admin-danger);
+    }
+
+    .content {
+      padding: 28px;
+    }
+
+    .welcome {
+      margin-bottom: 24px;
+    }
+
+    .welcome h1 {
+      font-size: 28px;
+      margin-bottom: 5px;
+    }
+
+    .welcome p {
+      color: var(--admin-muted);
+    }
+
+    /* STAT CARDS */
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: white;
+      border: 1px solid var(--admin-border);
+      border-radius: 17px;
+      padding: 20px;
+    }
+
+    .stat-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 17px;
+    }
+
+    .stat-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: #e9f7f2;
+      color: var(--admin-primary);
+      font-size: 19px;
+    }
+
+    .stat-card span {
+      color: var(--admin-muted);
+      font-size: 13px;
+    }
+
+    .stat-card strong {
+      display: block;
+      font-size: 27px;
+      margin-top: 5px;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: 20px;
+    }
+
+    .panel {
+      background: white;
+      border: 1px solid var(--admin-border);
+      border-radius: 18px;
+      padding: 21px;
+      margin-bottom: 20px;
+    }
+
+    .panel-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .panel-heading h3 {
+      font-size: 17px;
+    }
+
+    .panel-heading button {
+      border: 0;
+      background: transparent;
+      color: var(--admin-primary);
+      font-weight: 700;
+    }
+
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .quick-action {
+      padding: 15px;
+      border: 1px solid var(--admin-border);
+      background: #fafafa;
+      border-radius: 13px;
+      text-align: left;
+      transition: .2s;
+    }
+
+    .quick-action:hover {
+      border-color: var(--admin-primary);
+      background: #f4fbf8;
+      transform: translateY(-2px);
+    }
+
+    .quick-action strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .quick-action span {
+      color: var(--admin-muted);
+      font-size: 12px;
+    }
+
+    .activity {
+      display: flex;
+      gap: 12px;
+      padding: 13px 0;
+      border-bottom: 1px solid #f0f1f3;
+    }
+
+    .activity:last-child {
+      border-bottom: 0;
+    }
+
+    .activity-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #edf8f4;
+      color: var(--admin-primary);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+
+    .activity strong {
+      font-size: 13px;
+    }
+
+    .activity p {
+      font-size: 12px;
+      color: var(--admin-muted);
+      margin-top: 3px;
+    }
+
+    /* =========================
+       SETTINGS MODAL
+    ========================= */
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.55);
+      backdrop-filter: blur(5px);
+      z-index: 500;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.show {
+      display: flex;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 480px;
+      background: white;
+      border-radius: 21px;
+      padding: 25px;
+      box-shadow: 0 25px 70px rgba(0,0,0,.25);
+      animation: modalIn .2s ease;
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px) scale(.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 22px;
+    }
+
+    .modal-header h3 {
+      font-size: 20px;
+    }
+
+    .close-modal {
+      width: 37px;
+      height: 37px;
+      border: 0;
+      background: #f3f4f6;
+      border-radius: 10px;
+      font-size: 18px;
+    }
+
+    .setting-row {
+      padding: 15px 0;
+      border-bottom: 1px solid var(--admin-border);
+    }
+
+    .setting-row:last-child {
+      border-bottom: 0;
+    }
+
+    .setting-row strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .setting-row span {
+      color: var(--admin-muted);
+      font-size: 12px;
+    }
+
+    .change-password-btn {
+      margin-top: 12px;
+      padding: 10px 14px;
+      border: 0;
+      background: #eaf7f3;
+      color: var(--admin-primary);
+      border-radius: 9px;
+      font-weight: 700;
+    }
+
+    /* =========================
+       CHANGE PASSWORD
+    ========================= */
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 7px;
+    }
+
+    .form-group input {
+      width: 100%;
+      height: 48px;
+      border: 1px solid var(--admin-border);
+      border-radius: 11px;
+      padding: 0 14px;
+      outline: none;
+    }
+
+    .form-group input:focus {
+      border-color: var(--admin-primary);
+      box-shadow: 0 0 0 3px rgba(8,127,91,.08);
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 9px;
+      margin-top: 20px;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 10px;
+      padding: 11px 17px;
+      font-weight: 700;
+    }
+
+    .btn-secondary {
+      background: #f3f4f6;
+      color: #374151;
+    }
+
+    .btn-primary {
+      background: var(--admin-primary);
+      color: white;
+    }
+
+    /* =========================
+       EXIT MODAL
+    ========================= */
+
+    .exit-warning {
+      text-align: center;
+    }
+
+    .exit-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: #fef2f2;
+      color: var(--admin-danger);
+      display: grid;
+      place-items: center;
+      font-size: 27px;
+      margin: 0 auto 16px;
+    }
+
+    .exit-warning h3 {
+      margin-bottom: 8px;
+    }
+
+    .exit-warning p {
+      color: var(--admin-muted);
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    /* MOBILE */
+
+    .mobile-menu {
+      display: none;
+    }
+
+    @media (max-width: 1050px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .sidebar {
+        transform: translateX(-100%);
+        transition: .25s;
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .main {
+        margin-left: 0;
+      }
+
+      .mobile-menu {
+        display: grid;
+      }
+
+      .topbar {
+        padding: 0 15px;
+      }
+
+      .topbar-title h2 {
+        font-size: 16px;
+      }
+
+      .topbar-title p {
+        display: none;
+      }
+
+      .content {
+        padding: 18px 15px 90px;
+      }
+
+      .welcome h1 {
+        font-size: 23px;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .stat-card {
+        padding: 15px;
+      }
+
+      .stat-card strong {
+        font-size: 22px;
+      }
+
+      .quick-actions {
+        grid-template-columns: 1fr;
+      }
+
+      .login-card {
+        padding: 27px 22px;
+      }
+    }
+
+    @media (max-width: 430px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .exit-button-text {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =========================
+       LOGIN
+  ========================= -->
+
+  <section class="admin-login" id="loginScreen">
+
+    <div class="login-card">
+
+      <div class="login-logo">P</div>
+
+      <h1>PaceFetch Admin</h1>
+
+      <p>
+        Secure administrator access. Enter your dashboard password to continue.
+      </p>
+
+      <div class="password-field">
+
+        <input
+          type="password"
+          id="loginPassword"
+          placeholder="Enter password"
+          autocomplete="current-password"
+        >
+
+        <button
+          type="button"
+          class="password-toggle"
+          id="loginPasswordToggle"
+          aria-label="Show password"
+        >👁</button>
+
+      </div>
+
+      <button class="login-button" id="loginButton">
+        Unlock Dashboard
+      </button>
+
+      <div class="login-error" id="loginError">
+        Incorrect password. Please try again.
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =========================
+       DASHBOARD
+  ========================= -->
+
+  <section class="dashboard" id="dashboard">
+
+    <aside class="sidebar" id="sidebar">
+
+      <div class="brand">
+
+        <div class="brand-mark">P</div>
+
+        <div>
+          <strong>PaceFetch</strong>
+          <small>ADMIN CONTROL</small>
+        </div>
+
+      </div>
+
+
+      <div class="menu-label">MAIN</div>
+
+      <button class="side-link active">
+        <span class="side-icon">⌂</span>
+        Overview
+      </button>
+
+      <button class="side-link">
+        <span class="side-icon">📰</span>
+        News
+      </button>
+
+      <button class="side-link">
+        <span class="side-icon">🎯</span>
+        Predictions
+      </button>
+
+      <button class="side-link">
+        <span class="side-icon">🔄</span>
+        Transfers
+      </button>
+
+      <button class="side-link">
+        <span class="side-icon">⚽</span>
+        Matches
+      </button>
+
+
+      <div class="menu-label">MANAGEMENT</div>
+
+      <button class="side-link">
+        <span class="side-icon">📢</span>
+        Advertisers
+      </button>
+
+      <button class="side-link">
+        <span class="side-icon">🏆</span>
+        Leagues
+      </button>
+
+      <button class="side-link">
+        <span class="side-icon">👥</span>
+        Users
+      </button>
+
+
+      <div class="menu-label">SYSTEM</div>
+
+      <button class="side-link" id="settingsSideButton">
+        <span class="side-icon">⚙</span>
+        Settings
+      </button>
+
+      <div class="sidebar-bottom">
+
+        <button class="side-link exit-side" id="exitSideButton">
+          <span class="side-icon">⇥</span>
+          Exit Dashboard
+        </button>
+
+      </div>
+
+    </aside>
+
+
+    <main class="main">
+
+      <header class="topbar">
+
+        <div class="topbar-title">
+
+          <h2>Dashboard Overview</h2>
+
+          <p id="dashboardDate">
+            PaceFetch Administration
+          </p>
+
+        </div>
+
+
+        <div class="top-actions">
+
+          <button
+            class="icon-button mobile-menu"
+            id="mobileMenuButton"
+            aria-label="Open menu"
+          >
+            ☰
+          </button>
+
+          <!-- Advanced Search Icon -->
+          <button
+            class="icon-button"
+            id="adminSearchButton"
+            aria-label="Search dashboard"
+            title="Search"
+          >
+            🔎
+          </button>
+
+          <!-- Advanced Settings Icon -->
+          <button
+            class="icon-button"
+            id="settingsButton"
+            aria-label="Dashboard settings"
+            title="Settings"
+          >
+            ⚙
+          </button>
+
+          <!-- Exit Icon -->
+          <button
+            class="icon-button exit-button"
+            id="exitButton"
+            aria-label="Exit dashboard"
+            title="Exit Dashboard"
+          >
+            ⇥
+          </button>
+
+        </div>
+
+      </header>
+
+
+      <div class="content">
+
+        <div class="welcome">
+
+          <h1>Good day, Administrator 👋</h1>
+
+          <p>
+            Control your PaceFetch football platform from one place.
+          </p>
+
+        </div>
+
+
+        <!-- STATS -->
+
+        <div class="stats-grid">
+
+          <div class="stat-card">
+
+            <div class="stat-top">
+              <span>Published News</span>
+              <div class="stat-icon">📰</div>
+            </div>
+
+            <strong>248</strong>
+
+          </div>
+
+
+          <div class="stat-card">
+
+            <div class="stat-top">
+              <span>Predictions</span>
+              <div class="stat-icon">🎯</div>
+            </div>
+
+            <strong>125</strong>
+
+          </div>
+
+
+          <div class="stat-card">
+
+            <div class="stat-top">
+              <span>Active Advertisers</span>
+              <div class="stat-icon">📢</div>
+            </div>
+
+            <strong>5</strong>
+
+          </div>
+
+
+          <div class="stat-card">
+
+            <div class="stat-top">
+              <span>Today's Visitors</span>
+              <div class="stat-icon">👥</div>
+            </div>
+
+            <strong>12.8K</strong>
+
+          </div>
+
+        </div>
+
+
+        <div class="dashboard-grid">
+
+          <!-- LEFT -->
+
+          <div>
+
+            <div class="panel">
+
+              <div class="panel-heading">
+
+                <h3>Quick Actions</h3>
+
+              </div>
+
+
+              <div class="quick-actions">
+
+                <button class="quick-action">
+
+                  <strong>📰 Add News</strong>
+
+                  <span>
+                    Publish a new football story
+                  </span>
+
+                </button>
+
+
+                <button class="quick-action">
+
+                  <strong>🎯 Add Prediction</strong>
+
+                  <span>
+                    Create a new prediction
+                  </span>
+
+                </button>
+
+
+                <button class="quick-action">
+
+                  <strong>🔄 Add Signing</strong>
+
+                  <span>
+                    Manually publish a transfer
+                  </span>
+
+                </button>
+
+
+                <button class="quick-action">
+
+                  <strong>📢 Add Advertiser</strong>
+
+                  <span>
+                    Create a sponsor campaign
+                  </span>
+
+                </button>
+
+              </div>
+
+            </div>
+
+
+            <div class="panel">
+
+              <div class="panel-heading">
+
+                <h3>Recent Activity</h3>
+
+                <button>View all</button>
+
+              </div>
+
+
+              <div class="activity">
+
+                <div class="activity-icon">📰</div>
+
+                <div>
+                  <strong>News article published</strong>
+                  <p>Premier League update • 8 minutes ago</p>
+                </div>
+
+              </div>
+
+
+              <div class="activity">
+
+                <div class="activity-icon">🎯</div>
+
+                <div>
+                  <strong>Prediction added</strong>
+                  <p>Match prediction • 22 minutes ago</p>
+                </div>
+
+              </div>
+
+
+              <div class="activity">
+
+                <div class="activity-icon">🔄</div>
+
+                <div>
+                  <strong>Transfer updated</strong>
+                  <p>Transfer centre • 41 minutes ago</p>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- RIGHT -->
+
+          <div>
+
+            <div class="panel">
+
+              <div class="panel-heading">
+
+                <h3>Prediction Performance</h3>
+
+              </div>
+
+              <div style="text-align:center;padding:15px 0 25px">
+
+                <div style="font-size:45px;font-weight:900;color:#087f5b">
+                  76%
+                </div>
+
+                <div style="color:#6b7280;font-size:13px">
+                  Current PaceFetch 25 accuracy
+                </div>
+
+              </div>
+
+              <div style="
+                height:8px;
+                background:#edf0f2;
+                border-radius:20px;
+                overflow:hidden;
+              ">
+
+                <div style="
+                  width:76%;
+                  height:100%;
+                  background:#087f5b;
+                  border-radius:20px;
+                "></div>
+
+              </div>
+
+            </div>
+
+
+            <div class="panel">
+
+              <div class="panel-heading">
+
+                <h3>System Status</h3>
+
+              </div>
+
+              <div style="display:grid;gap:13px">
+
+                <div style="display:flex;justify-content:space-between">
+                  <span>Football API</span>
+                  <strong style="color:#087f5b">● Online</strong>
+                </div>
+
+                <div style="display:flex;justify-content:space-between">
+                  <span>News System</span>
+                  <strong style="color:#087f5b">● Online</strong>
+                </div>
+
+                <div style="display:flex;justify-content:space-between">
+                  <span>Prediction Engine</span>
+                  <strong style="color:#087f5b">● Online</strong>
+                </div>
+
+                <div style="display:flex;justify-content:space-between">
+                  <span>Database</span>
+                  <strong style="color:#087f5b">● Online</strong>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+
+  </section>
+
+
+  <!-- =========================
+       SETTINGS MODAL
+  ========================= -->
+
+  <div class="modal-overlay" id="settingsModal">
+
+    <div class="modal">
+
+      <div class="modal-header">
+
+        <h3>⚙ Dashboard Settings</h3>
+
+        <button class="close-modal" data-close="settingsModal">
+          ×
+        </button>
+
+      </div>
+
+
+      <div class="setting-row">
+
+        <strong>Security</strong>
+
+        <span>
+          Manage your PaceFetch administrator password.
+        </span>
+
+        <br>
+
+        <button
+          class="change-password-btn"
+          id="openChangePassword"
+        >
+          🔑 Change Password
+        </button>
+
+      </div>
+
+
+      <div class="setting-row">
+
+        <strong>Dashboard Protection</strong>
+
+        <span>
+          Password protection is enabled for this dashboard.
+        </span>
+
+      </div>
+
+
+      <div class="setting-row">
+
+        <strong>Session</strong>
+
+        <span>
+          Your current administrator session is active.
+        </span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       CHANGE PASSWORD MODAL
+  ========================= -->
+
+  <div class="modal-overlay" id="changePasswordModal">
+
+    <div class="modal">
+
+      <div class="modal-header">
+
+        <h3>🔐 Change Password</h3>
+
+        <button class="close-modal" data-close="changePasswordModal">
+          ×
+        </button>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>Current Password</label>
+
+        <div class="password-field">
+
+          <input
+            type="password"
+            id="currentPassword"
+            placeholder="Current password"
+          >
+
+          <button
+            type="button"
+            class="password-toggle"
+            data-target="currentPassword"
+          >
+            👁
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>New Password</label>
+
+        <div class="password-field">
+
+          <input
+            type="password"
+            id="newPassword"
+            placeholder="New password"
+          >
+
+          <button
+            type="button"
+            class="password-toggle"
+            data-target="newPassword"
+          >
+            👁
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>Confirm New Password</label>
+
+        <div class="password-field">
+
+          <input
+            type="password"
+            id="confirmPassword"
+            placeholder="Confirm new password"
+          >
+
+          <button
+            type="button"
+            class="password-toggle"
+            data-target="confirmPassword"
+          >
+            👁
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <div
+        id="passwordChangeMessage"
+        style="
+          display:none;
+          padding:11px;
+          border-radius:10px;
+          font-size:13px;
+          margin-top:5px;
+        "
+      ></div>
+
+
+      <div class="modal-actions">
+
+        <button
+          class="btn btn-secondary"
+          data-close="changePasswordModal"
+        >
+          Cancel
+        </button>
+
+        <button
+          class="btn btn-primary"
+          id="savePassword"
+        >
+          Save Password
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       EXIT CONFIRMATION
+  ========================= -->
+
+  <div class="modal-overlay" id="exitModal">
+
+    <div class="modal exit-warning">
+
+      <div class="exit-icon">
+        ⇥
+      </div>
+
+      <h3>Exit PaceFetch Dashboard?</h3>
+
+      <p>
+        Are you sure you want to exit the administrator dashboard?
+        You will need to enter your password again to access it.
+      </p>
+
+
+      <div class="modal-actions">
+
+        <button
+          class="btn btn-secondary"
+          data-close="exitModal"
+        >
+          Cancel
+        </button>
+
+        <button
+          class="btn"
+          id="confirmExit"
+          style="background:#dc2626;color:white"
+        >
+          Yes, Exit
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+    /* =====================================================
+       PACEFETCH ADMIN SECURITY
+    ===================================================== */
+
+    const DEFAULT_PASSWORD = "Amadi1390@!#";
+
+    const loginScreen = document.getElementById("loginScreen");
+    const dashboard = document.getElementById("dashboard");
+    const loginPassword = document.getElementById("loginPassword");
+    const loginButton = document.getElementById("loginButton");
+    const loginError = document.getElementById("loginError");
+
+
+    /*
+      Password is stored locally for this prototype.
+
+      IMPORTANT:
+      A frontend-only password is NOT true server-side security.
+      When PaceFetch gets its Python backend, authentication should
+      be moved to the backend/database.
+    */
+
+    function getStoredPassword() {
+
+      return localStorage.getItem("pacefetch_admin_password")
+        || DEFAULT_PASSWORD;
+
+    }
+
+
+    function openDashboard() {
+
+      loginScreen.style.display = "none";
+      dashboard.style.display = "block";
+
+      document.body.style.overflow = "auto";
+
+    }
+
+
+    function login() {
+
+      const enteredPassword = loginPassword.value;
+
+      if (enteredPassword === getStoredPassword()) {
+
+        sessionStorage.setItem(
+          "pacefetch_admin_authenticated",
+          "true"
+        );
+
+        loginError.style.display = "none";
+
+        openDashboard();
+
+      } else {
+
+        loginError.style.display = "block";
+
+        loginPassword.value = "";
+
+        loginPassword.focus();
+
+      }
+
+    }
+
+
+    loginButton.addEventListener("click", login);
+
+
+    loginPassword.addEventListener("keydown", function(event) {
+
+      if (event.key === "Enter") {
+        login();
+      }
+
+    });
+
+
+    /* =========================
+       SHOW / HIDE LOGIN PASSWORD
+    ========================= */
+
+    document
+      .getElementById("loginPasswordToggle")
+      .addEventListener("click", function() {
+
+        if (loginPassword.type === "password") {
+
+          loginPassword.type = "text";
+          this.textContent = "🙈";
+
+        } else {
+
+          loginPassword.type = "password";
+          this.textContent = "👁";
+
+        }
+
+      });
+
+
+    /* =========================
+       SHOW / HIDE ALL PASSWORDS
+    ========================= */
+
+    document.querySelectorAll(
+      ".password-toggle[data-target]"
+    ).forEach(button => {
+
+      button.addEventListener("click", function() {
+
+        const input =
+          document.getElementById(this.dataset.target);
+
+        if (input.type === "password") {
+
+          input.type = "text";
+          this.textContent = "🙈";
+
+        } else {
+
+          input.type = "password";
+          this.textContent = "👁";
+
+        }
+
+      });
+
+    });
+
+
+    /* =========================
+       SETTINGS
+    ========================= */
+
+    const settingsModal =
+      document.getElementById("settingsModal");
+
+    const changePasswordModal =
+      document.getElementById("changePasswordModal");
+
+    const exitModal =
+      document.getElementById("exitModal");
+
+
+    function openModal(modal) {
+
+      modal.classList.add("show");
+
+    }
+
+
+    function closeModal(modal) {
+
+      modal.classList.remove("show");
+
+    }
+
+
+    document
+      .getElementById("settingsButton")
+      .addEventListener("click", function() {
+
+        openModal(settingsModal);
+
+      });
+
+
+    document
+      .getElementById("settingsSideButton")
+      .addEventListener("click", function() {
+
+        openModal(settingsModal);
+
+      });
+
+
+    document
+      .getElementById("openChangePassword")
+      .addEventListener("click", function() {
+
+        closeModal(settingsModal);
+
+        openModal(changePasswordModal);
+
+      });
+
+
+    /* =========================
+       CLOSE MODALS
+    ========================= */
+
+    document.querySelectorAll(
+      "[data-close]"
+    ).forEach(button => {
+
+      button.addEventListener("click", function() {
+
+        const modal =
+          document.getElementById(this.dataset.close);
+
+        closeModal(modal);
+
+      });
+
+    });
+
+
+    /* Close by clicking outside */
+
+    document.querySelectorAll(
+      ".modal-overlay"
+    ).forEach(overlay => {
+
+      overlay.addEventListener("click", function(event) {
+
+        if (event.target === overlay) {
+          closeModal(overlay);
+        }
+
+      });
+
+    });
+
+
+    /* =========================
+       CHANGE PASSWORD
+    ========================= */
+
+    document
+      .getElementById("savePassword")
+      .addEventListener("click", function() {
+
+        const current =
+          document.getElementById("currentPassword").value;
+
+        const newPassword =
+          document.getElementById("newPassword").value;
+
+        const confirm =
+          document.getElementById("confirmPassword").value;
+
+        const message =
+          document.getElementById("passwordChangeMessage");
+
+
+        function showMessage(text, success) {
+
+          message.style.display = "block";
+
+          message.textContent = text;
+
+          message.style.background =
+            success ? "#ecfdf5" : "#fef2f2";
+
+          message.style.color =
+            success ? "#047857" : "#b91c1c";
+
+        }
+
+
+        if (current !== getStoredPassword()) {
+
+          showMessage(
+            "Current password is incorrect.",
+            false
+          );
+
+          return;
+
+        }
+
+
+        if (newPassword.length < 8) {
+
+          showMessage(
+            "New password must contain at least 8 characters.",
+            false
+          );
+
+          return;
+
+        }
+
+
+        if (newPassword !== confirm) {
+
+          showMessage(
+            "The new passwords do not match.",
+            false
+          );
+
+          return;
+
+        }
+
+
+        localStorage.setItem(
+          "pacefetch_admin_password",
+          newPassword
+        );
+
+
+        showMessage(
+          "Password changed successfully.",
+          true
+        );
+
+
+        document.getElementById("currentPassword").value = "";
+        document.getElementById("newPassword").value = "";
+        document.getElementById("confirmPassword").value = "";
+
+
+        setTimeout(() => {
+
+          closeModal(changePasswordModal);
+          message.style.display = "none";
+
+        }, 1200);
+
+      });
+
+
+    /* =========================
+       EXIT
+    ========================= */
+
+    function askToExit() {
+
+      openModal(exitModal);
+
+    }
+
+
+    document
+      .getElementById("exitButton")
+      .addEventListener("click", askToExit);
+
+
+    document
+      .getElementById("exitSideButton")
+      .addEventListener("click", askToExit);
+
+
+    document
+      .getElementById("confirmExit")
+      .addEventListener("click", function() {
+
+        sessionStorage.removeItem(
+          "pacefetch_admin_authenticated"
+        );
+
+        dashboard.style.display = "none";
+        loginScreen.style.display = "flex";
+
+        loginPassword.value = "";
+
+        closeModal(exitModal);
+
+        loginPassword.focus();
+
+      });
+
+
+    /* =========================
+       MOBILE SIDEBAR
+    ========================= */
+
+    const sidebar =
+      document.getElementById("sidebar");
+
+    document
+      .getElementById("mobileMenuButton")
+      .addEventListener("click", function() {
+
+        sidebar.classList.toggle("open");
+
+      });
+
+
+    /* =========================
+       ADMIN SEARCH
+    ========================= */
+
+    document
+      .getElementById("adminSearchButton")
+      .addEventListener("click", function() {
+
+        const query = prompt(
+          "Search PaceFetch administration:"
+        );
+
+        if (query && query.trim()) {
+
+          alert(
+            'Search system ready for: "' +
+            query.trim() +
+            '"'
+          );
+
+        }
+
+      });
+
+
+    /* =========================
+       DATE
+    ========================= */
+
+    function updateAdminDate() {
+
+      const now = new Date();
+
+      const formatter =
+        new Intl.DateTimeFormat(
+          "en-NG",
+          {
+            timeZone: "Africa/Lagos",
+            weekday: "short",
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false
+          }
+        );
+
+      document.getElementById(
+        "dashboardDate"
+      ).textContent =
+        formatter.format(now) + " • GMT +1";
+
+    }
+
+
+    updateAdminDate();
+
+    setInterval(updateAdminDate, 30000);
+
+
+    /* =========================
+       RESTORE SESSION
+    ========================= */
+
+    if (
+      sessionStorage.getItem(
+        "pacefetch_admin_authenticated"
+      ) === "true"
+    ) {
+
+      openDashboard();
+
+    }
+
+  </script>
+
+</body>
+</html>
