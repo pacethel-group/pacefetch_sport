@@ -1,115 +1,28 @@
 <!DOCTYPE html><html lang="en">
-<head>  <meta charset="UTF-8"><meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
-
-«»
-
-  <title>Latest Football News | PaceFetch</title><meta
-name="description"
-id="metaDescription"
-content="Latest football news, transfer updates, match stories and African football coverage from PaceFetch."
-
-«»
-
-<meta
-name="robots"
-content="index, follow, max-image-preview:large"
-
-«»
-
-  <link
-    rel="canonical"
-    href="https://pacefetch.com/news/"
-  ><meta
-property="og:type"
-content="website"
-
-«»
-
-<meta
-property="og:title"
-content="Latest Football News | PaceFetch"
-
-«»
-
-<meta
-property="og:description"
-content="Latest football news, transfers, match updates and football intelligence from PaceFetch."
-
-«»
-
-<meta
-property="og:url"
-content="https://pacefetch.com/news/"
-
-«»
-
-<meta
-property="og:site_name"
-content="PaceFetch"
-
-«»
-
-<meta
-property="og:image"
-content="https://pacefetch.com/assets/pacefetch-share.jpg"
-
-«»
-
-<meta
-name="twitter:card"
-content="summary_large_image"
-
-«»
-
-<meta
-name="twitter:title"
-content="Latest Football News | PaceFetch"
-
-«»
-
-<meta
-name="twitter:description"
-content="Latest football news, transfers and football updates from PaceFetch."
-
-«»
-
-<meta
-name="theme-color"
-content="#071c17"
-
-«»
-
-  <style>
-
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>Latest Football News | PaceFetch</title>  <meta name="description" content="PaceFetch brings you the latest football news, transfers, match updates, league stories and football intelligence from around the world.">
+  <meta name="keywords" content="football news, soccer news, Premier League news, transfer news, Champions League, La Liga, Serie A, Bundesliga, African football, PaceFetch">  <meta name="robots" content="index, follow, max-image-preview:large">  <meta property="og:type" content="website">
+  <meta property="og:title" content="Latest Football News | PaceFetch">
+  <meta property="og:description" content="Latest football news, transfers, match updates and football intelligence.">
+  <meta property="og:site_name" content="PaceFetch">  <link rel="canonical" href="/news/">  <style>
     :root {
-
       --green: #087f5b;
       --green-dark: #056044;
+      --green-bright: #0bb67c;
       --green-light: #e9f7f2;
-
       --black: #071c17;
       --black-2: #0d2b23;
-
       --white: #ffffff;
-
       --text: #111827;
       --muted: #6b7280;
-
       --border: #e6ebe9;
-
       --background: #f5f7f6;
-
       --red: #dc2626;
-
-      --radius: 17px;
-
-      --shadow:
-        0 10px 35px rgba(0,0,0,.055);
-
+      --orange: #f59e0b;
+      --radius: 18px;
+      --shadow: 0 10px 35px rgba(0,0,0,.055);
     }
-
 
     * {
       margin: 0;
@@ -117,1548 +30,837 @@ content="#071c17"
       box-sizing: border-box;
     }
 
-
     html {
       scroll-behavior: smooth;
     }
 
-
     body {
-
       background: var(--background);
-
       color: var(--text);
-
-      font-family:
-        Inter,
-        system-ui,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        sans-serif;
-
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       line-height: 1.55;
-
       overflow-x: hidden;
-
     }
 
+    body.menu-open {
+      overflow: hidden;
+    }
 
     a {
       color: inherit;
       text-decoration: none;
     }
 
-
     button {
       font: inherit;
       cursor: pointer;
     }
 
-
-    /* =====================================================
-       HEADER
-    ===================================================== */
+    /* ================= HEADER ================= */
 
     .site-header {
-
       position: sticky;
-
       top: 0;
-
       z-index: 1000;
-
-      height: 70px;
-
-      background:
-        rgba(7,28,23,.97);
-
+      height: 72px;
+      background: rgba(7,28,23,.97);
       color: white;
-
-      border-bottom:
-        1px solid rgba(255,255,255,.07);
-
-      backdrop-filter: blur(12px);
-
+      border-bottom: 1px solid rgba(255,255,255,.07);
+      backdrop-filter: blur(15px);
     }
-
 
     .header-inner {
-
-      max-width: 1180px;
-
+      max-width: 1220px;
       height: 100%;
-
       margin: auto;
-
-      padding: 0 18px;
-
+      padding: 0 20px;
       display: flex;
-
       align-items: center;
-
       justify-content: space-between;
-
-      gap: 15px;
-
+      gap: 20px;
     }
-
 
     .logo {
-
       display: flex;
-
       align-items: center;
-
-      gap: 10px;
-
+      gap: 11px;
       flex-shrink: 0;
-
     }
-
 
     .logo-mark {
-
-      width: 42px;
-
-      height: 42px;
-
+      width: 43px;
+      height: 43px;
       border-radius: 13px;
-
       display: grid;
-
       place-items: center;
-
-      font-size: 20px;
-
+      font-size: 21px;
       font-weight: 950;
-
-      background:
-        linear-gradient(
-          135deg,
-          #0bb67c,
-          #056044
-        );
-
+      background: linear-gradient(135deg, #0bb67c, #056044);
+      box-shadow: 0 8px 25px rgba(11,182,124,.18);
     }
-
 
     .logo-name {
-
-      font-size: 20px;
-
-      font-weight: 900;
-
-      letter-spacing: -.5px;
-
+      font-size: 21px;
+      font-weight: 950;
+      letter-spacing: -.7px;
     }
-
 
     .logo-tag {
-
       display: block;
-
       font-size: 8px;
-
       color: #89a59c;
-
       text-transform: uppercase;
-
       letter-spacing: 1px;
-
-      margin-top: -3px;
-
+      margin-top: -4px;
     }
-
 
     .desktop-nav {
-
       display: flex;
-
       align-items: center;
-
-      gap: 4px;
-
+      gap: 3px;
     }
-
 
     .desktop-nav a {
-
-      padding: 8px 11px;
-
-      border-radius: 8px;
-
+      padding: 9px 12px;
+      border-radius: 9px;
       color: #bdd0ca;
-
       font-size: 12px;
-
-      font-weight: 650;
-
+      font-weight: 700;
       transition: .2s;
-
     }
-
 
     .desktop-nav a:hover,
     .desktop-nav a.active {
-
-      background:
-        rgba(255,255,255,.08);
-
+      background: rgba(255,255,255,.09);
       color: white;
-
     }
-
 
     .header-actions {
-
       display: flex;
-
       align-items: center;
-
-      gap: 8px;
-
+      gap: 9px;
     }
-
 
     .clock {
-
-      padding: 6px 9px;
-
-      border:
-        1px solid rgba(255,255,255,.1);
-
-      border-radius: 8px;
-
+      padding: 6px 10px;
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 9px;
       text-align: right;
-
       white-space: nowrap;
-
     }
-
 
     .clock strong {
-
       display: block;
-
       font-size: 10px;
-
     }
-
 
     .clock span {
-
       display: block;
-
       color: #7e9990;
-
       font-size: 8px;
-
     }
 
-
-    .search-button {
-
-      width: 41px;
-
-      height: 41px;
-
-      border:
-        1px solid rgba(255,255,255,.1);
-
+    .search-button,
+    .menu-button {
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(255,255,255,.1);
       border-radius: 11px;
-
-      background:
-        rgba(255,255,255,.06);
-
+      background: rgba(255,255,255,.06);
       color: white;
-
       display: grid;
-
       place-items: center;
-
       transition: .2s;
-
     }
 
-
-    .search-button:hover {
-
+    .search-button:hover,
+    .menu-button:hover {
       background: var(--green);
-
     }
-
 
     .search-icon {
-
-      width: 18px;
-
-      height: 18px;
-
+      width: 19px;
+      height: 19px;
       fill: none;
-
       stroke: currentColor;
-
       stroke-width: 2;
-
       stroke-linecap: round;
-
     }
 
-
-    /* =====================================================
-       BREADCRUMBS
-    ===================================================== */
-
-    .breadcrumbs {
-
-      max-width: 1180px;
-
-      margin: auto;
-
-      padding:
-        19px 18px 8px;
-
-      color: var(--muted);
-
-      font-size: 11px;
-
-    }
-
-
-    .breadcrumbs a {
-
-      color: var(--green);
-
-      font-weight: 750;
-
-    }
-
-
-    .breadcrumbs span {
-
-      margin: 0 6px;
-
-      color: #aeb7b4;
-
-    }
-
-
-    /* =====================================================
-       MAIN
-    ===================================================== */
-
-    .container {
-
-      max-width: 1180px;
-
-      margin: auto;
-
-      padding:
-        10px 18px 55px;
-
-    }
-
-
-    .page-heading {
-
-      display: flex;
-
-      align-items: flex-end;
-
-      justify-content: space-between;
-
-      gap: 20px;
-
-      margin:
-        10px 0 22px;
-
-    }
-
-
-    .page-heading h1 {
-
-      font-size:
-        clamp(31px, 4vw, 45px);
-
-      line-height: 1;
-
-      letter-spacing: -1.7px;
-
-      font-weight: 950;
-
-    }
-
-
-    .page-heading p {
-
-      color: var(--muted);
-
-      font-size: 12px;
-
-      margin-top: 8px;
-
-      max-width: 600px;
-
-    }
-
-
-    .live-indicator {
-
-      display: inline-flex;
-
-      align-items: center;
-
-      gap: 7px;
-
-      color: var(--green);
-
-      font-size: 10px;
-
-      font-weight: 850;
-
-      white-space: nowrap;
-
-    }
-
-
-    .live-dot {
-
-      width: 7px;
-
-      height: 7px;
-
-      background: var(--green);
-
-      border-radius: 50%;
-
-      box-shadow:
-        0 0 0 5px rgba(8,127,91,.1);
-
-    }
-
-
-    /* =====================================================
-       CATEGORY NAV
-    ===================================================== */
-
-    .category-bar {
-
-      background: white;
-
-      border:
-        1px solid var(--border);
-
-      border-radius: 13px;
-
-      padding: 7px;
-
-      display: flex;
-
-      gap: 5px;
-
-      overflow-x: auto;
-
-      scrollbar-width: none;
-
-      margin-bottom: 22px;
-
-    }
-
-
-    .category-bar::-webkit-scrollbar {
+    .menu-button {
       display: none;
     }
 
+    /* ================= MOBILE MENU ================= */
 
-    .category {
-
-      border: 0;
-
-      background: transparent;
-
-      padding:
-        9px 13px;
-
-      border-radius: 8px;
-
-      color: var(--muted);
-
-      font-size: 10px;
-
-      font-weight: 800;
-
-      white-space: nowrap;
-
-      transition: .2s;
-
+    .mobile-menu {
+      position: fixed;
+      inset: 72px 0 0;
+      background: rgba(7,28,23,.98);
+      z-index: 900;
+      padding: 25px;
+      transform: translateX(100%);
+      transition: transform .3s ease;
     }
 
-
-    .category:hover,
-    .category.active {
-
-      background: var(--green);
-
-      color: white;
-
+    .mobile-menu.show {
+      transform: translateX(0);
     }
 
-
-    /* =====================================================
-       FEATURED
-    ===================================================== */
-
-    .section-label {
-
-      display: flex;
-
-      align-items: center;
-
-      gap: 9px;
-
-      margin:
-        25px 0 12px;
-
-    }
-
-
-    .section-label h2 {
-
-      font-size: 16px;
-
-      letter-spacing: -.3px;
-
-    }
-
-
-    .section-line {
-
-      flex: 1;
-
-      height: 1px;
-
-      background: var(--border);
-
-    }
-
-
-    .featured-grid {
-
-      display: grid;
-
-      grid-template-columns:
-        minmax(0, 1.45fr)
-        minmax(260px, .8fr);
-
-      gap: 15px;
-
-    }
-
-
-    .featured-main {
-
-      min-height: 360px;
-
-      border-radius: var(--radius);
-
-      overflow: hidden;
-
-      position: relative;
-
-      color: white;
-
-      background:
-        linear-gradient(
-          135deg,
-          #0a382b,
-          #087f5b
-        );
-
-      display: flex;
-
-      align-items: flex-end;
-
-      box-shadow: var(--shadow);
-
-    }
-
-
-    .featured-main::before {
-
-      content: "⚽";
-
-      position: absolute;
-
-      font-size: 150px;
-
-      right: 35px;
-
-      top: 38px;
-
-      opacity: .07;
-
-      transform: rotate(-12deg);
-
-    }
-
-
-    .featured-main::after {
-
-      content: "";
-
-      position: absolute;
-
-      inset: 0;
-
-      background:
-        linear-gradient(
-          transparent 25%,
-          rgba(0,0,0,.7)
-        );
-
-    }
-
-
-    .featured-content {
-
-      position: relative;
-
-      z-index: 2;
-
-      padding: 27px;
-
-      max-width: 720px;
-
-    }
-
-
-    .story-tag {
-
-      display: inline-flex;
-
-      padding:
-        5px 8px;
-
-      background:
-        rgba(255,255,255,.14);
-
-      border:
-        1px solid rgba(255,255,255,.1);
-
-      border-radius: 6px;
-
-      font-size: 8px;
-
-      font-weight: 900;
-
-      text-transform: uppercase;
-
-      letter-spacing: .5px;
-
-      margin-bottom: 10px;
-
-    }
-
-
-    .featured-content h2 {
-
-      font-size:
-        clamp(25px, 3.3vw, 38px);
-
-      line-height: 1.08;
-
-      letter-spacing: -1.2px;
-
-      font-weight: 900;
-
-    }
-
-
-    .featured-content p {
-
-      color: #c4ddd5;
-
-      font-size: 11px;
-
-      max-width: 620px;
-
-      margin-top: 9px;
-
-    }
-
-
-    .story-meta {
-
-      display: flex;
-
-      gap: 8px;
-
-      align-items: center;
-
-      color: #aacbc0;
-
-      font-size: 9px;
-
-      margin-top: 14px;
-
-    }
-
-
-    .featured-side {
-
-      display: grid;
-
-      gap: 15px;
-
-    }
-
-
-    .side-feature {
-
-      background: white;
-
-      border:
-        1px solid var(--border);
-
-      border-radius: var(--radius);
-
-      padding: 20px;
-
-      box-shadow: var(--shadow);
-
-      display: flex;
-
-      flex-direction: column;
-
-      justify-content: space-between;
-
-      min-height: 172px;
-
-      transition:
-        transform .2s,
-        box-shadow .2s;
-
-    }
-
-
-    .side-feature:hover {
-
-      transform: translateY(-3px);
-
-      box-shadow:
-        0 15px 40px rgba(0,0,0,.08);
-
-    }
-
-
-    .side-feature .story-tag {
-
-      background: var(--green-light);
-
-      color: var(--green);
-
-      border: 0;
-
-      align-self: flex-start;
-
-    }
-
-
-    .side-feature h3 {
-
-      font-size: 17px;
-
-      line-height: 1.25;
-
-      margin-top: 4px;
-
-    }
-
-
-    .side-feature p {
-
-      color: var(--muted);
-
-      font-size: 9px;
-
-      margin-top: 7px;
-
-    }
-
-
-    /* =====================================================
-       NEWS LAYOUT
-    ===================================================== */
-
-    .content-grid {
-
-      display: grid;
-
-      grid-template-columns:
-        minmax(0, 1fr)
-        300px;
-
-      gap: 22px;
-
-      align-items: start;
-
-    }
-
-
-    .news-list {
-
-      display: grid;
-
-      gap: 11px;
-
-    }
-
-
-    .news-card {
-
-      background: white;
-
-      border:
-        1px solid var(--border);
-
-      border-radius: 14px;
-
-      padding: 13px;
-
-      display: grid;
-
-      grid-template-columns:
-        125px
-        minmax(0,1fr);
-
-      gap: 15px;
-
-      transition:
-        transform .2s,
-        box-shadow .2s;
-
-    }
-
-
-    .news-card:hover {
-
-      transform: translateY(-2px);
-
-      box-shadow:
-        0 12px 32px rgba(0,0,0,.07);
-
-    }
-
-
-    .news-thumb {
-
-      min-height: 112px;
-
-      border-radius: 10px;
-
-      background:
-        linear-gradient(
-          135deg,
-          #dcebe6,
-          #b9d5cb
-        );
-
-      display: grid;
-
-      place-items: center;
-
-      font-size: 38px;
-
-      overflow: hidden;
-
-    }
-
-
-    .news-content {
-
-      padding:
-        3px 4px 3px 0;
-
-    }
-
-
-    .news-category {
-
-      display: inline-block;
-
-      color: var(--green);
-
-      background: var(--green-light);
-
-      padding:
-        4px 6px;
-
-      border-radius: 5px;
-
-      font-size: 7px;
-
-      font-weight: 900;
-
-      text-transform: uppercase;
-
-    }
-
-
-    .news-card h3 {
-
-      font-size: 16px;
-
-      line-height: 1.25;
-
-      margin-top: 7px;
-
-    }
-
-
-    .news-card p {
-
-      color: var(--muted);
-
-      font-size: 10px;
-
-      line-height: 1.5;
-
-      margin-top: 6px;
-
-    }
-
-
-    .news-meta {
-
-      color: #9aa5a1;
-
-      font-size: 8px;
-
-      margin-top: 8px;
-
-    }
-
-
-    /* =====================================================
-       SIDEBAR
-    ===================================================== */
-
-    .sidebar-card {
-
-      background: white;
-
-      border:
-        1px solid var(--border);
-
-      border-radius: 15px;
-
-      padding: 18px;
-
-      margin-bottom: 14px;
-
-      box-shadow: var(--shadow);
-
-    }
-
-
-    .sidebar-heading {
-
-      display: flex;
-
-      justify-content: space-between;
-
-      align-items: center;
-
-      margin-bottom: 11px;
-
-    }
-
-
-    .sidebar-heading h3 {
-
-      font-size: 14px;
-
-    }
-
-
-    .sidebar-heading a {
-
-      color: var(--green);
-
-      font-size: 9px;
-
-      font-weight: 800;
-
-    }
-
-
-    .trend {
-
-      display: flex;
-
-      gap: 9px;
-
-      padding:
-        11px 0;
-
-      border-bottom:
-        1px solid #eef1ef;
-
-    }
-
-
-    .trend:last-child {
-
-      border-bottom: 0;
-
-    }
-
-
-    .trend-number {
-
-      width: 25px;
-
-      height: 25px;
-
-      border-radius: 7px;
-
-      background: var(--green-light);
-
-      color: var(--green);
-
-      display: grid;
-
-      place-items: center;
-
-      font-size: 9px;
-
-      font-weight: 900;
-
-      flex-shrink: 0;
-
-    }
-
-
-    .trend h4 {
-
-      font-size: 10px;
-
-      line-height: 1.4;
-
-    }
-
-
-    .trend p {
-
-      color: var(--muted);
-
-      font-size: 7px;
-
-      margin-top: 3px;
-
-    }
-
-
-    /* =====================================================
-       AD / SPONSOR
-    ===================================================== */
-
-    .ad-card {
-
-      min-height: 150px;
-
-      border-radius: 15px;
-
-      background:
-        linear-gradient(
-          135deg,
-          #071c17,
-          #123d31
-        );
-
-      color: white;
-
-      padding: 19px;
-
-      display: flex;
-
-      flex-direction: column;
-
-      justify-content: center;
-
-      position: relative;
-
-      overflow: hidden;
-
-    }
-
-
-    .ad-card::after {
-
-      content: "AD";
-
-      position: absolute;
-
-      right: -12px;
-
-      top: 15px;
-
-      font-size: 65px;
-
-      font-weight: 950;
-
-      opacity: .035;
-
-    }
-
-
-    .ad-label {
-
-      color: #7da69a;
-
-      font-size: 7px;
-
-      font-weight: 900;
-
-      letter-spacing: 1px;
-
-    }
-
-
-    .ad-card h3 {
-
-      font-size: 18px;
-
-      margin-top: 5px;
-
-    }
-
-
-    .ad-card p {
-
-      color: #91aaa2;
-
-      font-size: 9px;
-
-      margin-top: 4px;
-
-    }
-
-
-    .ad-button {
-
-      margin-top: 13px;
-
-      display: inline-block;
-
-      align-self: flex-start;
-
-      background: var(--green);
-
-      border-radius: 7px;
-
-      padding: 7px 10px;
-
-      font-size: 8px;
-
-      font-weight: 850;
-
-    }
-
-
-    /* =====================================================
-       PAGINATION
-    ===================================================== */
-
-    .pagination {
-
-      display: flex;
-
-      justify-content: center;
-
-      gap: 5px;
-
-      margin-top: 25px;
-
-    }
-
-
-    .page-button {
-
-      width: 34px;
-
-      height: 34px;
-
-      border:
-        1px solid var(--border);
-
-      border-radius: 8px;
-
-      background: white;
-
-      color: var(--muted);
-
-      font-size: 10px;
-
-      font-weight: 800;
-
-    }
-
-
-    .page-button.active {
-
-      background: var(--green);
-
-      color: white;
-
-      border-color: var(--green);
-
-    }
-
-
-    /* =====================================================
-       SEARCH RESULT
-    ===================================================== */
-
-    .search-result-heading {
-
-      background:
-        linear-gradient(
-          135deg,
-          #eaf7f2,
-          #ffffff
-        );
-
-      border:
-        1px solid #dcece6;
-
-      border-radius: 14px;
-
-      padding: 17px;
-
-      margin-bottom: 15px;
-
-      display: none;
-
-    }
-
-
-    .search-result-heading.show {
-
+    .mobile-menu a {
       display: block;
-
-    }
-
-
-    .search-result-heading strong {
-
-      color: var(--green);
-
-    }
-
-
-    .clear-search {
-
-      display: inline-block;
-
-      margin-top: 8px;
-
-      color: var(--green);
-
-      font-size: 9px;
-
-      font-weight: 850;
-
-    }
-
-
-    /* =====================================================
-       EMPTY
-    ===================================================== */
-
-    .empty-state {
-
-      background: white;
-
-      border:
-        1px solid var(--border);
-
-      border-radius: 15px;
-
-      padding: 45px 20px;
-
-      text-align: center;
-
-      display: none;
-
-    }
-
-
-    .empty-state.show {
-
-      display: block;
-
-    }
-
-
-    .empty-state div {
-
-      font-size: 40px;
-
-    }
-
-
-    .empty-state h3 {
-
-      margin-top: 8px;
-
-      font-size: 17px;
-
-    }
-
-
-    .empty-state p {
-
-      color: var(--muted);
-
-      font-size: 10px;
-
-      margin-top: 5px;
-
-    }
-
-
-    /* =====================================================
-       FOOTER
-    ===================================================== */
-
-    .site-footer {
-
-      background: var(--black);
-
-      color: white;
-
-      text-align: center;
-
-      padding:
-        45px 20px 85px;
-
-    }
-
-
-    .footer-logo {
-
-      font-size: 20px;
-
-      font-weight: 900;
-
-    }
-
-
-    .footer-description {
-
-      max-width: 470px;
-
-      margin:
-        8px auto 22px;
-
-      color: #809991;
-
-      font-size: 10px;
-
-    }
-
-
-    .footer-links {
-
-      display: flex;
-
-      justify-content: center;
-
-      flex-wrap: wrap;
-
-      gap: 17px;
-
-      margin-bottom: 27px;
-
-    }
-
-
-    .footer-links a {
-
-      color: #a3b9b2;
-
-      font-size: 10px;
-
-    }
-
-
-    .designer-credit {
-
-      color: #78928a;
-
-      font-size: 11px;
-
+      padding: 16px 4px;
+      color: #c5d6d1;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      font-size: 16px;
       font-weight: 750;
-
-      animation:
-        designerPulse 3s ease-in-out infinite;
-
     }
 
-
-    @keyframes designerPulse {
-
-      0%,
-      100% {
-        opacity: .65;
-        transform: translateY(0);
-      }
-
-      50% {
-        opacity: 1;
-        transform: translateY(-2px);
-      }
-
-    }
-
-
-    /* =====================================================
-       SEARCH OVERLAY
-    ===================================================== */
+    /* ================= SEARCH ================= */
 
     .search-overlay {
-
       position: fixed;
-
       inset: 0;
-
-      background:
-        rgba(7,28,23,.96);
-
-      backdrop-filter: blur(10px);
-
+      background: rgba(7,28,23,.97);
+      backdrop-filter: blur(15px);
       z-index: 3000;
-
       display: none;
-
       padding: 20px;
-
     }
-
 
     .search-overlay.show {
       display: block;
     }
 
-
     .search-container {
-
-      max-width: 700px;
-
-      margin:
-        90px auto;
-
+      max-width: 760px;
+      margin: 100px auto;
     }
 
+    .search-title {
+      color: white;
+      font-size: 28px;
+      font-weight: 900;
+      margin-bottom: 18px;
+    }
 
     .search-form {
-
       display: flex;
-
       gap: 8px;
-
     }
-
 
     .search-input {
-
       flex: 1;
-
-      height: 55px;
-
+      height: 57px;
       border: 0;
-
       outline: 0;
-
-      border-radius: 12px;
-
-      padding:
-        0 16px;
-
+      border-radius: 13px;
+      padding: 0 17px;
       font-size: 15px;
-
     }
-
 
     .search-submit {
-
-      width: 55px;
-
+      width: 57px;
       border: 0;
-
-      border-radius: 12px;
-
+      border-radius: 13px;
       background: var(--green);
-
       color: white;
-
+      display: grid;
+      place-items: center;
     }
-
 
     .close-search {
-
-      margin-top: 13px;
-
+      margin-top: 14px;
       background: transparent;
-
       border: 0;
-
       color: #9ab0a9;
-
       font-size: 11px;
-
     }
 
+    /* ================= PAGE ================= */
 
-    /* =====================================================
-       MOBILE BOTTOM NAV
-    ===================================================== */
+    .breadcrumbs {
+      max-width: 1220px;
+      margin: auto;
+      padding: 20px 20px 8px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .breadcrumbs a {
+      color: var(--green);
+      font-weight: 800;
+    }
+
+    .breadcrumbs span {
+      margin: 0 6px;
+      color: #aeb7b4;
+    }
+
+    .container {
+      max-width: 1220px;
+      margin: auto;
+      padding: 10px 20px 65px;
+    }
+
+    .page-heading {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 20px;
+      margin: 12px 0 23px;
+    }
+
+    .page-heading h1 {
+      font-size: clamp(32px, 4vw, 48px);
+      line-height: 1;
+      letter-spacing: -1.8px;
+      font-weight: 950;
+    }
+
+    .page-heading p {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 9px;
+      max-width: 650px;
+    }
+
+    .live-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--green);
+      font-size: 10px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--green);
+      border-radius: 50%;
+      box-shadow: 0 0 0 5px rgba(8,127,91,.1);
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0%,100% { opacity: 1; }
+      50% { opacity: .4; }
+    }
+
+    /* ================= CATEGORY ================= */
+
+    .category-bar {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 7px;
+      display: flex;
+      gap: 5px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      margin-bottom: 25px;
+      box-shadow: var(--shadow);
+    }
+
+    .category-bar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .category {
+      border: 0;
+      background: transparent;
+      padding: 10px 14px;
+      border-radius: 9px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 850;
+      white-space: nowrap;
+      transition: .2s;
+    }
+
+    .category:hover,
+    .category.active {
+      background: var(--green);
+      color: white;
+    }
+
+    /* ================= FEATURED ================= */
+
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 27px 0 13px;
+    }
+
+    .section-label h2 {
+      font-size: 16px;
+      letter-spacing: -.3px;
+    }
+
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .featured-grid {
+      display: grid;
+      grid-template-columns: minmax(0,1.45fr) minmax(270px,.8fr);
+      gap: 16px;
+    }
+
+    .featured-main {
+      min-height: 385px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      position: relative;
+      color: white;
+      background:
+        radial-gradient(circle at 80% 25%, rgba(11,182,124,.35), transparent 30%),
+        linear-gradient(135deg,#0a382b,#087f5b);
+      display: flex;
+      align-items: flex-end;
+      box-shadow: 0 18px 50px rgba(5,96,68,.13);
+    }
+
+    .featured-main::before {
+      content: "⚽";
+      position: absolute;
+      font-size: 175px;
+      right: 35px;
+      top: 30px;
+      opacity: .07;
+      transform: rotate(-12deg);
+    }
+
+    .featured-main::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(transparent 20%,rgba(0,0,0,.76));
+    }
+
+    .featured-content {
+      position: relative;
+      z-index: 2;
+      padding: 30px;
+      max-width: 760px;
+    }
+
+    .story-tag {
+      display: inline-flex;
+      padding: 5px 8px;
+      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 6px;
+      font-size: 8px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-bottom: 11px;
+    }
+
+    .featured-content h2 {
+      font-size: clamp(26px,3.3vw,40px);
+      line-height: 1.07;
+      letter-spacing: -1.3px;
+      font-weight: 950;
+    }
+
+    .featured-content p {
+      color: #c4ddd5;
+      font-size: 11px;
+      max-width: 650px;
+      margin-top: 10px;
+    }
+
+    .story-meta {
+      display: flex;
+      gap: 9px;
+      align-items: center;
+      color: #aacbc0;
+      font-size: 9px;
+      margin-top: 15px;
+    }
+
+    .featured-side {
+      display: grid;
+      gap: 16px;
+    }
+
+    .side-feature {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 21px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 184px;
+      transition: transform .2s, box-shadow .2s;
+    }
+
+    .side-feature:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 17px 42px rgba(0,0,0,.08);
+    }
+
+    .side-feature .story-tag {
+      background: var(--green-light);
+      color: var(--green);
+      border: 0;
+      align-self: flex-start;
+    }
+
+    .side-feature h3 {
+      font-size: 17px;
+      line-height: 1.25;
+      margin-top: 5px;
+    }
+
+    .side-feature p {
+      color: var(--muted);
+      font-size: 9px;
+      margin-top: 7px;
+    }
+
+    /* ================= MAIN CONTENT ================= */
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) 310px;
+      gap: 23px;
+      align-items: start;
+      margin-top: 30px;
+    }
+
+    .news-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .news-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 13px;
+      display: grid;
+      grid-template-columns: 135px minmax(0,1fr);
+      gap: 16px;
+      transition: transform .2s, box-shadow .2s, border-color .2s;
+    }
+
+    .news-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 35px rgba(0,0,0,.07);
+      border-color: #d5e4df;
+    }
+
+    .news-thumb {
+      min-height: 120px;
+      border-radius: 11px;
+      background: linear-gradient(135deg,#dcebe6,#b9d5cb);
+      display: grid;
+      place-items: center;
+      font-size: 40px;
+      overflow: hidden;
+    }
+
+    .news-content {
+      padding: 3px 4px 3px 0;
+    }
+
+    .news-category {
+      display: inline-block;
+      color: var(--green);
+      background: var(--green-light);
+      padding: 4px 7px;
+      border-radius: 5px;
+      font-size: 7px;
+      font-weight: 950;
+      text-transform: uppercase;
+    }
+
+    .news-card h3 {
+      font-size: 17px;
+      line-height: 1.25;
+      margin-top: 7px;
+    }
+
+    .news-card p {
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.5;
+      margin-top: 6px;
+    }
+
+    .news-meta {
+      color: #9aa5a1;
+      font-size: 8px;
+      margin-top: 9px;
+    }
+
+    /* ================= SIDEBAR ================= */
+
+    .sidebar-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 18px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    .sidebar-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 11px;
+    }
+
+    .sidebar-heading h3 {
+      font-size: 14px;
+    }
+
+    .sidebar-heading a,
+    .refresh-button {
+      color: var(--green);
+      font-size: 9px;
+      font-weight: 850;
+      background: transparent;
+      border: 0;
+    }
+
+    .trend {
+      display: flex;
+      gap: 9px;
+      padding: 11px 0;
+      border-bottom: 1px solid #eef1ef;
+    }
+
+    .trend:last-child {
+      border-bottom: 0;
+    }
+
+    .trend-number {
+      width: 25px;
+      height: 25px;
+      border-radius: 7px;
+      background: var(--green-light);
+      color: var(--green);
+      display: grid;
+      place-items: center;
+      font-size: 9px;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .trend h4 {
+      font-size: 10px;
+      line-height: 1.4;
+    }
+
+    .trend p {
+      color: var(--muted);
+      font-size: 7px;
+      margin-top: 3px;
+    }
+
+    /* ================= AD ================= */
+
+    .ad-card {
+      min-height: 170px;
+      border-radius: 15px;
+      background: linear-gradient(135deg,#071c17,#123d31);
+      color: white;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ad-card::after {
+      content: "AD";
+      position: absolute;
+      right: -12px;
+      top: 15px;
+      font-size: 65px;
+      font-weight: 950;
+      opacity: .035;
+    }
+
+    .ad-label {
+      color: #7da69a;
+      font-size: 7px;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+
+    .ad-card h3 {
+      font-size: 18px;
+      margin-top: 5px;
+    }
+
+    .ad-card p {
+      color: #91aaa2;
+      font-size: 9px;
+      margin-top: 4px;
+    }
+
+    .ad-button {
+      margin-top: 13px;
+      display: inline-block;
+      align-self: flex-start;
+      background: var(--green);
+      border: 0;
+      color: white;
+      border-radius: 7px;
+      padding: 8px 11px;
+      font-size: 8px;
+      font-weight: 850;
+    }
+
+    /* ================= PAGINATION ================= */
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 27px;
+    }
+
+    .page-button {
+      width: 35px;
+      height: 35px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: white;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .page-button.active {
+      background: var(--green);
+      color: white;
+      border-color: var(--green);
+    }
+
+    /* ================= EMPTY ================= */
+
+    .empty-state {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 50px 20px;
+      text-align: center;
+      display: none;
+    }
+
+    .empty-state.show {
+      display: block;
+    }
+
+    .empty-state div {
+      font-size: 40px;
+    }
+
+    .empty-state h3 {
+      margin-top: 8px;
+      font-size: 17px;
+    }
+
+    .empty-state p {
+      color: var(--muted);
+      font-size: 10px;
+      margin-top: 5px;
+    }
+
+    /* ================= FOOTER ================= */
+
+    .site-footer {
+      background: var(--black);
+      color: white;
+      text-align: center;
+      padding: 48px 20px 90px;
+    }
+
+    .footer-logo {
+      font-size: 21px;
+      font-weight: 950;
+    }
+
+    .footer-description {
+      max-width: 500px;
+      margin: 8px auto 23px;
+      color: #809991;
+      font-size: 10px;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .footer-links a {
+      color: #a3b9b2;
+      font-size: 10px;
+    }
+
+    .designer-credit {
+      display: inline-block;
+      color: #78928a;
+      font-size: 11px;
+      font-weight: 800;
+      animation: designerPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes designerPulse {
+      0%,100% {
+        opacity: .55;
+        transform: translateY(0);
+      }
+      50% {
+        opacity: 1;
+        transform: translateY(-3px);
+      }
+    }
+
+    /* ================= MOBILE NAV ================= */
 
     .mobile-nav {
-
       display: none;
-
     }
 
+    /* ================= RESPONSIVE ================= */
 
-    /* =====================================================
-       RESPONSIVE
-    ===================================================== */
-
-    @media (max-width: 900px) {
+    @media (max-width: 950px) {
 
       .desktop-nav {
         display: none;
       }
 
+      .menu-button {
+        display: grid;
+      }
 
       .featured-grid {
-
         grid-template-columns: 1fr;
-
       }
-
 
       .content-grid {
-
         grid-template-columns: 1fr;
-
       }
-
     }
-
 
     @media (max-width: 600px) {
 
@@ -1666,441 +868,280 @@ content="#071c17"
         height: 64px;
       }
 
-
       .header-inner {
         padding: 0 13px;
       }
-
 
       .logo-mark {
         width: 39px;
         height: 39px;
       }
 
-
       .logo-name {
         font-size: 18px;
       }
-
 
       .clock {
         display: none;
       }
 
-
       .breadcrumbs {
-        padding:
-          15px 14px 7px;
+        padding: 15px 14px 7px;
       }
-
 
       .container {
-        padding:
-          7px 13px 40px;
+        padding: 7px 13px 40px;
       }
-
 
       .page-heading {
-
         align-items: flex-start;
-
         flex-direction: column;
-
         margin-top: 13px;
-
       }
-
 
       .page-heading h1 {
         font-size: 34px;
       }
 
-
       .featured-main {
-        min-height: 310px;
+        min-height: 320px;
       }
-
 
       .featured-content {
         padding: 21px;
       }
 
-
       .featured-content h2 {
         font-size: 27px;
       }
 
-
       .news-card {
-
-        grid-template-columns:
-          92px
-          minmax(0,1fr);
-
+        grid-template-columns: 92px minmax(0,1fr);
         gap: 11px;
-
         padding: 10px;
-
       }
-
 
       .news-thumb {
-
         min-height: 92px;
-
         font-size: 28px;
-
       }
-
 
       .news-card h3 {
         font-size: 13px;
       }
 
-
       .news-card p {
         display: none;
       }
 
-
-      .sidebar-card {
-        margin-bottom: 12px;
-      }
-
-
       .mobile-nav {
-
         position: fixed;
-
         bottom: 0;
-
         left: 0;
-
         right: 0;
-
-        height: 62px;
-
-        background:
-          rgba(7,28,23,.98);
-
-        border-top:
-          1px solid rgba(255,255,255,.08);
-
+        height: 64px;
+        background: rgba(7,28,23,.99);
+        border-top: 1px solid rgba(255,255,255,.08);
         z-index: 2000;
-
         display: grid;
-
-        grid-template-columns:
-          repeat(5,1fr);
-
+        grid-template-columns: repeat(5,1fr);
       }
-
 
       .mobile-nav a {
-
         color: #829c94;
-
         display: flex;
-
         flex-direction: column;
-
         align-items: center;
-
         justify-content: center;
-
         gap: 3px;
-
         font-size: 8px;
-
-        font-weight: 700;
-
+        font-weight: 750;
       }
-
 
       .mobile-nav a.active {
         color: white;
       }
 
-
       .mobile-nav-icon {
         font-size: 17px;
       }
-
     }
 
-
     @media (prefers-reduced-motion: reduce) {
-
       html {
         scroll-behavior: auto;
       }
 
-      .designer-credit {
+      .designer-credit,
+      .live-dot {
         animation: none;
       }
-
     }
-
-  </style></head><body>  <!-- =====================================================
-       HEADER
-  ===================================================== -->  <header class="site-header"><div class="header-inner">
-
-
-  <a href="/" class="logo">
-
-    <div class="logo-mark">
-      P
-    </div>
+  </style>  <!-- News Article Structured Data -->  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"NewsMediaOrganization",
+    "name":"PaceFetch",
+    "description":"Football news, transfers, scores, predictions and football intelligence.",
+    "url":"/news/"
+  }
+  </script></head><body>  <!-- ================= HEADER ================= -->  <header class="site-header">
+    <div class="header-inner">  <a class="logo" href="../">
+    <div class="logo-mark">⚽</div>
 
     <div>
-
-      <div class="logo-name">
-        PaceFetch
-      </div>
-
-      <span class="logo-tag">
-        Football Intelligence
-      </span>
-
+      <div class="logo-name">PaceFetch</div>
+      <span class="logo-tag">Football Intelligence</span>
     </div>
-
   </a>
 
-
   <nav class="desktop-nav">
-
-    <a href="/">
-      Home
-    </a>
-
-    <a
-      href="/news/"
-      class="active"
-    >
-      News
-    </a>
-
-    <a href="/predictions/">
-      Predictions
-    </a>
-
-    <a href="/transfers/">
-      Transfers
-    </a>
-
-    <a href="/leagues/">
-      Leagues
-    </a>
-
-    <a href="/teams/">
-      Teams
-    </a>
-
+    <a href="../">Home</a>
+    <a href="./" class="active">News</a>
+    <a href="../prediction/">Predictions</a>
+    <a href="../transfer/">Transfers</a>
+    <a href="../leagues/">Leagues</a>
+    <a href="../teams/">Teams</a>
   </nav>
-
 
   <div class="header-actions">
 
-
     <div class="clock">
-
-      <strong id="currentTime">
-        --:--:--
-      </strong>
-
-      <span>
-        GMT +1 • Nigeria
-      </span>
-
+      <strong id="clockTime">--:--:-- GMT +1</strong>
+      <span>Nigeria</span>
     </div>
 
-
-    <button
-      class="search-button"
-      id="openSearch"
-      aria-label="Search football news"
-    >
-
-      <svg
-        class="search-icon"
-        viewBox="0 0 24 24"
-      >
-
-        <circle
-          cx="11"
-          cy="11"
-          r="6.5"
-        ></circle>
-
-        <path
-          d="M16 16l5 5"
-        ></path>
-
+    <button class="search-button" id="openSearch" aria-label="Search football news">
+      <svg class="search-icon" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="6.5"></circle>
+        <path d="M16 16l5 5"></path>
       </svg>
+    </button>
 
+    <button class="menu-button" id="openMenu" aria-label="Open menu">
+      ☰
     </button>
 
   </div>
+</div>
+
+  </header>  <!-- ================= MOBILE MENU ================= -->  <div class="mobile-menu" id="mobileMenu"><a href="../">⌂ Home</a>
+<a href="./">📰 News</a>
+<a href="../prediction/">🎯 Predictions</a>
+<a href="../transfer/">↔ Transfers</a>
+<a href="../leagues/">🏆 Leagues</a>
+<a href="../teams/">👥 Teams</a>
+
+  </div>  <!-- ================= SEARCH OVERLAY ================= -->  <div class="search-overlay" id="searchOverlay"><div class="search-container">
+
+  <div class="search-title">
+    Search PaceFetch
+  </div>
+
+  <form class="search-form" id="searchForm">
+
+    <input
+      type="search"
+      class="search-input"
+      id="searchInput"
+      placeholder="Search football news, transfers, teams..."
+      autocomplete="off"
+    >
+
+    <button class="search-submit" type="submit">
+      🔎
+    </button>
+
+  </form>
+
+  <button class="close-search" id="closeSearch">
+    ✕ Close search
+  </button>
 
 </div>
 
-  </header>  <!-- =====================================================
-       BREADCRUMBS
-  ===================================================== -->  <div class="breadcrumbs"><a href="/">
-  Home
-</a>
-
-<span>›</span>
-
-<span>
-  Football News
-</span>
-
-  </div>  <!-- =====================================================
-       MAIN
-  ===================================================== -->  <main class="container"><section class="page-heading">
+  </div>  <!-- ================= BREADCRUMBS ================= -->  <div class="breadcrumbs">
+    <a href="../">Home</a>
+    <span>›</span>
+    Football News
+  </div>  <!-- ================= MAIN ================= -->  <main class="container"><section class="page-heading">
 
   <div>
-
-    <h1>
-      Football News
-    </h1>
+    <h1>Football News</h1>
 
     <p>
-      Latest football stories, transfer developments,
-      match updates and football intelligence from
-      around the world.
+      Latest football stories, transfer developments, match updates
+      and football intelligence from around the world.
     </p>
-
   </div>
 
-
   <div class="live-indicator">
-
     <span class="live-dot"></span>
-
     LIVE NEWS DESK
-
   </div>
 
 </section>
 
+<!-- ================= CATEGORIES ================= -->
 
-<!-- ===================================================
-     CATEGORIES
-===================================================== -->
+<div class="category-bar">
 
-<div
-  class="category-bar"
-  id="categoryBar"
->
-
-  <button
-    class="category active"
-    data-category="All"
-  >
+  <button class="category active" data-category="all">
     All News
   </button>
 
-  <button
-    class="category"
-    data-category="Premier League"
-  >
+  <button class="category" data-category="premier-league">
     Premier League
   </button>
 
-  <button
-    class="category"
-    data-category="Transfers"
-  >
+  <button class="category" data-category="transfers">
     Transfers
   </button>
 
-  <button
-    class="category"
-    data-category="Champions League"
-  >
+  <button class="category" data-category="champions-league">
     Champions League
   </button>
 
-  <button
-    class="category"
-    data-category="African Football"
-  >
+  <button class="category" data-category="african-football">
     African Football
   </button>
 
-  <button
-    class="category"
-    data-category="La Liga"
-  >
+  <button class="category" data-category="la-liga">
     La Liga
   </button>
 
-  <button
-    class="category"
-    data-category="Serie A"
-  >
+  <button class="category" data-category="serie-a">
     Serie A
   </button>
 
-  <button
-    class="category"
-    data-category="Bundesliga"
-  >
+  <button class="category" data-category="bundesliga">
     Bundesliga
   </button>
 
 </div>
 
+<!-- ================= SEARCH RESULT ================= -->
 
-<!-- ===================================================
-     SEARCH RESULT
-===================================================== -->
+<div class="search-result-heading" id="searchResult">
+  Showing results for
+  <strong id="searchTerm"></strong>
+  <br>
 
-<div
-  class="search-result-heading"
-  id="searchResult"
->
-
-  <div>
-    Showing results for
-    <strong id="searchTerm"></strong>
-  </div>
-
-  <a
-    href="/news/"
-    class="clear-search"
-  >
+  <button class="clear-search" id="clearSearch">
     ✕ Clear search
-  </a>
-
+  </button>
 </div>
 
-
-<!-- ===================================================
-     FEATURED
-===================================================== -->
+<!-- ================= FEATURED ================= -->
 
 <div class="section-label">
-
-  <h2>
-    Featured
-  </h2>
-
+  <h2>Featured</h2>
   <div class="section-line"></div>
-
 </div>
-
 
 <section class="featured-grid">
 
-
-  <a
-    href="/article/index.html?slug=premier-league-latest"
-    class="featured-main"
-    id="featuredMain"
-  >
+  <a href="#" class="featured-main" data-article="latest-football">
 
     <div class="featured-content">
 
@@ -2113,44 +1154,29 @@ content="#071c17"
       </h2>
 
       <p>
-        Follow the biggest football developments,
-        performances and stories currently shaping
-        the game.
+        Follow the biggest football developments, performances
+        and stories currently shaping the game.
       </p>
 
       <div class="story-meta">
-
-        <span>
-          PaceFetch Sports Desk
-        </span>
-
+        <span>PaceFetch Sports Desk</span>
         <span>•</span>
-
-        <span>
-          Today
-        </span>
-
+        <span>Today</span>
       </div>
 
     </div>
 
   </a>
 
-
   <div class="featured-side">
 
+    <a href="#" class="side-feature" data-article="transfer-centre">
 
-    <a
-      href="/article/index.html?slug=transfer-centre"
-      class="side-feature"
-    >
+      <span class="story-tag">
+        Transfers
+      </span>
 
       <div>
-
-        <span class="story-tag">
-          Transfers
-        </span>
-
         <h3>
           Transfer Centre: Latest Completed Deals and Developing Moves
         </h3>
@@ -2158,37 +1184,21 @@ content="#071c17"
         <p>
           Follow confirmed moves and developing transfer stories.
         </p>
-
       </div>
 
       <div class="story-meta">
-
-        <span>
-          Transfer Desk
-        </span>
-
-        <span>•</span>
-
-        <span>
-          Today
-        </span>
-
+        PaceFetch Transfer Desk • Today
       </div>
 
     </a>
 
+    <a href="#" class="side-feature" data-article="champions-league">
 
-    <a
-      href="/article/index.html?slug=champions-league"
-      class="side-feature"
-    >
+      <span class="story-tag">
+        Champions League
+      </span>
 
       <div>
-
-        <span class="story-tag">
-          Champions League
-        </span>
-
         <h3>
           European Clubs Prepare for Another Major Campaign
         </h3>
@@ -2196,74 +1206,272 @@ content="#071c17"
         <p>
           The latest developments from European football.
         </p>
-
       </div>
 
       <div class="story-meta">
-
-        <span>
-          Europe Desk
-        </span>
-
-        <span>•</span>
-
-        <span>
-          Today
-        </span>
-
+        PaceFetch Europe Desk • Today
       </div>
 
     </a>
-
 
   </div>
 
 </section>
 
+<!-- ================= NEWS + SIDEBAR ================= -->
 
-<!-- ===================================================
-     NEWS + SIDEBAR
-===================================================== -->
+<div class="content-grid">
 
-<div class="section-label">
+  <section>
 
-  <h2>
-    Latest Stories
-  </h2>
+    <div class="section-label">
+      <h2>Latest Stories</h2>
+      <div class="section-line"></div>
+    </div>
 
-  <div class="section-line"></div>
+    <div class="news-list" id="newsList">
 
-</div>
+      <article class="news-card" data-category="premier-league">
 
+        <div class="news-thumb">
+          ⚽
+        </div>
 
-<section class="content-grid">
+        <div class="news-content">
 
+          <span class="news-category">
+            Premier League
+          </span>
 
-  <div>
+          <h3>
+            The Latest Football Stories Making Headlines Today
+          </h3>
 
+          <p>
+            A look at the biggest developments, talking points and
+            stories currently shaping the football conversation.
+          </p>
 
-    <div
-      class="news-list"
-      id="newsList"
-    >
+          <div class="news-meta">
+            PaceFetch Sports Desk • Today • 4 min read
+          </div>
 
-      <!-- JavaScript renders stories -->
+        </div>
+
+      </article>
+
+      <article class="news-card" data-category="transfers">
+
+        <div class="news-thumb">
+          🔄
+        </div>
+
+        <div class="news-content">
+
+          <span class="news-category">
+            Transfers
+          </span>
+
+          <h3>
+            Transfer Centre: Latest Completed Deals and Developing Moves
+          </h3>
+
+          <p>
+            Follow confirmed transfers and developing player-movement
+            stories from the football world.
+          </p>
+
+          <div class="news-meta">
+            PaceFetch Transfer Desk • Today • 3 min read
+          </div>
+
+        </div>
+
+      </article>
+
+      <article class="news-card" data-category="premier-league">
+
+        <div class="news-thumb">
+          🏆
+        </div>
+
+        <div class="news-content">
+
+          <span class="news-category">
+            Premier League
+          </span>
+
+          <h3>
+            Premier League Roundup: Everything You Need to Know
+            From Today's Action
+          </h3>
+
+          <p>
+            Key results, performances and talking points from
+            the latest Premier League action.
+          </p>
+
+          <div class="news-meta">
+            PaceFetch Sports Desk • Today • 4 min read
+          </div>
+
+        </div>
+
+      </article>
+
+      <article class="news-card" data-category="champions-league">
+
+        <div class="news-thumb">
+          🏆
+        </div>
+
+        <div class="news-content">
+
+          <span class="news-category">
+            Champions League
+          </span>
+
+          <h3>
+            Champions League Clubs Prepare for Another Major
+            European Campaign
+          </h3>
+
+          <p>
+            European football returns to the spotlight as clubs
+            prepare for another demanding campaign.
+          </p>
+
+          <div class="news-meta">
+            PaceFetch Europe Desk • Today • 3 min read
+          </div>
+
+        </div>
+
+      </article>
+
+      <article class="news-card" data-category="african-football">
+
+        <div class="news-thumb">
+          🌍
+        </div>
+
+        <div class="news-content">
+
+          <span class="news-category">
+            African Football
+          </span>
+
+          <h3>
+            African Football: Latest Updates From Across the Continent
+          </h3>
+
+          <p>
+            Important developments from African football, including
+            clubs, competitions and players attracting attention.
+          </p>
+
+          <div class="news-meta">
+            PaceFetch Africa Desk • Today • 3 min read
+          </div>
+
+        </div>
+
+      </article>
+
+      <article class="news-card" data-category="la-liga">
+
+        <div class="news-thumb">
+          🇪🇸
+        </div>
+
+        <div class="news-content">
+
+          <span class="news-category">
+            La Liga
+          </span>
+
+          <h3>
+            La Liga: The Latest Developments From Spain
+          </h3>
+
+          <p>
+            Follow the latest stories and developments from
+            Spanish football.
+          </p>
+
+          <div class="news-meta">
+            PaceFetch Spain Desk • Today • 3 min read
+          </div>
+
+        </div>
+
+      </article>
+
+      <article class="news-card" data-category="serie-a">
+
+        <div class="news-thumb">
+          🇮🇹
+        </div>
+
+        <div class="news-content">
+
+          <span class="news-category">
+            Serie A
+          </span>
+
+          <h3>
+            Serie A: Latest Stories From Italian Football
+          </h3>
+
+          <p>
+            The latest developments from clubs and players across
+            Italian football.
+          </p>
+
+          <div class="news-meta">
+            PaceFetch Italy Desk • Today • 3 min read
+          </div>
+
+        </div>
+
+      </article>
+
+      <article class="news-card" data-category="bundesliga">
+
+        <div class="news-thumb">
+          🇩🇪
+        </div>
+
+        <div class="news-content">
+
+          <span class="news-category">
+            Bundesliga
+          </span>
+
+          <h3>
+            Bundesliga: Latest Football Developments From Germany
+          </h3>
+
+          <p>
+            Follow the latest Bundesliga stories, performances
+            and developments.
+          </p>
+
+          <div class="news-meta">
+            PaceFetch Germany Desk • Today • 3 min read
+          </div>
+
+        </div>
+
+      </article>
 
     </div>
 
+    <div class="empty-state" id="emptyState">
 
-    <div
-      class="empty-state"
-      id="emptyState"
-    >
+      <div>🔎</div>
 
-      <div>
-        🔎
-      </div>
-
-      <h3>
-        No stories found
-      </h3>
+      <h3>No stories found</h3>
 
       <p>
         Try another search term or choose another category.
@@ -2271,1072 +1479,448 @@ content="#071c17"
 
     </div>
 
-
-    <!-- PAGINATION -->
-
     <div class="pagination">
 
-      <button
-        class="page-button active"
-      >
-        1
-      </button>
-
-      <button
-        class="page-button"
-      >
-        2
-      </button>
-
-      <button
-        class="page-button"
-      >
-        3
-      </button>
-
-      <button
-        class="page-button"
-      >
-        →
-      </button>
+      <button class="page-button active">1</button>
+      <button class="page-button">2</button>
+      <button class="page-button">3</button>
+      <button class="page-button">→</button>
 
     </div>
 
+  </section>
 
-  </div>
-
-
-  <!-- =================================================
-       SIDEBAR
-  ================================================== -->
+  <!-- ================= SIDEBAR ================= -->
 
   <aside>
-
-
-    <!-- TRENDING -->
 
     <div class="sidebar-card">
 
       <div class="sidebar-heading">
+        <h3>Trending Now</h3>
 
-        <h3>
-          Trending Now
-        </h3>
-
-        <a href="/news/">
+        <button class="refresh-button" onclick="refreshTrending()">
           Refresh
-        </a>
-
+        </button>
       </div>
 
+      <div class="trend">
 
-      <a
-        href="/article/index.html?slug=transfer-centre"
-        class="trend"
-      >
-
-        <div class="trend-number">
-          1
-        </div>
+        <div class="trend-number">1</div>
 
         <div>
-
           <h4>
             Latest football transfer developments
           </h4>
 
-          <p>
-            Transfers
-          </p>
-
+          <p>Transfers</p>
         </div>
 
-      </a>
+      </div>
 
+      <div class="trend">
 
-      <a
-        href="/article/index.html?slug=premier-league-roundup"
-        class="trend"
-      >
-
-        <div class="trend-number">
-          2
-        </div>
+        <div class="trend-number">2</div>
 
         <div>
-
           <h4>
             Premier League roundup and latest results
           </h4>
 
-          <p>
-            Premier League
-          </p>
-
+          <p>Premier League</p>
         </div>
 
-      </a>
+      </div>
 
+      <div class="trend">
 
-      <a
-        href="/article/index.html?slug=champions-league"
-        class="trend"
-      >
-
-        <div class="trend-number">
-          3
-        </div>
+        <div class="trend-number">3</div>
 
         <div>
-
           <h4>
             Champions League clubs prepare for Europe
           </h4>
 
-          <p>
-            Champions League
-          </p>
-
+          <p>Champions League</p>
         </div>
 
-      </a>
+      </div>
 
+      <div class="trend">
 
-      <a
-        href="/article/index.html?slug=african-football"
-        class="trend"
-      >
-
-        <div class="trend-number">
-          4
-        </div>
+        <div class="trend-number">4</div>
 
         <div>
-
           <h4>
             African football latest updates
           </h4>
 
-          <p>
-            African Football
-          </p>
-
+          <p>African Football</p>
         </div>
 
-      </a>
-
-    </div>
-
-
-    <!-- AD -->
-
-    <div class="sidebar-card" style="padding:0;overflow:hidden;">
-
-      <div class="ad-card">
-
-        <span class="ad-label">
-          PACEFETCH PARTNER
-        </span>
-
-        <h3>
-          Your Brand Here
-        </h3>
-
-        <p>
-          Advertise to football fans on PaceFetch.
-        </p>
-
-        <a
-          href="/admin/"
-          class="ad-button"
-        >
-          Advertise With Us
-        </a>
-
       </div>
 
     </div>
 
+    <!-- Adsterra / sponsor area can be inserted here later -->
 
-    <!-- PREDICTIONS -->
+    <div class="ad-card">
 
-    <div class="sidebar-card">
+      <span class="ad-label">
+        PACEFETCH PARTNER
+      </span>
 
-      <div class="sidebar-heading">
+      <h3>
+        Your Brand Here
+      </h3>
 
-        <h3>
-          PaceFetch 25
-        </h3>
-
-        <a href="/predictions/">
-          View
-        </a>
-
-      </div>
-
-
-      <p
-        style="
-          color:#6b7280;
-          font-size:10px;
-        "
-      >
-        Explore today's statistical football
-        predictions and track previous results.
+      <p>
+        Advertise to football fans on PaceFetch.
       </p>
 
-
-      <a
-        href="/predictions/"
-        style="
-          display:block;
-          margin-top:12px;
-          background:#087f5b;
-          color:white;
-          text-align:center;
-          padding:10px;
-          border-radius:8px;
-          font-size:9px;
-          font-weight:850;
-        "
-      >
-        View Today's Predictions →
-      </a>
+      <button class="ad-button">
+        Advertise With Us
+      </button>
 
     </div>
-
 
   </aside>
 
+</div>
 
-</section>
-
-  </main>  <!-- =====================================================
-       FOOTER
-  ===================================================== -->  <footer class="site-footer"><div class="footer-logo">
+  </main>  <!-- ================= FOOTER ================= -->  <footer class="site-footer"><div class="footer-logo">
   PaceFetch
 </div>
 
-
 <p class="footer-description">
-
-  Football predictions, news, scores, transfers
-  and football intelligence — completely free.
-
+  Football predictions, news, scores, transfers and football
+  intelligence — completely free.
 </p>
-
 
 <div class="footer-links">
 
-  <a href="/">
-    Home
-  </a>
-
-  <a href="/news/">
-    News
-  </a>
-
-  <a href="/predictions/">
-    Predictions
-  </a>
-
-  <a href="/transfers/">
-    Transfers
-  </a>
-
-  <a href="/leagues/">
-    Leagues
-  </a>
-
-  <a href="/teams/">
-    Teams
-  </a>
-
-  <a href="/admin/">
-    Admin
-  </a>
+  <a href="../">Home</a>
+  <a href="./">News</a>
+  <a href="../prediction/">Predictions</a>
+  <a href="../transfer/">Transfers</a>
+  <a href="../leagues/">Leagues</a>
+  <a href="../teams/">Teams</a>
+  <a href="../admin/">Admin</a>
 
 </div>
-
 
 <div class="designer-credit">
   Designed by Pacethel
 </div>
 
-  </footer>  <!-- =====================================================
-       MOBILE NAV
-  ===================================================== -->  <nav class="mobile-nav"><a href="/">
+  </footer>  <!-- ================= MOBILE BOTTOM NAV ================= -->  <nav class="mobile-nav"><a href="../" class="active">
   <span class="mobile-nav-icon">⌂</span>
   Home
 </a>
 
-<a
-  href="/news/"
-  class="active"
->
+<a href="./">
   <span class="mobile-nav-icon">📰</span>
   News
 </a>
 
-<a href="/predictions/">
+<a href="../prediction/">
   <span class="mobile-nav-icon">🎯</span>
   Picks
 </a>
 
-<a href="/transfers/">
+<a href="../transfer/">
   <span class="mobile-nav-icon">↔</span>
   Transfers
 </a>
 
-<a href="/leagues/">
+<a href="../leagues/">
   <span class="mobile-nav-icon">🏆</span>
   Leagues
 </a>
 
-  </nav>  <!-- =====================================================
-       SEARCH OVERLAY
-  ===================================================== -->  <div
-    class="search-overlay"
-    id="searchOverlay"
-  ><div class="search-container">
+  </nav>  <!-- ================= JAVASCRIPT ================= -->  <script>
 
-  <form
-    class="search-form"
-    id="searchForm"
-  >
-
-    <input
-      type="search"
-      id="searchInput"
-      class="search-input"
-      placeholder="Search football news, teams, players..."
-      autocomplete="off"
-    >
-
-
-    <button
-      type="submit"
-      class="search-submit"
-      aria-label="Search"
-    >
-
-      <svg
-        class="search-icon"
-        viewBox="0 0 24 24"
-      >
-
-        <circle
-          cx="11"
-          cy="11"
-          r="6.5"
-        ></circle>
-
-        <path
-          d="M16 16l5 5"
-        ></path>
-
-      </svg>
-
-    </button>
-
-  </form>
-
-
-  <button
-    class="close-search"
-    id="closeSearch"
-  >
-    ✕ Close search
-  </button>
-
-</div>
-
-  </div>  <!-- =====================================================
-       JAVASCRIPT
-  ===================================================== -->  <script>
-
-
-    /* =====================================================
-       NEWS DATA
-       
-       Temporary frontend data.
-       This will later be replaced by the PaceFetch API.
-    ===================================================== */
-
-
-    const newsArticles = [
-
-      {
-
-        slug:
-          "premier-league-latest",
-
-        category:
-          "Premier League",
-
-        title:
-          "The Latest Football Stories Making Headlines Today",
-
-        description:
-          "A look at the biggest developments, talking points and stories currently shaping the football conversation.",
-
-        emoji:
-          "⚽",
-
-        time:
-          "Today • 4 min read"
-
-      },
-
-
-      {
-
-        slug:
-          "transfer-centre",
-
-        category:
-          "Transfers",
-
-        title:
-          "Transfer Centre: Latest Completed Deals and Developing Moves",
-
-        description:
-          "Follow confirmed transfers and developing player-movement stories from the football world.",
-
-        emoji:
-          "🔄",
-
-        time:
-          "Today • 3 min read"
-
-      },
-
-
-      {
-
-        slug:
-          "premier-league-roundup",
-
-        category:
-          "Premier League",
-
-        title:
-          "Premier League Roundup: Everything You Need to Know From Today's Action",
-
-        description:
-          "Key results, performances and talking points from the latest Premier League action.",
-
-        emoji:
-          "🏆",
-
-        time:
-          "Today • 4 min read"
-
-      },
-
-
-      {
-
-        slug:
-          "champions-league",
-
-        category:
-          "Champions League",
-
-        title:
-          "Champions League Clubs Prepare for Another Major European Campaign",
-
-        description:
-          "European football returns to the spotlight as clubs prepare for another demanding campaign.",
-
-        emoji:
-          "🏆",
-
-        time:
-          "Today • 3 min read"
-
-      },
-
-
-      {
-
-        slug:
-          "african-football",
-
-        category:
-          "African Football",
-
-        title:
-          "African Football: Latest Updates From Across the Continent",
-
-        description:
-          "Important developments from African football, including clubs, competitions and players attracting attention.",
-
-        emoji:
-          "🌍",
-
-        time:
-          "Today • 3 min read"
-
-      },
-
-
-      {
-
-        slug:
-          "la-liga-latest",
-
-        category:
-          "La Liga",
-
-        title:
-          "La Liga: The Latest Developments From Spain",
-
-        description:
-          "Follow the latest stories and developments from Spanish football.",
-
-        emoji:
-          "🇪🇸",
-
-        time:
-          "Today • 3 min read"
-
-      },
-
-
-      {
-
-        slug:
-          "serie-a-latest",
-
-        category:
-          "Serie A",
-
-        title:
-          "Serie A: Latest Stories From Italian Football",
-
-        description:
-          "The latest developments from clubs and players across Italian football.",
-
-        emoji:
-          "🇮🇹",
-
-        time:
-          "Today • 3 min read"
-
-      },
-
-
-      {
-
-        slug:
-          "bundesliga-latest",
-
-        category:
-          "Bundesliga",
-
-        title:
-          "Bundesliga: Latest Football Developments From Germany",
-
-        description:
-          "Follow the latest Bundesliga stories, performances and developments.",
-
-        emoji:
-          "🇩🇪",
-
-        time:
-          "Today • 3 min read"
-
-      }
-
-    ];
-
-
-    /* =====================================================
-       RENDER NEWS
-    ===================================================== */
-
-    const newsList =
-      document.getElementById(
-        "newsList"
-      );
-
-
-    const emptyState =
-      document.getElementById(
-        "emptyState"
-      );
-
-
-    function renderNews(
-      articles
-    ) {
-
-      newsList.innerHTML = "";
-
-
-      if (
-        articles.length === 0
-      ) {
-
-        emptyState
-          .classList
-          .add("show");
-
-        return;
-
-      }
-
-
-      emptyState
-        .classList
-        .remove("show");
-
-
-      articles.forEach(
-        article => {
-
-
-          const link =
-            document.createElement("a");
-
-
-          link.href =
-            "/article/index.html?slug=" +
-            encodeURIComponent(
-              article.slug
-            );
-
-
-          link.className =
-            "news-card";
-
-
-          link.innerHTML = `
-
-            <div class="news-thumb">
-
-              ${article.emoji}
-
-            </div>
-
-
-            <div class="news-content">
-
-              <span class="news-category">
-
-                ${article.category}
-
-              </span>
-
-
-              <h3>
-
-                ${article.title}
-
-              </h3>
-
-
-              <p>
-
-                ${article.description}
-
-              </p>
-
-
-              <div class="news-meta">
-
-                PaceFetch Sports Desk
-                •
-                ${article.time}
-
-              </div>
-
-            </div>
-
-          `;
-
-
-          newsList.appendChild(
-            link
-          );
-
-        }
-      );
-
-    }
-
-
-    renderNews(
-      newsArticles
-    );
-
-
-    /* =====================================================
-       CATEGORY FILTER
-    ===================================================== */
-
-    const categoryButtons =
-      document.querySelectorAll(
-        ".category"
-      );
-
-
-    categoryButtons.forEach(
-      button => {
-
-        button.addEventListener(
-          "click",
-          function() {
-
-
-            categoryButtons
-              .forEach(
-                item =>
-                  item.classList
-                    .remove("active")
-              );
-
-
-            this.classList
-              .add("active");
-
-
-            const category =
-              this.dataset.category;
-
-
-            if (
-              category === "All"
-            ) {
-
-              renderNews(
-                newsArticles
-              );
-
-              return;
-
-            }
-
-
-            const filtered =
-              newsArticles.filter(
-                article =>
-                  article.category ===
-                  category
-              );
-
-
-            renderNews(
-              filtered
-            );
-
-          }
-        );
-
-      }
-    );
-
-
-    /* =====================================================
-       URL SEARCH
-    ===================================================== */
-
-    const urlParams =
-      new URLSearchParams(
-        window.location.search
-      );
-
-
-    const searchQuery =
-      urlParams.get("search");
-
-
-    if (searchQuery) {
-
-      const cleanQuery =
-        searchQuery.trim();
-
-
-      document
-        .getElementById(
-          "searchResult"
-        )
-        .classList
-        .add("show");
-
-
-      document
-        .getElementById(
-          "searchTerm"
-        )
-        .textContent =
-        cleanQuery;
-
-
-      document
-        .getElementById(
-          "metaDescription"
-        )
-        .setAttribute(
-          "content",
-          "Search results for " +
-          cleanQuery +
-          " on PaceFetch football news."
-        );
-
-
-      const lowerQuery =
-        cleanQuery.toLowerCase();
-
-
-      const results =
-        newsArticles.filter(
-          article =>
-
-            article.title
-              .toLowerCase()
-              .includes(
-                lowerQuery
-              )
-
-            ||
-
-            article.category
-              .toLowerCase()
-              .includes(
-                lowerQuery
-              )
-
-            ||
-
-            article.description
-              .toLowerCase()
-              .includes(
-                lowerQuery
-              )
-
-        );
-
-
-      renderNews(
-        results
-      );
-
-    }
-
-
-    /* =====================================================
-       CLOCK — NIGERIA GMT +1
-    ===================================================== */
+    /* ================= CLOCK ================= */
 
     function updateClock() {
 
-      const now =
-        new Date();
+      const now = new Date();
+
+      const nigeriaTime = new Intl.DateTimeFormat("en-NG", {
+        timeZone: "Africa/Lagos",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false
+      }).format(now);
+
+      const clock = document.getElementById("clockTime");
+
+      if (clock) {
+        clock.textContent = nigeriaTime + " GMT +1";
+      }
+    }
+
+    updateClock();
+    setInterval(updateClock, 1000);
 
 
-      const formatter =
-        new Intl.DateTimeFormat(
-          "en-NG",
-          {
+    /* ================= SEARCH OVERLAY ================= */
 
-            timeZone:
-              "Africa/Lagos",
+    const searchOverlay =
+      document.getElementById("searchOverlay");
 
-            hour:
-              "2-digit",
+    const openSearch =
+      document.getElementById("openSearch");
 
-            minute:
-              "2-digit",
+    const closeSearch =
+      document.getElementById("closeSearch");
 
-            second:
-              "2-digit",
+    const searchInput =
+      document.getElementById("searchInput");
 
-            hour12:
-              false
+    openSearch.addEventListener("click", function() {
 
-          }
-        );
+      searchOverlay.classList.add("show");
+
+      setTimeout(function() {
+        searchInput.focus();
+      }, 100);
+
+    });
+
+    closeSearch.addEventListener("click", function() {
+      searchOverlay.classList.remove("show");
+    });
 
 
-      document
-        .getElementById(
-          "currentTime"
-        )
-        .textContent =
-        formatter.format(now);
+    /* ================= SEARCH ================= */
+
+    const searchForm =
+      document.getElementById("searchForm");
+
+    const searchResult =
+      document.getElementById("searchResult");
+
+    const searchTerm =
+      document.getElementById("searchTerm");
+
+    const clearSearch =
+      document.getElementById("clearSearch");
+
+    const newsCards =
+      document.querySelectorAll(".news-card");
+
+    const emptyState =
+      document.getElementById("emptyState");
+
+
+    function performSearch(term) {
+
+      const query = term.trim().toLowerCase();
+
+      let matches = 0;
+
+      newsCards.forEach(function(card) {
+
+        const text =
+          card.textContent.toLowerCase();
+
+        if (!query || text.includes(query)) {
+
+          card.style.display = "grid";
+          matches++;
+
+        } else {
+
+          card.style.display = "none";
+
+        }
+
+      });
+
+      if (query) {
+
+        searchResult.classList.add("show");
+        searchTerm.textContent = '"' + term + '"';
+
+      } else {
+
+        searchResult.classList.remove("show");
+
+      }
+
+      if (matches === 0) {
+        emptyState.classList.add("show");
+      } else {
+        emptyState.classList.remove("show");
+      }
 
     }
 
 
-    updateClock();
+    searchForm.addEventListener("submit", function(event) {
+
+      event.preventDefault();
+
+      performSearch(searchInput.value);
+
+      searchOverlay.classList.remove("show");
+
+      window.scrollTo({
+        top: 350,
+        behavior: "smooth"
+      });
+
+    });
 
 
-    setInterval(
-      updateClock,
-      1000
-    );
+    clearSearch.addEventListener("click", function() {
+
+      searchInput.value = "";
+
+      performSearch("");
+
+    });
 
 
-    /* =====================================================
-       SEARCH OVERLAY
-    ===================================================== */
+    /* ================= CATEGORY FILTER ================= */
 
-    const searchOverlay =
-      document.getElementById(
-        "searchOverlay"
-      );
+    const categories =
+      document.querySelectorAll(".category");
 
 
-    const searchInput =
-      document.getElementById(
-        "searchInput"
-      );
+    categories.forEach(function(button) {
 
+      button.addEventListener("click", function() {
 
-    document
-      .getElementById(
-        "openSearch"
-      )
-      .addEventListener(
-        "click",
-        function() {
+        categories.forEach(function(item) {
+          item.classList.remove("active");
+        });
 
-          searchOverlay
-            .classList
-            .add("show");
+        button.classList.add("active");
 
-          document.body.style.overflow =
-            "hidden";
+        const selected =
+          button.dataset.category;
 
-          setTimeout(
-            () =>
-              searchInput.focus(),
-            100
-          );
+        let matches = 0;
 
+        newsCards.forEach(function(card) {
+
+          if (
+            selected === "all" ||
+            card.dataset.category === selected
+          ) {
+
+            card.style.display = "grid";
+            matches++;
+
+          } else {
+
+            card.style.display = "none";
+
+          }
+
+        });
+
+        searchResult.classList.remove("show");
+
+        if (matches === 0) {
+          emptyState.classList.add("show");
+        } else {
+          emptyState.classList.remove("show");
         }
-      );
+
+      });
+
+    });
 
 
-    document
-      .getElementById(
-        "closeSearch"
-      )
-      .addEventListener(
-        "click",
-        function() {
+    /* ================= MOBILE MENU ================= */
 
-          searchOverlay
-            .classList
-            .remove("show");
+    const mobileMenu =
+      document.getElementById("mobileMenu");
 
-          document.body.style.overflow =
-            "";
+    const openMenu =
+      document.getElementById("openMenu");
 
-        }
-      );
+    openMenu.addEventListener("click", function() {
+
+      mobileMenu.classList.toggle("show");
+
+      document.body.classList.toggle("menu-open");
+
+      if (mobileMenu.classList.contains("show")) {
+        openMenu.textContent = "✕";
+      } else {
+        openMenu.textContent = "☰";
+      }
+
+    });
 
 
-    document
-      .getElementById(
-        "searchForm"
-      )
-      .addEventListener(
-        "submit",
-        function(event) {
+    /* ================= ARTICLE LINKS ================= */
+
+    document.querySelectorAll("[data-article]")
+      .forEach(function(element) {
+
+        element.addEventListener("click", function(event) {
 
           event.preventDefault();
 
+          const article =
+            element.dataset.article;
 
-          const query =
-            searchInput.value.trim();
+          /*
+             Later this can become:
+             ../news/article.html?id=ARTICLE_ID
 
-
-          if (!query) {
-
-            searchInput.focus();
-
-            return;
-
-          }
-
+             The backend/admin system will supply
+             real article IDs.
+          */
 
           window.location.href =
-            "/news/?search=" +
-            encodeURIComponent(
-              query
-            );
+            "./article.html?article=" +
+            encodeURIComponent(article);
 
-        }
-      );
+        });
 
-
-    searchOverlay
-      .addEventListener(
-        "click",
-        function(event) {
-
-          if (
-            event.target ===
-            searchOverlay
-          ) {
-
-            searchOverlay
-              .classList
-              .remove("show");
-
-            document.body.style.overflow =
-              "";
-
-          }
-
-        }
-      );
+      });
 
 
-    /* =====================================================
-       ESCAPE SEARCH
-    ===================================================== */
+    /* ================= TRENDING ================= */
 
-    document.addEventListener(
-      "keydown",
-      function(event) {
+    function refreshTrending() {
 
-        if (
-          event.key === "Escape"
-        ) {
+      const button =
+        document.querySelector(".refresh-button");
 
-          searchOverlay
-            .classList
-            .remove("show");
+      button.textContent = "Updated";
 
-          document.body.style.overflow =
-            "";
+      setTimeout(function() {
+        button.textContent = "Refresh";
+      }, 1200);
 
-        }
+    }
+
+
+    /* ================= ESC KEY ================= */
+
+    document.addEventListener("keydown", function(event) {
+
+      if (event.key === "Escape") {
+
+        searchOverlay.classList.remove("show");
+
+        mobileMenu.classList.remove("show");
+
+        document.body.classList.remove("menu-open");
+
+        openMenu.textContent = "☰";
 
       }
-    );
 
-
-  </script>  <!-- =====================================================
-       WEBSITE STRUCTURED DATA
-  ===================================================== -->  <script type="application/ld+json">
-
-  {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    "name": "Latest Football News",
-    "description": "Latest football news, transfer updates, match stories and African football coverage from PaceFetch.",
-    "url": "https://pacefetch.com/news/",
-    "isPartOf": {
-      "@type": "WebSite",
-      "name": "PaceFetch",
-      "url": "https://pacefetch.com/"
-    }
-  }
+    });
 
   </script></body>
 </html>
