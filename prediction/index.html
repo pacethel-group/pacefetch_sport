@@ -1515,4 +1515,1686 @@ main{
 
   .horizontal-vs{
     width:17px;
-    height:17p
+    height:17px;
+
+    font-size:5px;
+  }
+
+  .horizontal-pick small,
+  .horizontal-confidence small,
+  .horizontal-risk small{
+    font-size:5px;
+
+    letter-spacing:.1px;
+
+    margin-bottom:1px;
+  }
+
+  .horizontal-pick strong{
+    font-size:6.5px;
+  }
+
+  .horizontal-confidence strong{
+    font-size:8px;
+  }
+
+  .horizontal-confidence .bar{
+    width:30px;
+    height:2px;
+
+    margin-top:2px;
+  }
+
+  .horizontal-risk strong{
+    padding:3px;
+
+    font-size:5px;
+  }
+
+  .mobile-nav{
+    display:flex;
+  }
+
+  .footer{
+    padding-bottom:95px;
+  }
+
+  .footer-inner{
+    display:block;
+    text-align:center;
+  }
+
+  .footer-links{
+    justify-content:center;
+    margin-top:14px;
+  }
+
+}
+
+
+/* =========================
+   VERY SMALL PHONES
+========================= */
+
+@media(max-width:380px){
+
+  .container{
+    width:calc(100% - 12px);
+  }
+
+  .prediction-list{
+    padding:7px;
+  }
+
+  .prediction-card-inner{
+
+    grid-template-columns:
+      43px
+      minmax(40px,1fr)
+      15px
+      minmax(40px,1fr)
+      minmax(53px,1.1fr)
+      34px
+      38px;
+
+    gap:2px;
+
+    padding:6px 4px;
+  }
+
+  .match-info .league{
+    font-size:4px;
+  }
+
+  .match-info .match-time{
+    font-size:6px;
+  }
+
+  .horizontal-team{
+    font-size:6px;
+  }
+
+  .horizontal-vs{
+    width:15px;
+    height:15px;
+
+    font-size:4px;
+  }
+
+  .horizontal-pick small,
+  .horizontal-confidence small,
+  .horizontal-risk small{
+    font-size:4px;
+  }
+
+  .horizontal-pick strong{
+    font-size:5.5px;
+  }
+
+  .horizontal-confidence strong{
+    font-size:7px;
+  }
+
+  .horizontal-risk strong{
+    font-size:4px;
+    padding:2px;
+  }
+
+}
+
+
+/* =========================
+   REDUCED MOTION
+========================= */
+
+@media(prefers-reduced-motion:reduce){
+
+  *,
+  *::before,
+  *::after{
+    animation:none !important;
+    transition:none !important;
+    scroll-behavior:auto !important;
+  }
+
+}
+</style>
+</head>
+
+
+<body>
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header class="header">
+
+  <div class="header-inner">
+
+    <a href="/" class="logo">
+
+      <div class="logo-mark">P</div>
+
+      <div class="logo-text">
+        PaceFetch
+        <small>Football Intelligence</small>
+      </div>
+
+    </a>
+
+
+    <nav class="nav">
+
+      <a href="/">Home</a>
+
+      <a href="/news/">News</a>
+
+      <a href="/prediction/" class="active">Predictions</a>
+
+      <a href="/transfer/">Transfers</a>
+
+      <a href="/leagues/">Leagues</a>
+
+      <a href="/teams/">Teams</a>
+
+    </nav>
+
+
+    <div class="header-actions">
+
+      <div class="clock" id="ngClock">
+        WAT --:--
+      </div>
+
+      <button
+        class="search-btn"
+        id="openSearch"
+        aria-label="Search">
+        ⌕
+      </button>
+
+    </div>
+
+  </div>
+
+</header>
+
+
+<!-- =========================
+     SEARCH
+========================= -->
+
+<div
+  class="search-overlay"
+  id="searchOverlay">
+
+  <div class="search-box">
+
+    <div class="search-top">
+
+      <input
+        class="search-input"
+        id="searchInput"
+        type="search"
+        placeholder="Search PaceFetch...">
+
+      <button
+        class="close-search"
+        id="closeSearch">
+        ×
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main>
+
+<div class="container">
+
+
+  <!-- BREADCRUMB -->
+
+  <div class="breadcrumb">
+
+    <a href="/">Home</a>
+
+    <span>›</span>
+
+    <span>Football Predictions</span>
+
+  </div>
+
+
+  <!-- PAGE HEADING -->
+
+  <div class="page-head">
+
+    <div>
+
+      <h1>Football Predictions</h1>
+
+      <p>
+        Daily football predictions, confidence ratings and transparent
+        results from PaceFetch. Every prediction remains visible,
+        including losses.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- HERO -->
+
+  <section class="prediction-hero">
+
+    <div class="hero-label">
+      PaceFetch Daily Picks
+    </div>
+
+    <h2>Today's Football Predictions</h2>
+
+    <p>
+      Statistical match analysis built around form, team strength,
+      scoring patterns and available match information. Confidence
+      represents the model's assessment — it is not a guarantee.
+    </p>
+
+
+    <div class="hero-stats">
+
+      <div class="hero-stat">
+
+        <strong id="totalPredictions">
+          25
+        </strong>
+
+        <span>
+          Predictions
+        </span>
+
+      </div>
+
+
+      <div class="hero-stat">
+
+        <strong id="correctPredictions">
+          19
+        </strong>
+
+        <span>
+          Correct
+        </span>
+
+      </div>
+
+
+      <div class="hero-stat">
+
+        <strong id="accuracyRate">
+          76%
+        </strong>
+
+        <span>
+          Accuracy
+        </span>
+
+      </div>
+
+
+      <div class="hero-stat">
+
+        <strong id="pendingPredictions">
+          6
+        </strong>
+
+        <span>
+          Pending
+        </span>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- FILTERS -->
+
+  <div class="filters">
+
+    <button
+      class="filter-btn active"
+      data-filter="all">
+      All
+    </button>
+
+    <button
+      class="filter-btn"
+      data-filter="Premier League">
+      Premier League
+    </button>
+
+    <button
+      class="filter-btn"
+      data-filter="La Liga">
+      La Liga
+    </button>
+
+    <button
+      class="filter-btn"
+      data-filter="Serie A">
+      Serie A
+    </button>
+
+    <button
+      class="filter-btn"
+      data-filter="Bundesliga">
+      Bundesliga
+    </button>
+
+    <button
+      class="filter-btn"
+      data-filter="Champions League">
+      Champions League
+    </button>
+
+    <button
+      class="filter-btn"
+      data-filter="African Football">
+      African Football
+    </button>
+
+  </div>
+
+
+  <!-- MAIN GRID -->
+
+  <div class="prediction-layout">
+
+
+    <!-- PREDICTIONS -->
+
+    <section class="section-card">
+
+      <div class="section-header">
+
+        <h3 id="predictionTitle">
+          Today's Picks
+        </h3>
+
+        <span id="predictionDate">
+          8 September 2026
+        </span>
+
+      </div>
+
+
+      <div
+        class="prediction-list"
+        id="predictionList">
+      </div>
+
+    </section>
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+
+      <!-- RECORD -->
+
+      <div class="side-card">
+
+        <h3>
+          Prediction Record
+        </h3>
+
+        <p>
+          PaceFetch publishes the full record. Winning and losing
+          predictions remain visible for transparency.
+        </p>
+
+
+        <div class="record-main">
+
+          <strong id="sideAccuracy">
+            76%
+          </strong>
+
+          <span>
+            current record
+          </span>
+
+        </div>
+
+
+        <div class="record-bar">
+          <i id="recordBar"></i>
+        </div>
+
+      </div>
+
+
+      <!-- CALENDAR -->
+
+      <div class="side-card">
+
+        <h3>
+          Prediction Calendar
+        </h3>
+
+        <p>
+          Select a previous date to review that day's predictions
+          and results.
+        </p>
+
+
+        <div class="calendar">
+
+          <div class="calendar-head">
+
+            <button id="prevMonth">
+              ‹
+            </button>
+
+            <strong id="calendarMonth">
+              September 2026
+            </strong>
+
+            <button id="nextMonth">
+              ›
+            </button>
+
+          </div>
+
+
+          <div class="calendar-week">
+
+            <span>Sun</span>
+            <span>Mon</span>
+            <span>Tue</span>
+            <span>Wed</span>
+            <span>Thu</span>
+            <span>Fri</span>
+            <span>Sat</span>
+
+          </div>
+
+
+          <div
+            class="calendar-grid"
+            id="calendarGrid">
+          </div>
+
+
+          <div
+            class="daily-summary"
+            id="dailySummary">
+
+            <div class="daily-summary-top">
+
+              <strong id="summaryRecord">
+                19/25
+              </strong>
+
+              <span id="summaryAccuracy">
+                76%
+              </span>
+
+            </div>
+
+            <p id="summaryText">
+              Prediction record for the selected date.
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- GUIDE -->
+
+      <div class="side-card">
+
+        <h3>
+          Prediction Guide
+        </h3>
+
+        <p>
+          How to interpret PaceFetch predictions.
+        </p>
+
+
+        <div class="guide-item">
+
+          <div class="guide-number">
+            1
+          </div>
+
+          <div>
+
+            <strong>
+              Confidence
+            </strong>
+
+            <span>
+              Indicates how strongly the model favours the selected
+              outcome.
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="guide-item">
+
+          <div class="guide-number">
+            2
+          </div>
+
+          <div>
+
+            <strong>
+              Risk
+            </strong>
+
+            <span>
+              A simplified indication of uncertainty around the pick.
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="guide-item">
+
+          <div class="guide-number">
+            3
+          </div>
+
+          <div>
+
+            <strong>
+              Results
+            </strong>
+
+            <span>
+              Historical results remain visible, whether correct or
+              incorrect.
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- MORE -->
+
+      <div class="side-card">
+
+        <h3>
+          More PaceFetch
+        </h3>
+
+        <p>
+          Explore the rest of the football intelligence platform.
+        </p>
+
+        <div class="guide-item">
+
+          <div class="guide-number">
+            N
+          </div>
+
+          <div>
+            <a href="/news/">
+              <strong>Latest Football News</strong>
+            </a>
+          </div>
+
+        </div>
+
+
+        <div class="guide-item">
+
+          <div class="guide-number">
+            T
+          </div>
+
+          <div>
+            <a href="/transfer/">
+              <strong>Transfer Centre</strong>
+            </a>
+          </div>
+
+        </div>
+
+
+        <div class="guide-item">
+
+          <div class="guide-number">
+            L
+          </div>
+
+          <div>
+            <a href="/leagues/">
+              <strong>Football Leagues</strong>
+            </a>
+          </div>
+
+        </div>
+
+      </div>
+
+
+    </aside>
+
+  </div>
+
+</div>
+
+</main>
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer class="footer">
+
+  <div class="footer-inner">
+
+    <div class="footer-brand">
+      © 2026 PaceFetch. Football Intelligence.
+    </div>
+
+
+    <div class="footer-links">
+
+      <a href="/">
+        Home
+      </a>
+
+      <a href="/news/">
+        News
+      </a>
+
+      <a href="/prediction/">
+        Predictions
+      </a>
+
+      <a href="/transfer/">
+        Transfers
+      </a>
+
+      <a href="/leagues/">
+        Leagues
+      </a>
+
+      <a href="/teams/">
+        Teams
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <div class="designed">
+
+    Designed by
+    <span>Pacethel</span>
+
+  </div>
+
+</footer>
+
+
+<!-- =========================
+     MOBILE NAV
+========================= -->
+
+<nav class="mobile-nav">
+
+  <a href="/">
+
+    <div class="mobile-nav-icon">
+      ⌂
+    </div>
+
+    Home
+
+  </a>
+
+
+  <a href="/news/">
+
+    <div class="mobile-nav-icon">
+      ◉
+    </div>
+
+    News
+
+  </a>
+
+
+  <a
+    href="/prediction/"
+    class="active">
+
+    <div class="mobile-nav-icon">
+      ◈
+    </div>
+
+    Predict
+
+  </a>
+
+
+  <a href="/transfer/">
+
+    <div class="mobile-nav-icon">
+      ↗
+    </div>
+
+    Transfers
+
+  </a>
+
+
+  <a href="/teams/">
+
+    <div class="mobile-nav-icon">
+      ◎
+    </div>
+
+    Teams
+
+  </a>
+
+</nav>
+
+
+<script>
+
+/* =====================================================
+   PACEFETCH PREDICTION PAGE
+===================================================== */
+
+
+/* =========================
+   DEMO DATA
+========================= */
+
+const predictionData = [
+
+  {
+    id:"bayern-leipzig",
+    league:"Bundesliga",
+    time:"18:30",
+    home:"Bayern Munich",
+    away:"Leipzig",
+    pick:"Over 2.5 Goals",
+    confidence:74,
+    risk:"Medium",
+    result:"pending"
+  },
+
+  {
+    id:"real-inter",
+    league:"Champions League",
+    time:"20:00",
+    home:"Real Madrid",
+    away:"Inter",
+    pick:"Real Madrid",
+    confidence:71,
+    risk:"Medium",
+    result:"pending"
+  },
+
+  {
+    id:"porto-city",
+    league:"Champions League",
+    time:"20:00",
+    home:"FC Porto",
+    away:"Man City",
+    pick:"Over 2.5 Goals",
+    confidence:73,
+    risk:"Medium",
+    result:"pending"
+  },
+
+  {
+    id:"dortmund-villarreal",
+    league:"Champions League",
+    time:"20:00",
+    home:"Dortmund",
+    away:"Villarreal",
+    pick:"Both Teams To Score",
+    confidence:69,
+    risk:"Medium",
+    result:"pending"
+  },
+
+  {
+    id:"brugge-villa",
+    league:"Champions League",
+    time:"17:45",
+    home:"Club Brugge",
+    away:"Aston Villa",
+    pick:"Over 2.5 Goals",
+    confidence:72,
+    risk:"Low",
+    result:"pending"
+  },
+
+  {
+    id:"lille-betis",
+    league:"Champions League",
+    time:"20:00",
+    home:"Lille",
+    away:"Real Betis",
+    pick:"Under 3.5 Goals",
+    confidence:67,
+    risk:"Medium",
+    result:"pending"
+  },
+
+  {
+    id:"arsenal-chelsea",
+    league:"Premier League",
+    time:"15:00",
+    home:"Arsenal",
+    away:"Chelsea",
+    pick:"Arsenal Win",
+    confidence:70,
+    risk:"Medium",
+    result:"pending"
+  },
+
+  {
+    id:"barcelona-sevilla",
+    league:"La Liga",
+    time:"17:30",
+    home:"Barcelona",
+    away:"Sevilla",
+    pick:"Barcelona Win",
+    confidence:78,
+    risk:"Low",
+    result:"pending"
+  },
+
+  {
+    id:"inter-milan",
+    league:"Serie A",
+    time:"19:45",
+    home:"Inter",
+    away:"Milan",
+    pick:"Both Teams To Score",
+    confidence:66,
+    risk:"Medium",
+    result:"pending"
+  },
+
+  {
+    id:"leverkusen-mainz",
+    league:"Bundesliga",
+    time:"17:30",
+    home:"Leverkusen",
+    away:"Mainz",
+    pick:"Leverkusen Win",
+    confidence:76,
+    risk:"Low",
+    result:"pending"
+  }
+
+];
+
+
+/* =========================
+   SAFE HTML ESCAPE
+========================= */
+
+function escapeHTML(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================
+   RENDER PREDICTIONS
+========================= */
+
+function renderPredictions(data){
+
+  const list =
+    document.getElementById("predictionList");
+
+  if(!list) return;
+
+
+  if(!data.length){
+
+    list.innerHTML = `
+      <div style="
+        padding:35px 15px;
+        text-align:center;
+        color:var(--muted);
+        font-size:11px;
+      ">
+        No predictions available for this filter.
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  list.innerHTML = data.map(item => {
+
+    const risk =
+      String(item.risk || "Medium").toLowerCase();
+
+    const riskClass =
+      risk === "low"
+        ? "risk-low"
+        : risk === "high"
+          ? "risk-high"
+          : "risk-medium";
+
+
+    return `
+
+      <article
+        class="prediction-card"
+        data-league="${escapeHTML(item.league)}">
+
+        <div class="prediction-card-inner">
+
+
+          <!-- TIME -->
+
+          <div class="match-info">
+
+            <span class="league">
+              ${escapeHTML(item.league)}
+            </span>
+
+            <span class="match-time">
+              ${escapeHTML(item.time)}
+            </span>
+
+          </div>
+
+
+          <!-- HOME -->
+
+          <div
+            class="horizontal-team"
+            title="${escapeHTML(item.home)}">
+
+            ${escapeHTML(item.home)}
+
+          </div>
+
+
+          <!-- VS -->
+
+          <div class="horizontal-vs">
+            VS
+          </div>
+
+
+          <!-- AWAY -->
+
+          <div
+            class="horizontal-team away"
+            title="${escapeHTML(item.away)}">
+
+            ${escapeHTML(item.away)}
+
+          </div>
+
+
+          <!-- PICK -->
+
+          <div class="horizontal-pick">
+
+            <small>
+              Our Pick
+            </small>
+
+            <strong
+              title="${escapeHTML(item.pick)}">
+
+              ${escapeHTML(item.pick)}
+
+            </strong>
+
+          </div>
+
+
+          <!-- CONFIDENCE -->
+
+          <div class="horizontal-confidence">
+
+            <small>
+              Confidence
+            </small>
+
+            <strong>
+              ${Number(item.confidence) || 0}%
+            </strong>
+
+            <div class="bar">
+
+              <i
+                style="
+                  width:${Math.min(
+                    100,
+                    Math.max(
+                      0,
+                      Number(item.confidence) || 0
+                    )
+                  )}%;
+                ">
+              </i>
+
+            </div>
+
+          </div>
+
+
+          <!-- RISK -->
+
+          <div class="horizontal-risk">
+
+            <small>
+              Risk
+            </small>
+
+            <strong class="${riskClass}">
+              ${escapeHTML(item.risk || "Medium")}
+            </strong>
+
+          </div>
+
+
+        </div>
+
+      </article>
+
+    `;
+
+  }).join("");
+
+}
+
+
+/* =========================
+   FILTERS
+========================= */
+
+document
+  .querySelectorAll(".filter-btn")
+  .forEach(button => {
+
+    button.addEventListener("click",() => {
+
+      document
+        .querySelectorAll(".filter-btn")
+        .forEach(btn =>
+          btn.classList.remove("active")
+        );
+
+      button.classList.add("active");
+
+
+      const filter =
+        button.dataset.filter;
+
+
+      const filtered =
+        filter === "all"
+          ? predictionData
+          : predictionData.filter(
+              item => item.league === filter
+            );
+
+
+      renderPredictions(filtered);
+
+    });
+
+  });
+
+
+/* =========================
+   NIGERIA CLOCK
+========================= */
+
+function updateNigeriaClock(){
+
+  const clock =
+    document.getElementById("ngClock");
+
+  if(!clock) return;
+
+  const now =
+    new Date();
+
+  const formatter =
+    new Intl.DateTimeFormat(
+      "en-NG",
+      {
+        timeZone:"Africa/Lagos",
+        hour:"2-digit",
+        minute:"2-digit",
+        hour12:false
+      }
+    );
+
+  clock.textContent =
+    "WAT " + formatter.format(now);
+
+}
+
+updateNigeriaClock();
+
+setInterval(
+  updateNigeriaClock,
+  30000
+);
+
+/* =========================
+   SEARCH
+========================= */
+
+const searchOverlay =
+  document.getElementById("searchOverlay");
+
+const openSearch =
+  document.getElementById("openSearch");
+
+const closeSearch =
+  document.getElementById("closeSearch");
+
+const searchInput =
+  document.getElementById("searchInput");
+
+if(openSearch){
+
+  openSearch.addEventListener("click",() => {
+
+    searchOverlay.classList.add("show");
+
+    setTimeout(
+      () => searchInput?.focus(),
+      100
+    );
+
+  });
+
+}
+
+if(closeSearch){
+
+  closeSearch.addEventListener("click",() => {
+
+    searchOverlay.classList.remove("show");
+
+  });
+
+}
+
+if(searchOverlay){
+
+  searchOverlay.addEventListener("click",event => {
+
+    if(event.target === searchOverlay){
+
+      searchOverlay.classList.remove("show");
+
+    }
+
+  });
+
+}
+
+document.addEventListener("keydown",event => {
+
+  if(event.key === "Escape"){
+
+    searchOverlay?.classList.remove("show");
+
+  }
+
+});
+
+if(searchInput){
+
+  searchInput.addEventListener("keydown",event => {
+
+    if(event.key !== "Enter") return;
+
+    const query =
+      searchInput.value.trim().toLowerCase();
+
+    if(!query) return;
+
+    if(
+      query.includes("news")
+      ||
+      query.includes("football news")
+    ){
+
+      window.location.href="/news/";
+
+      return;
+
+    }
+
+    if(
+      query.includes("transfer")
+      ||
+      query.includes("signing")
+    ){
+
+      window.location.href="/transfer/";
+
+      return;
+
+    }
+
+    if(
+      query.includes("prediction")
+      ||
+      query.includes("tip")
+    ){
+
+      window.location.href="/prediction/";
+
+      return;
+
+    }
+
+  });
+
+}
+
+/* =====================================================
+   PREDICTION CALENDAR
+===================================================== */
+
+const calendarGrid =
+  document.getElementById("calendarGrid");
+
+const calendarMonth =
+  document.getElementById("calendarMonth");
+
+const prevMonth =
+  document.getElementById("prevMonth");
+
+const nextMonth =
+  document.getElementById("nextMonth");
+
+const summaryRecord =
+  document.getElementById("summaryRecord");
+
+const summaryAccuracy =
+  document.getElementById("summaryAccuracy");
+
+const summaryText =
+  document.getElementById("summaryText");
+
+let calendarDate =
+  new Date();
+
+calendarDate.setDate(1);
+
+/* Historical demo records.
+   These are deliberately transparent:
+   losses are kept visible.
+*/
+
+const historicalResults = {
+
+  "2026-09-08":{
+    correct:19,
+    total:25,
+    pending:6
+  },
+
+  "2026-09-07":{
+    correct:18,
+    total:25,
+    pending:0
+  },
+
+  "2026-09-06":{
+    correct:17,
+    total:25,
+    pending:0
+  },
+
+  "2026-09-05":{
+    correct:20,
+    total:25,
+    pending:0
+  },
+
+  "2026-09-04":{
+    correct:16,
+    total:25,
+    pending:0
+  },
+
+  "2026-09-03":{
+    correct:18,
+    total:25,
+    pending:0
+  }
+
+};
+
+function dateKey(year,month,day){
+
+  return [
+    year,
+    String(month + 1).padStart(2,"0"),
+    String(day).padStart(2,"0")
+  ].join("-");
+
+}
+
+function renderCalendar(){
+
+  if(!calendarGrid) return;
+
+  calendarGrid.innerHTML="";
+
+  const year =
+    calendarDate.getFullYear();
+
+  const month =
+    calendarDate.getMonth();
+
+  const monthName =
+    calendarDate.toLocaleDateString(
+      "en-US",
+      {
+        month:"long",
+        year:"numeric"
+      }
+    );
+
+  calendarMonth.textContent =
+    monthName;
+
+  const firstDay =
+    new Date(
+      year,
+      month,
+      1
+    ).getDay();
+
+  const daysInMonth =
+    new Date(
+      year,
+      month + 1,
+      0
+    ).getDate();
+
+  for(let i=0;i<firstDay;i++){
+
+    const empty =
+      document.createElement("div");
+
+    empty.className =
+      "calendar-day empty";
+
+    calendarGrid.appendChild(empty);
+
+  }
+
+  const today =
+    new Date();
+
+  for(let day=1;day<=daysInMonth;day++){
+
+    const cell =
+      document.createElement("button");
+
+    cell.type="button";
+
+    cell.className =
+      "calendar-day";
+
+    cell.textContent =
+      day;
+
+    const key =
+      dateKey(
+        year,
+        month,
+        day
+      );
+
+    const result =
+      historicalResults[key];
+
+    if(
+      today.getFullYear() === year
+      &&
+      today.getMonth() === month
+      &&
+      today.getDate() === day
+    ){
+
+      cell.classList.add("today");
+
+    }
+
+    cell.addEventListener(
+      "click",
+      () => selectDate(key)
+    );
+
+    if(result){
+
+      cell.title =
+        `${result.correct}/${result.total} correct`;
+
+    }
+
+    calendarGrid.appendChild(cell);
+
+  }
+
+}
+
+function selectDate(key){
+
+  const result =
+    historicalResults[key];
+
+  if(result){
+
+    const accuracy =
+      result.total
+        ? Math.round(
+            result.correct /
+            result.total *
+            100
+          )
+        : 0;
+
+    summaryRecord.textContent =
+      `${result.correct}/${result.total}`;
+
+    summaryAccuracy.textContent =
+      `${accuracy}%`;
+
+    summaryText.textContent =
+      result.pending > 0
+        ? `${result.pending} predictions are still pending.`
+        : `Final verified record for ${key}.`;
+
+  }else{
+
+    summaryRecord.textContent =
+      "—";
+
+    summaryAccuracy.textContent =
+      "—";
+
+    summaryText.textContent =
+      `No published prediction record is available for ${key}.`;
+
+  }
+
+  /*
+    Allows a date to be shared/bookmarked.
+  */
+
+  const url =
+    new URL(
+      window.location.href
+    );
+
+  url.searchParams.set(
+    "date",
+    key
+  );
+
+  window.history.replaceState(
+    {},
+    "",
+    url
+  );
+
+}
+
+if(prevMonth){
+
+  prevMonth.addEventListener(
+    "click",
+    () => {
+
+      calendarDate.setMonth(
+        calendarDate.getMonth() - 1
+      );
+
+      renderCalendar();
+
+    }
+  );
+
+}
+
+if(nextMonth){
+
+  nextMonth.addEventListener(
+    "click",
+    () => {
+
+      calendarDate.setMonth(
+        calendarDate.getMonth() + 1
+      );
+
+      renderCalendar();
+
+    }
+  );
+
+}
+
+/* =========================
+   URL DATE
+========================= */
+
+const params =
+  new URLSearchParams(
+    window.location.search
+  );
+
+const selectedURLDate =
+  params.get("date");
+
+if(selectedURLDate){
+
+  selectDate(selectedURLDate);
+
+}
+
+/* =========================
+   INITIAL RENDER
+========================= */
+
+renderPredictions(
+  predictionData
+);
+
+renderCalendar();
+
+/* =========================
+   DISPLAY RECORD
+========================= */
+
+document.getElementById(
+  "recordBar"
+).style.width="76%";
+
+/* =========================
+   BACK/FORWARD
+========================= */
+
+window.addEventListener(
+  "popstate",
+  () => {
+
+    const currentParams =
+      new URLSearchParams(
+        window.location.search
+      );
+
+    const date =
+      currentParams.get("date");
+
+    if(date){
+
+      selectDate(date);
+
+    }
+
+  }
+);
+
+</script>
+
+</body>
+</html>
