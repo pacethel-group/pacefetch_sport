@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>PaceFetch Transfer Centre — Latest Football Transfers</title>
+
+    <meta
+        name="description"
+        content="Follow the latest football transfers, confirmed signings, transfer negotiations and rumours on the PaceFetch Transfer Centre."
+    >
+
+    <meta
+        name="robots"
+        content="index, follow"
+    >
+
+    <link
+        rel="canonical"
+        href="https://pacefetch.com/transfers/"
+    >
+
+    <meta
+        property="og:title"
+        content="PaceFetch Transfer Centre"
+    >
+
+    <meta
+        property="og:description"
+        content="Latest football transfer news, signings and rumours."
+    >
+
+    <meta
+        property="og:type"
+        content="website"
+    >
+
+    <meta
+        property="og:url"
+        content="https://pacefetch.com/transfers/"
+    >
+
+    <meta
+        name="theme-color"
+        content="#07111f"
+    >
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #06101c;
+
+            color: #f5f8fc;
+
+            font-family:
+                Inter,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            line-height: 1.6;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .site-header {
+            position: sticky;
+            top: 0;
+
+            z-index: 100;
+
+            background:
+                rgba(6,16,28,.94);
+
+            backdrop-filter:
+                blur(18px);
+
+            border-bottom:
+                1px solid rgba(255,255,255,.08);
+        }
+
+        .header-inner {
+            max-width: 1200px;
+
+            margin: auto;
+
+            padding:
+                14px 18px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 18px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+
+            gap: 10px;
+
+            font-weight: 900;
+        }
+
+        .brand-mark {
+            width: 42px;
+            height: 42px;
+
+            border-radius: 13px;
+
+            display: grid;
+            place-items: center;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #24d17e,
+                    #0ca66a
+                );
+
+            color: #04120d;
+
+            font-size: 21px;
+            font-weight: 1000;
+
+            box-shadow:
+                0 8px 30px
+                rgba(36,209,126,.2);
+        }
+
+        .brand-text small {
+            display: block;
+
+            color: #7f92a8;
+
+            font-size: 10px;
+
+            letter-spacing: 1.5px;
+
+            text-transform: uppercase;
+        }
+
+        .desktop-nav {
+            display: none;
+
+            gap: 24px;
+        }
+
+        .desktop-nav a {
+            color: #9eafc2;
+
+            font-size: 14px;
+
+            font-weight: 700;
+        }
+
+        .desktop-nav a:hover,
+        .desktop-nav a.active {
+            color: #fff;
+        }
+
+        .header-time {
+            display: none;
+
+            text-align: right;
+        }
+
+        .header-time strong {
+            display: block;
+            font-size: 13px;
+        }
+
+        .header-time span {
+            color: #7f92a8;
+            font-size: 10px;
+        }
+
+        .hero {
+            max-width: 1200px;
+
+            margin: auto;
+
+            padding:
+                55px 18px 30px;
+        }
+
+        .eyebrow {
+            color: #31df88;
+
+            font-size: 11px;
+
+            font-weight: 900;
+
+            letter-spacing: 2px;
+
+            text-transform: uppercase;
+
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size:
+                clamp(35px, 8vw, 64px);
+
+            line-height: 1.02;
+
+            max-width: 850px;
+        }
+
+        .hero p {
+            color: #8fa2b8;
+
+            max-width: 680px;
+
+            margin-top: 18px;
+
+            font-size: 16px;
+        }
+
+        .transfer-section {
+            max-width: 1200px;
+
+            margin: auto;
+
+            padding:
+                15px 18px 100px;
+        }
+
+        .transfer-toolbar {
+            display: flex;
+
+            gap: 9px;
+
+            overflow-x: auto;
+
+            margin-bottom: 20px;
+        }
+
+        .filter {
+            flex:
+                0 0 auto;
+
+            padding:
+                9px 14px;
+
+            border:
+                1px solid rgba(255,255,255,.08);
+
+            border-radius: 100px;
+
+            background:
+                #0c1a2a;
+
+            color: #8da0b5;
+
+            font-size: 11px;
+
+            font-weight: 800;
+        }
+
+        .filter.active {
+            background:
+                #28d783;
+
+            color: #04120d;
+        }
+
+        .transfer-list {
+            display: grid;
+
+            gap: 12px;
+        }
+
+        .transfer-card {
+            background:
+                #0b1929;
+
+            border:
+                1px solid rgba(255,255,255,.07);
+
+            border-radius: 20px;
+
+            padding: 18px;
+
+            transition:
+                transform .2s ease,
+                border-color .2s ease;
+        }
+
+        .transfer-card:hover {
+            transform:
+                translateY(-2px);
+
+            border-color:
+                rgba(40,215,131,.35);
+        }
+
+        .transfer-top {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 10px;
+
+            margin-bottom: 16px;
+        }
+
+        .transfer-player {
+            font-size: 18px;
+
+            font-weight: 900;
+        }
+
+        .transfer-status {
+            padding:
+                5px 9px;
+
+            border-radius:
+                100px;
+
+            background:
+                rgba(40,215,131,.09);
+
+            color:
+                #31df88;
+
+            font-size:
+                10px;
+
+            font-weight:
+                900;
+
+            text-transform:
+                uppercase;
+        }
+
+        .transfer-route {
+            display: grid;
+
+            grid-template-columns:
+                1fr auto 1fr;
+
+            align-items: center;
+
+            gap: 10px;
+
+            padding:
+                14px;
+
+            border-radius:
+                15px;
+
+            background:
+                rgba(255,255,255,.035);
+        }
+
+        .club {
+            min-width: 0;
+        }
+
+        .club-label {
+            display: block;
+
+            color: #667b91;
+
+            font-size: 9px;
+
+            font-weight: 900;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+        }
+
+        .club-name {
+            display: block;
+
+            margin-top: 3px;
+
+            font-size: 13px;
+
+            font-weight: 800;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+
+            white-space: nowrap;
+        }
+
+        .club:last-child {
+            text-align: right;
+        }
+
+        .arrow {
+            color:
+                #31df88;
+
+            font-size: 20px;
+
+            font-weight: 900;
+        }
+
+        .transfer-info {
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 10px;
+
+            margin-top: 14px;
+        }
+
+        .info-box {
+            padding:
+                10px;
+
+            border-radius:
+                12px;
+
+            background:
+                rgba(255,255,255,.025);
+        }
+
+        .info-box span {
+            display: block;
+
+            color:
+                #657a91;
+
+            font-size:
+                9px;
+
+            text-transform:
+                uppercase;
+
+            font-weight:
+                800;
+        }
+
+        .info-box strong {
+            display: block;
+
+            margin-top: 2px;
+
+            font-size:
+                12px;
+        }
+
+        .transfer-description {
+            color:
+                #7d91a7;
+
+            font-size:
+                12px;
+
+            margin-top:
+                13px;
+        }
+
+        .transfer-date {
+            color:
+                #5f7389;
+
+            font-size:
+                10px;
+
+            margin-top:
+                10px;
+        }
+
+        .empty {
+            padding:
+                55px 20px;
+
+            text-align:
+                center;
+
+            border:
+                1px dashed rgba(255,255,255,.1);
+
+            border-radius:
+                18px;
+
+            color:
+                #71859c;
+        }
+
+        footer {
+            border-top:
+                1px solid rgba(255,255,255,.07);
+
+            padding:
+                28px 18px;
+
+            text-align:
+                center;
+
+            color:
+                #667b92;
+
+            font-size:
+                12px;
+        }
+
+        .pacethel {
+            display: inline-block;
+
+            margin-top:
+                5px;
+
+            color:
+                #9cafc3;
+
+            font-weight:
+                800;
+
+            animation:
+                pacethelPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pacethelPulse {
+
+            0%,100% {
+                opacity:
+                    .65;
+
+                transform:
+                    translateY(0);
+            }
+
+            50% {
+                opacity:
+                    1;
+
+                transform:
+                    translateY(-2px);
+            }
+
+        }
+
+        .mobile-bottom-nav {
+            position: fixed;
+
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+
+            z-index: 90;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4,1fr);
+
+            padding: 8px;
+
+            background:
+                rgba(9,24,39,.95);
+
+            border:
+                1px solid rgba(255,255,255,.08);
+
+            backdrop-filter:
+                blur(18px);
+
+            border-radius:
+                18px;
+        }
+
+        .mobile-bottom-nav a {
+            text-align:
+                center;
+
+            color:
+                #71859c;
+
+            font-size:
+                10px;
+
+            font-weight:
+                800;
+
+            padding:
+                7px 2px;
+        }
+
+        .mobile-bottom-nav a.active {
+            color:
+                #31df88;
+        }
+
+        @media (min-width:800px) {
+
+            .desktop-nav {
+                display:
+                    flex;
+            }
+
+            .header-time {
+                display:
+                    block;
+            }
+
+            .transfer-list {
+                grid-template-columns:
+                    repeat(2,1fr);
+            }
+
+            .mobile-bottom-nav {
+                display:
+                    none;
+            }
+
+        }
+
+        @media (prefers-reduced-motion:reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation:
+                    none !important;
+
+                transition:
+                    none !important;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+<header class="site-header">
+
+    <div class="header-inner">
+
+        <a
+            href="/"
+            class="brand"
+        >
+
+            <div class="brand-mark">
+                P
+            </div>
+
+            <div class="brand-text">
+
+                PaceFetch
+
+                <small>
+                    Football Intelligence
+                </small>
+
+            </div>
+
+        </a>
+
+
+        <nav class="desktop-nav">
+
+            <a href="/">
+                Home
+            </a>
+
+            <a href="/news/">
+                News
+            </a>
+
+            <a href="/predictions/">
+                Predictions
+            </a>
+
+            <a
+                href="/transfers/"
+                class="active"
+            >
+                Transfers
+            </a>
+
+            <a href="/leagues/">
+                Leagues
+            </a>
+
+            <a href="/teams/">
+                Teams
+            </a>
+
+        </nav>
+
+
+        <div class="header-time">
+
+            <strong
+                data-nigeria-time
+            >
+                --:--:--
+            </strong>
+
+            <span>
+                Nigeria • GMT +1
+            </span>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<main>
+
+
+<section class="hero">
+
+    <div class="eyebrow">
+        Transfer Centre
+    </div>
+
+    <h1>
+        Every major move. One place.
+    </h1>
+
+    <p>
+        Follow confirmed signings, transfer negotiations,
+        fees and major football rumours from around the world.
+    </p>
+
+</section>
+
+
+<section class="transfer-section">
+
+
+    <div class="transfer-toolbar">
+
+        <button
+            class="filter active"
+            data-filter="all"
+        >
+            All
+        </button>
+
+        <button
+            class="filter"
+            data-filter="confirmed"
+        >
+            Confirmed
+        </button>
+
+        <button
+            class="filter"
+            data-filter="rumour"
+        >
+            Rumours
+        </button>
+
+        <button
+            class="filter"
+            data-filter="negotiation"
+        >
+            Negotiations
+        </button>
+
+    </div>
+
+
+    <div
+        id="transferList"
+        class="transfer-list"
+    ></div>
+
+
+</section>
+
+</main>
+
+
+<footer>
+
+    <div>
+        © 2026 PaceFetch
+    </div>
+
+    <div class="pacethel">
+        Designed by Pacethel
+    </div>
+
+</footer>
+
+
+<nav class="mobile-bottom-nav">
+
+    <a href="/">
+        Home
+    </a>
+
+    <a href="/news/">
+        News
+    </a>
+
+    <a href="/predictions/">
+        Picks
+    </a>
+
+    <a
+        href="/transfers/"
+        class="active"
+    >
+        Transfers
+    </a>
+
+</nav>
+
+
+<script>
+
+(function () {
+
+    "use strict";
+
+
+    const fallbackTransfers = [
+
+        {
+            player: "Transfer Update",
+            from_team: "Previous Club",
+            to_team: "New Club",
+            status: "Confirmed",
+            fee: "Undisclosed",
+            description:
+                "The PaceFetch transfer centre will display the latest confirmed football movements and major transfer developments.",
+            published_at:
+                new Date().toISOString()
+        },
+
+        {
+            player: "Transfer Watch",
+            from_team: "Club A",
+            to_team: "Club B",
+            status: "Rumour",
+            fee: "Reported",
+            description:
+                "Major transfer rumours and negotiations will appear here once connected to the PaceFetch backend.",
+            published_at:
+                new Date().toISOString()
+        }
+
+    ];
+
+
+    let allTransfers = [];
+
+
+    function escapeText(value) {
+        return value ?? "";
+    }
+
+
+    function createCard(transfer) {
+
+        const card =
+            document.createElement("article");
+
+        card.className =
+            "transfer-card";
+
+        card.dataset.status =
+            (transfer.status || "")
+                .toLowerCase();
+
+
+        const top =
+            document.createElement("div");
+
+        top.className =
+            "transfer-top";
+
+
+        const player =
+            document.createElement("div");
+
+        player.className =
+            "transfer-player";
+
+        player.textContent =
+            escapeText(
+                transfer.player
+            );
+
+
+        const status =
+            document.createElement("span");
+
+        status.className =
+            "transfer-status";
+
+        status.textContent =
+            escapeText(
+                transfer.status || "Rumour"
+            );
+
+
+        top.appendChild(player);
+        top.appendChild(status);
+
+
+        const route =
+            document.createElement("div");
+
+        route.className =
+            "transfer-route";
+
+
+        const from =
+            document.createElement("div");
+
+        from.className =
+            "club";
+
+        const fromLabel =
+            document.createElement("span");
+
+        fromLabel.className =
+            "club-label";
+
+        fromLabel.textContent =
+            "From";
+
+
+        const fromName =
+            document.createElement("span");
+
+        fromName.className =
+            "club-name";
+
+        fromName.textContent =
+            escapeText(
+                transfer.from_team || "—"
+            );
+
+
+        from.appendChild(fromLabel);
+        from.appendChild(fromName);
+
+
+        const arrow =
+            document.createElement("div");
+
+        arrow.className =
+            "arrow";
+
+        arrow.textContent =
+            "→";
+
+
+        const to =
+            document.createElement("div");
+
+        to.className =
+            "club";
+
+        const toLabel =
+            document.createElement("span");
+
+        toLabel.className =
+            "club-label";
+
+        toLabel.textContent =
+            "To";
+
+
+        const toName =
+            document.createElement("span");
+
+        toName.className =
+            "club-name";
+
+        toName.textContent =
+            escapeText(
+                transfer.to_team || "—"
+            );
+
+
+        to.appendChild(toLabel);
+        to.appendChild(toName);
+
+
+        route.appendChild(from);
+        route.appendChild(arrow);
+        route.appendChild(to);
+
+
+        const info =
+            document.createElement("div");
+
+        info.className =
+            "transfer-info";
+
+
+        const fee =
+            document.createElement("div");
+
+        fee.className =
+            "info-box";
+
+        fee.innerHTML =
+            "<span>Fee</span>";
+
+
+        const feeValue =
+            document.createElement("strong");
+
+        feeValue.textContent =
+            escapeText(
+                transfer.fee || "Undisclosed"
+            );
+
+        fee.appendChild(feeValue);
+
+
+        const date =
+            document.createElement("div");
+
+        date.className =
+            "info-box";
+
+        date.innerHTML =
+            "<span>Updated</span>";
+
+
+        const dateValue =
+            document.createElement("strong");
+
+        dateValue.textContent =
+            formatDate(
+                transfer.published_at
+            );
+
+        date.appendChild(dateValue);
+
+
+        info.appendChild(fee);
+        info.appendChild(date);
+
+
+        const description =
+            document.createElement("p");
+
+        description.className =
+            "transfer-description";
+
+        description.textContent =
+            escapeText(
+                transfer.description || ""
+            );
+
+
+        const published =
+            document.createElement("div");
+
+        published.className =
+            "transfer-date";
+
+        published.textContent =
+            formatDate(
+                transfer.published_at
+            );
+
+
+        card.appendChild(top);
+        card.appendChild(route);
+        card.appendChild(info);
+
+        if (transfer.description) {
+            card.appendChild(description);
+        }
+
+        card.appendChild(published);
+
+
+        return card;
+    }
+
+
+    function formatDate(value) {
+
+        if (!value) {
+            return "Recently";
+        }
+
+        const date =
+            new Date(value);
+
+        if (
+            Number.isNaN(
+                date.getTime()
+            )
+        ) {
+            return value;
+        }
+
+        return new Intl.DateTimeFormat(
+            "en-NG",
+            {
+                timeZone:
+                    "Africa/Lagos",
+
+                day:
+                    "2-digit",
+
+                month:
+                    "short",
+
+                year:
+                    "numeric",
+
+                hour:
+                    "2-digit",
+
+                minute:
+                    "2-digit",
+
+                hour12:
+                    true
+            }
+        ).format(date);
+    }
+
+
+ 
