@@ -1,237 +1,288 @@
 // api/prediction-engine.js
 
 const {
-    clamp,
-    getConfidenceTier,
     calculateConfidence
 } = require("./confidence");
 
-const { validatePredictionSet } = require("./validator");
-const { getTopPredictions } = require("./ranking");
+const {
+    validatePredictionSet
+} = require("./validator");
+
+const {
+    rankPredictions
+} = require("./ranking");
 
 
-/* -------------------------------------------------------
-   BASIC HELPERS
-------------------------------------------------------- */
+const MODEL_VERSION = "PF-1.2";
 
-function round(value, decimals = 2) {
-    const factor = Math.pow(10, decimals);
-    return Math.round(Number(value) * factor) / factor;
-}
-
-function safeNumber(value, fallback = null) {
-    const n = Number(value);
-
-    return Number.isFinite(n)
-        ? n
-        : fallback;
-}
-
-function validProbability(value) {
-    const n = Number(value);
-
-    return Number.isFinite(n) &&
-        n >= 0 &&
-        n <= 100;
-}
-
-function normalizePercentages(values) {
-    const clean = {};
-
-    for (const [key, value] of Object.entries(values)) {
-        clean[key] = safeNumber(value, 0);
-    }
-
-    const total = Object.values(clean).reduce(
-        (sum, value) => sum + value,
-        0
-    );
-
-    if (total <= 0) {
-        return clean;
-    }
-
-    const result = {};
-
-    for (const [key, value] of Object.entries(clean)) {
-        result[key] = round(
-            (value / total) * 100
-        );
-    }
-
-    return result;
-}
-
-
-/* -------------------------------------------------------
-   PROVIDER PROBABILITY EXTRACTION
-------------------------------------------------------- */
 
 /*
- * API-Football's prediction response normally gives
- * home / draw / away percentages.
- *
- * This function accepts several possible formats so the
- * engine remains compatible with our provider adapter.
- */
+|--------------------------------------------------------------------------
+| Helpers
+|--------------------------------------------------------------------------
+*/
 
-function extractProvider1X2(providerPrediction) {
+function clamp(value, min, max) {
 
-    if (!providerPrediction) {
-        return null;
+    const n = Number(value);
+
+    if (!Number.isFinite(n)) {
+        return min;
     }
 
-    const sources = [
-        providerPrediction,
-        providerPrediction.percent,
-        providerPrediction.percentages,
-        providerPrediction.probabilities,
-        providerPrediction.predictions,
-        providerPrediction.data
-    ].filter(Boolean);
-
-    for (const source of sources) {
-
-        const home = safeNumber(
-            source.home ??
-            source.Home ??
-            source["home"]
-        );
-
-        const draw = safeNumber(
-            source.draw ??
-            source.Draw ??
-            source["draw"]
-        );
-
-        const away = safeNumber(
-            source.away ??
-            source.Away ??
-            source["away"]
-        );
-
-        if (
-            validProbability(home) &&
-            validProbability(draw) &&
-            validProbability(away)
-        ) {
-            return normalizePercentages({
-                home,
-                draw,
-                away
-            });
-        }
-    }
-
-    return null;
+    return Math.min(
+        max,
+        Math.max(
+            min,
+            n
+        )
+    );
 }
 
 
-/* -------------------------------------------------------
-   OPTIONAL PROVIDER MARKETS
-------------------------------------------------------- */
+function round(value, decimals = 1) {
 
-function getProviderMarket(providerPrediction, names) {
+    const multiplier =
+        Math.pow(
+            10,
+            decimals
+        );
 
-    if (!providerPrediction) {
-        return null;
-    }
-
-    const sources = [
-        providerPrediction,
-        providerPrediction.markets,
-        providerPrediction.probabilities,
-        providerPrediction.predictions,
-        providerPrediction.percent,
-        providerPrediction.percentages
-    ].filter(Boolean);
-
-    for (const source of sources) {
-
-        for (const name of names) {
-
-            const value = source[name];
-
-            if (validProbability(value)) {
-                return round(value);
-            }
-        }
-    }
-
-    return null;
+    return Math.round(
+        Number(value) * multiplier
+    ) / multiplier;
 }
 
 
-/* -------------------------------------------------------
-   CONFIDENCE
-------------------------------------------------------- */
+/*
+|--------------------------------------------------------------------------
+| Normalize API-Football 1X2 probabilities
+|--------------------------------------------------------------------------
+*/
 
-function addConfidence(prediction) {
+function normalize1X2(
+    home,
+    draw,
+    away
+) {
 
-    const confidence = calculateConfidence({
-        probability: prediction.probability,
-        dataQuality: prediction.dataQuality,
-        providerAgreement: prediction.providerAgreement,
-        sampleQuality: prediction.sampleQuality
-    });
+    home = clamp(home, 0, 100);
+    draw = clamp(draw, 0, 100);
+    away = clamp(away, 0, 100);
 
-    const tier = getConfidenceTier(confidence);
+    const total =
+        home +
+        draw +
+        away;
+
+    if (total <= 0) {
+        return null;
+    }
 
     return {
-        ...prediction,
 
-        probability: round(
-            prediction.probability
-        ),
+        home:
+            round(
+                (home / total) * 100
+            ),
 
-        confidence: round(
-            confidence
-        ),
+        draw:
+            round(
+                (draw / total) * 100
+            ),
 
-        confidenceTier: tier.tier,
+        away:
+            round(
+                (away / total) * 100
+            )
 
-        confidenceLabel: tier.label,
-
-        confidenceColor: tier.color,
-
-        modelVersion: "PF-1.1"
     };
 }
 
 
-/* -------------------------------------------------------
-   BUILD PROVIDER-BASED PREDICTIONS
-------------------------------------------------------- */
+/*
+|--------------------------------------------------------------------------
+| Get strongest 1X2 outcome
+|--------------------------------------------------------------------------
+*/
 
-function buildPredictionList({
+function getBest1X2(
+    probabilities
+) {
+
+    const choices = [
+
+        {
+            selection: "Home",
+            probability:
+                probabilities.home
+        },
+
+        {
+            selection: "Draw",
+            probability:
+                probabilities.draw
+        },
+
+        {
+            selection: "Away",
+            probability:
+                probabilities.away
+        }
+
+    ];
+
+    choices.sort(
+        (a, b) =>
+            b.probability -
+            a.probability
+    );
+
+    return choices[0];
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Get strongest Double Chance
+|--------------------------------------------------------------------------
+|
+| 1X = Home + Draw
+| X2 = Draw + Away
+| 12 = Home + Away
+|
+| We cap the displayed value at 99%.
+| This prevents rounded provider percentages from
+| producing an artificial 100% certainty.
+|--------------------------------------------------------------------------
+*/
+
+function getBestDoubleChance(
+    probabilities
+) {
+
+    const choices = [
+
+        {
+            selection: "1X",
+
+            probability:
+                probabilities.home +
+                probabilities.draw
+        },
+
+        {
+            selection: "X2",
+
+            probability:
+                probabilities.draw +
+                probabilities.away
+        },
+
+        {
+            selection: "12",
+
+            probability:
+                probabilities.home +
+                probabilities.away
+        }
+
+    ];
+
+    choices.forEach(
+        choice => {
+
+            choice.probability =
+                round(
+                    clamp(
+                        choice.probability,
+                        0,
+                        99
+                    )
+                );
+
+        }
+    );
+
+    choices.sort(
+        (a, b) =>
+            b.probability -
+            a.probability
+    );
+
+    return choices[0];
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Create prediction object
+|--------------------------------------------------------------------------
+*/
+
+function createPrediction(
     fixture,
-    providerPrediction = null
-}) {
+    market,
+    selection,
+    probability
+) {
 
-    const predictions = [];
+    const finalProbability =
+        round(
+            clamp(
+                probability,
+                0,
+                99
+            )
+        );
 
-    const homeTeam =
-        fixture.homeTeam ||
-        fixture.teams?.home?.name ||
-        "Home";
+    /*
+     * PaceFetch does not publish predictions below 50%.
+     */
 
-    const awayTeam =
-        fixture.awayTeam ||
-        fixture.teams?.away?.name ||
-        "Away";
+    if (
+        finalProbability < 50
+    ) {
 
-    const base = {
+        return null;
+    }
+
+
+    const dataQuality = 90;
+
+    const providerAgreement = 100;
+
+    const sampleQuality = 80;
+
+
+    const confidence =
+        calculateConfidence({
+
+            probability:
+                finalProbability,
+
+            dataQuality,
+
+            providerAgreement,
+
+            sampleQuality
+
+        });
+
+
+    return {
+
         fixtureId:
-            fixture.id ||
             fixture.fixtureId,
 
-        homeTeam,
+        homeTeam:
+            fixture.homeTeam,
 
-        awayTeam,
+        awayTeam:
+            fixture.awayTeam,
 
         kickoff:
-            fixture.kickoff ||
-            fixture.date,
+            fixture.kickoff,
 
         league:
             fixture.league,
@@ -240,245 +291,288 @@ function buildPredictionList({
             fixture.country,
 
         source:
-            "API-Football"
+            "API-Football",
+
+        market,
+
+        selection,
+
+        probability:
+            finalProbability,
+
+        dataQuality,
+
+        providerAgreement,
+
+        sampleQuality,
+
+        confidence:
+            round(
+                confidence
+            ),
+
+        modelVersion:
+            MODEL_VERSION
+
     };
+}
 
 
-    /* ---------------------------------------------------
-       1X2
-    --------------------------------------------------- */
+/*
+|--------------------------------------------------------------------------
+| Generate predictions for one fixture
+|--------------------------------------------------------------------------
+*/
 
-    const provider1X2 =
-        extractProvider1X2(
-            providerPrediction
+function generateFixturePredictions(
+    fixture
+) {
+
+    if (
+        !fixture ||
+        !fixture.providerPrediction
+    ) {
+
+        return [];
+    }
+
+
+    const provider =
+        fixture.providerPrediction;
+
+
+    const probabilities =
+        normalize1X2(
+
+            provider.home,
+            provider.draw,
+            provider.away
+
         );
+
+
+    if (!probabilities) {
+        return [];
+    }
+
+
+    const predictions = [];
 
 
     /*
-     * We do NOT manufacture a 1X2 probability.
-     *
-     * If API-Football doesn't provide usable
-     * probabilities, this fixture produces no
-     * prediction rather than a fake one.
-     */
+    |--------------------------------------------------------------------------
+    | 1X2
+    |--------------------------------------------------------------------------
+    */
 
-    if (provider1X2) {
+    const bestResult =
+        getBest1X2(
+            probabilities
+        );
 
-        const winnerEntries = [
-            {
-                selection: homeTeam,
-                probability: provider1X2.home
-            },
-            {
-                selection: "Draw",
-                probability: provider1X2.draw
-            },
-            {
-                selection: awayTeam,
-                probability: provider1X2.away
+
+    if (bestResult) {
+
+        const prediction =
+            createPrediction(
+
+                fixture,
+
+                "1X2",
+
+                bestResult.selection,
+
+                bestResult.probability
+
+            );
+
+
+        if (prediction) {
+
+            predictions.push(
+                prediction
+            );
+
+        }
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Double Chance
+    |--------------------------------------------------------------------------
+    */
+
+    const bestDoubleChance =
+        getBestDoubleChance(
+            probabilities
+        );
+
+
+    if (bestDoubleChance) {
+
+        const prediction =
+            createPrediction(
+
+                fixture,
+
+                "Double Chance",
+
+                bestDoubleChance.selection,
+
+                bestDoubleChance.probability
+
+            );
+
+
+        if (prediction) {
+
+            predictions.push(
+                prediction
+            );
+
+        }
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Optional real provider markets
+    |--------------------------------------------------------------------------
+    |
+    | These are only used when actual provider values
+    | are supplied by the caller.
+    |
+    | Nothing is invented here.
+    |--------------------------------------------------------------------------
+    */
+
+    if (
+        provider.over15 !== undefined &&
+        provider.over15 !== null
+    ) {
+
+        const probability =
+            Number(
+                provider.over15
+            );
+
+
+        if (
+            Number.isFinite(
+                probability
+            ) &&
+            probability >= 50
+        ) {
+
+            const prediction =
+                createPrediction(
+
+                    fixture,
+
+                    "Over/Under 1.5",
+
+                    "Over 1.5",
+
+                    probability
+
+                );
+
+
+            if (prediction) {
+
+                predictions.push(
+                    prediction
+                );
+
             }
-        ];
-
-        winnerEntries.sort(
-            (a, b) =>
-                b.probability -
-                a.probability
-        );
-
-        const strongest =
-            winnerEntries[0];
+        }
+    }
 
 
-        predictions.push(
-            addConfidence({
-                ...base,
+    if (
+        provider.over25 !== undefined &&
+        provider.over25 !== null
+    ) {
 
-                market: "1X2",
-
-                selection:
-                    strongest.selection,
-
-                probability:
-                    strongest.probability,
-
-                /*
-                 * Real provider prediction is being used.
-                 */
-                dataQuality: 90,
-
-                providerAgreement: 100,
-
-                /*
-                 * This is provider data rather
-                 * than our unavailable historical
-                 * statistics.
-                 */
-                sampleQuality: 80
-            })
-        );
+        const probability =
+            Number(
+                provider.over25
+            );
 
 
-        /* ------------------------------------------------
-           DOUBLE CHANCE
-        ------------------------------------------------ */
+        if (
+            Number.isFinite(
+                probability
+            ) &&
+            probability >= 50
+        ) {
 
-        const oneX =
-            provider1X2.home +
-            provider1X2.draw;
+            const prediction =
+                createPrediction(
 
-        const xTwo =
-            provider1X2.draw +
-            provider1X2.away;
+                    fixture,
 
-        const twelve =
-            provider1X2.home +
-            provider1X2.away;
+                    "Over/Under 2.5",
+
+                    "Over 2.5",
+
+                    probability
+
+                );
 
 
-        const doubleChance = [
-            {
-                selection: "1X",
-                probability: oneX
-            },
-            {
-                selection: "X2",
-                probability: xTwo
-            },
-            {
-                selection: "12",
-                probability: twelve
+            if (prediction) {
+
+                predictions.push(
+                    prediction
+                );
+
             }
-        ].sort(
-            (a, b) =>
-                b.probability -
-                a.probability
-        )[0];
-
-
-        predictions.push(
-            addConfidence({
-                ...base,
-
-                market: "Double Chance",
-
-                selection:
-                    doubleChance.selection,
-
-                probability:
-                    doubleChance.probability,
-
-                dataQuality: 90,
-
-                providerAgreement: 100,
-
-                sampleQuality: 80
-            })
-        );
+        }
     }
 
 
-    /* ---------------------------------------------------
-       OPTIONAL PROVIDER MARKETS
-       Only publish these if the provider actually gives
-       us a probability.
-    --------------------------------------------------- */
+    if (
+        provider.btts !== undefined &&
+        provider.btts !== null
+    ) {
 
-    const over15 =
-        getProviderMarket(
-            providerPrediction,
-            [
-                "over_1_5",
-                "over1_5",
-                "over15",
-                "OVER_1_5"
-            ]
-        );
-
-    if (over15 !== null) {
-
-        predictions.push(
-            addConfidence({
-                ...base,
-
-                market: "Over/Under 1.5",
-
-                selection: "Over 1.5",
-
-                probability: over15,
-
-                dataQuality: 90,
-
-                providerAgreement: 100,
-
-                sampleQuality: 80
-            })
-        );
-    }
+        const probability =
+            Number(
+                provider.btts
+            );
 
 
-    const over25 =
-        getProviderMarket(
-            providerPrediction,
-            [
-                "over_2_5",
-                "over2_5",
-                "over25",
-                "OVER_2_5"
-            ]
-        );
+        if (
+            Number.isFinite(
+                probability
+            ) &&
+            probability >= 50
+        ) {
 
-    if (over25 !== null) {
+            const prediction =
+                createPrediction(
 
-        predictions.push(
-            addConfidence({
-                ...base,
+                    fixture,
 
-                market: "Over/Under 2.5",
+                    "BTTS",
 
-                selection: "Over 2.5",
+                    "Yes",
 
-                probability: over25,
+                    probability
 
-                dataQuality: 90,
-
-                providerAgreement: 100,
-
-                sampleQuality: 80
-            })
-        );
-    }
+                );
 
 
-    const bttsYes =
-        getProviderMarket(
-            providerPrediction,
-            [
-                "btts_yes",
-                "bttsYes",
-                "BTTS_YES",
-                "btts"
-            ]
-        );
+            if (prediction) {
 
-    if (bttsYes !== null) {
+                predictions.push(
+                    prediction
+                );
 
-        predictions.push(
-            addConfidence({
-                ...base,
-
-                market: "BTTS",
-
-                selection: "BTTS Yes",
-
-                probability: bttsYes,
-
-                dataQuality: 90,
-
-                providerAgreement: 100,
-
-                sampleQuality: 80
-            })
-        );
+            }
+        }
     }
 
 
@@ -486,163 +580,463 @@ function buildPredictionList({
 }
 
 
-/* -------------------------------------------------------
-   MAIN ENGINE
-------------------------------------------------------- */
+/*
+|--------------------------------------------------------------------------
+| Keep strongest prediction per fixture
+|--------------------------------------------------------------------------
+|
+| This prevents the same match from occupying multiple
+| slots in the daily published list.
+|--------------------------------------------------------------------------
+*/
 
-function generatePredictions({
-    fixture,
-    teamStats = {},
-    providerPrediction = null
-}) {
-
-    /*
-     * teamStats is intentionally NOT required anymore.
-     *
-     * API-Football's current free-plan restriction means
-     * 2026 team statistics cannot reliably be requested.
-     *
-     * Therefore the production engine uses real provider
-     * probabilities instead of invented fallback statistics.
-     */
-
-    const predictions =
-        buildPredictionList({
-            fixture,
-            providerPrediction
-        });
-
-
-    return {
-        fixture,
-
-        expectedGoals: null,
-
-        markets: null,
-
-        predictions
-    };
-}
-
-
-/* -------------------------------------------------------
-   DAILY ENGINE
-------------------------------------------------------- */
-
-function generateDailyPredictions(
-    fixtures = [],
-    maximum = 50
+function keepBestPerFixture(
+    predictions
 ) {
 
-    const allPredictions = [];
+    const best =
+        new Map();
 
-    for (const fixture of fixtures) {
 
-        if (!fixture) {
+    for (
+        const prediction
+        of predictions
+    ) {
+
+        if (
+            !prediction ||
+            !prediction.fixtureId
+        ) {
+
             continue;
         }
 
 
-        const result =
-            generatePredictions({
-                fixture,
-
-                /*
-                 * Kept for backwards compatibility.
-                 * It is no longer required.
-                 */
-                teamStats:
-                    fixture.teamStats || {},
-
-                providerPrediction:
-                    fixture.providerPrediction ||
-                    null
-            });
+        const fixtureId =
+            String(
+                prediction.fixtureId
+            );
 
 
-        allPredictions.push(
-            ...result.predictions
-        );
+        const existing =
+            best.get(
+                fixtureId
+            );
+
+
+        if (!existing) {
+
+            best.set(
+                fixtureId,
+                prediction
+            );
+
+            continue;
+        }
+
+
+        const newConfidence =
+            Number(
+                prediction.confidence
+            ) || 0;
+
+
+        const oldConfidence =
+            Number(
+                existing.confidence
+            ) || 0;
+
+
+        if (
+            newConfidence >
+            oldConfidence
+        ) {
+
+            best.set(
+                fixtureId,
+                prediction
+            );
+
+            continue;
+        }
+
+
+        /*
+         * If confidence is equal,
+         * use probability as the tie breaker.
+         */
+
+        if (
+            newConfidence ===
+            oldConfidence
+        ) {
+
+            const newProbability =
+                Number(
+                    prediction.probability
+                ) || 0;
+
+
+            const oldProbability =
+                Number(
+                    existing.probability
+                ) || 0;
+
+
+            if (
+                newProbability >
+                oldProbability
+            ) {
+
+                best.set(
+                    fixtureId,
+                    prediction
+                );
+
+            }
+        }
+    }
+
+
+    return Array.from(
+        best.values()
+    );
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Generate daily predictions
+|--------------------------------------------------------------------------
+*/
+
+function generateDailyPredictions(
+    fixtures,
+    maximum = 50
+) {
+
+    if (
+        !Array.isArray(
+            fixtures
+        )
+    ) {
+
+        return {
+
+            generated: 0,
+
+            usable: 0,
+
+            rejected: 0,
+
+            published: 0,
+
+            predictions: []
+
+        };
+    }
+
+
+    const generated = [];
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Generate provider-backed predictions
+    |--------------------------------------------------------------------------
+    */
+
+    for (
+        const fixture
+        of fixtures
+    ) {
+
+        try {
+
+            const predictions =
+                generateFixturePredictions(
+                    fixture
+                );
+
+
+            if (
+                Array.isArray(
+                    predictions
+                )
+            ) {
+
+                generated.push(
+                    ...predictions
+                );
+
+            }
+
+        } catch (error) {
+
+            /*
+             * One bad fixture must never
+             * destroy the whole daily run.
+             */
+
+            console.error(
+                "Prediction engine error:",
+                error.message
+            );
+
+        }
     }
 
 
     /*
-     * Remove anything that doesn't have a valid
-     * probability.
-     */
+    |--------------------------------------------------------------------------
+    | One strongest prediction per match
+    |--------------------------------------------------------------------------
+    */
 
-    const usable =
-        allPredictions.filter(
-            prediction =>
-                validProbability(
-                    prediction.probability
-                )
+    const unique =
+        keepBestPerFixture(
+            generated
         );
 
 
     /*
-     * Your existing validator handles:
-     *
-     * - missing fields
-     * - probability below 50%
-     * - bad data quality
-     * - invalid prediction objects
-     */
+    |--------------------------------------------------------------------------
+    | Validate
+    |--------------------------------------------------------------------------
+    */
 
-    const validation =
-        validatePredictionSet(
-            usable,
+    let validated;
+
+
+    try {
+
+        validated =
+            validatePredictionSet(
+                unique,
+                maximum
+            );
+
+    } catch (error) {
+
+        console.error(
+            "Prediction validation error:",
+            error.message
+        );
+
+        /*
+         * Safe fallback:
+         * use unique predictions and apply
+         * the hard maximum.
+         */
+
+        validated =
+            unique.slice(
+                0,
+                maximum
+            );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Support the existing validator's return format
+    |--------------------------------------------------------------------------
+    */
+
+    let usable = [];
+
+
+    if (
+        Array.isArray(
+            validated
+        )
+    ) {
+
+        usable =
+            validated;
+
+    } else if (
+        validated &&
+        Array.isArray(
+            validated.predictions
+        )
+    ) {
+
+        usable =
+            validated.predictions;
+
+    } else if (
+        validated &&
+        Array.isArray(
+            validated.valid
+        )
+    ) {
+
+        usable =
+            validated.valid;
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Rank
+    |--------------------------------------------------------------------------
+    */
+
+    let ranked = [];
+
+
+    try {
+
+        const result =
+            rankPredictions(
+                usable
+            );
+
+
+        if (
+            Array.isArray(
+                result
+            )
+        ) {
+
+            ranked =
+                result;
+
+        } else if (
+            result &&
+            Array.isArray(
+                result.predictions
+            )
+        ) {
+
+            ranked =
+                result.predictions;
+
+        } else {
+
+            ranked =
+                usable;
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Prediction ranking error:",
+            error.message
+        );
+
+        ranked =
+            usable;
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Final hard limit
+    |--------------------------------------------------------------------------
+    */
+
+    ranked =
+        ranked.slice(
+            0,
             maximum
         );
 
 
-    const ranked =
-        getTopPredictions(
-            validation.valid,
-            maximum
+    /*
+    |--------------------------------------------------------------------------
+    | Ensure ranks exist
+    |--------------------------------------------------------------------------
+    */
+
+    ranked =
+        ranked.map(
+            (prediction, index) => ({
+
+                ...prediction,
+
+                rank:
+                    index + 1
+
+            })
         );
 
 
     return {
+
         generated:
-            allPredictions.length,
+            generated.length,
 
         usable:
             usable.length,
 
         rejected:
-            validation.rejected.length,
+            Math.max(
+
+                0,
+
+                generated.length -
+                usable.length
+
+            ),
 
         published:
             ranked.length,
 
         predictions:
             ranked
+
     };
 }
 
 
-/* -------------------------------------------------------
-   EXPORTS
-------------------------------------------------------- */
+/*
+|--------------------------------------------------------------------------
+| Backwards compatibility
+|--------------------------------------------------------------------------
+|
+| Older PaceFetch code may import these functions.
+| We deliberately do NOT manufacture statistical data.
+|--------------------------------------------------------------------------
+*/
+
+function calculateMarkets() {
+
+    return null;
+}
+
+
+function calculateExpectedGoals() {
+
+    return null;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Exports
+|--------------------------------------------------------------------------
+*/
 
 module.exports = {
-    generatePredictions,
+
+    MODEL_VERSION,
+
+    normalize1X2,
+
+    getBest1X2,
+
+    getBestDoubleChance,
+
+    generateFixturePredictions,
 
     generateDailyPredictions,
 
-    /*
-     * Kept for compatibility with any existing imports.
-     *
-     * The production engine no longer depends on Poisson
-     * calculations because we don't have reliable 2026
-     * team statistics on the current API plan.
-     */
-    calculateMarkets: function () {
-        return null;
-    },
+    calculateMarkets,
 
-    calculateExpectedGoals: function () {
-        return null;
-    }
+    calculateExpectedGoals
+
 };
