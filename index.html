@@ -810,19 +810,1044 @@
 
                 </section>
 
+<!-- QUICK LINKS -->
+<section
+    class="section"
+    style="padding-left:0;padding-right:0;"
+>
 
-                <!-- QUICK LINKS -->
-                <section
-                    class="section"
-                    style="padding-left:0;padding-right:0;"
+    <div class="pf-section-heading">
+
+        <div>
+            <h2>
+                Explore PaceFetch
+            </h2>
+
+            <p>
+                Explore predictions, countries, leagues,
+                history and how PaceFetch works.
+            </p>
+        </div>
+
+    </div>
+
+
+    <div class="quick-links-grid">
+
+        <!-- COUNTRIES -->
+
+        <a
+            href="/countries.html"
+            class="quick-link-card"
+        >
+
+            <div class="quick-link-icon">
+                🌍
+            </div>
+
+            <div class="quick-link-content">
+
+                <h3>
+                    Countries &amp; Leagues
+                </h3>
+
+                <p>
+                    Browse football predictions by country,
+                    competition and league.
+                </p>
+
+                <span class="quick-link-arrow">
+                    Explore →
+                </span>
+
+            </div>
+
+        </a>
+
+
+        <!-- PREDICTIONS -->
+
+        <a
+            href="/predictions.html"
+            class="quick-link-card"
+        >
+
+            <div class="quick-link-icon">
+                🎯
+            </div>
+
+            <div class="quick-link-content">
+
+                <h3>
+                    All Predictions
+                </h3>
+
+                <p>
+                    View today's qualifying predictions
+                    and filter them by market and confidence.
+                </p>
+
+                <span class="quick-link-arrow">
+                    View predictions →
+                </span>
+
+            </div>
+
+        </a>
+
+
+        <!-- HISTORY -->
+
+        <a
+            href="/history.html"
+            class="quick-link-card"
+        >
+
+            <div class="quick-link-icon">
+                📊
+            </div>
+
+            <div class="quick-link-content">
+
+                <h3>
+                    Prediction History
+                </h3>
+
+                <p>
+                    Track previous predictions, results,
+                    accuracy and market performance.
+                </p>
+
+                <span class="quick-link-arrow">
+                    View history →
+                </span>
+
+            </div>
+
+        </a>
+
+
+        <!-- METHODOLOGY -->
+
+        <a
+            href="/methodology.html"
+            class="quick-link-card"
+        >
+
+            <div class="quick-link-icon">
+                🧠
+            </div>
+
+            <div class="quick-link-content">
+
+                <h3>
+                    Our Methodology
+                </h3>
+
+                <p>
+                    Learn how PaceFetch probabilities,
+                    confidence and qualifying predictions
+                    are produced.
+                </p>
+
+                <span class="quick-link-arrow">
+                    Learn more →
+                </span>
+
+            </div>
+
+        </a>
+
+    </div>
+
+</section>
+
+
+<!-- DISCLAIMER -->
+<section
+    class="section"
+    style="padding-left:0;padding-right:0;"
+>
+
+    <div class="disclaimer-card">
+
+        <div class="disclaimer-icon">
+            ⚠️
+        </div>
+
+        <div>
+
+            <h3>
+                Important Notice
+            </h3>
+
+            <p>
+                PaceFetch predictions are statistical
+                probabilities generated from available
+                football data. They are not guarantees
+                of match results. Football involves
+                uncertainty, and users should make
+                their own decisions.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+</main>
+
+
+<!-- FOOTER -->
+<footer class="site-footer">
+
+    <div class="footer-inner">
+
+        <div class="footer-brand">
+
+            <a
+                href="/"
+                class="footer-logo"
+                aria-label="PaceFetch Home"
+            >
+
+                <img
+                    src="/assets/logo.svg"
+                    alt="PaceFetch"
                 >
 
-                    <div class="pf-section-heading">
+            </a>
 
-                        <div>
-                            <h2>
-                                Explore PaceFetch
-                            </h2>
-                        </div>
+            <p>
+                Fetch your predictions.
+                Follow the football.
+            </p>
 
-    
+        </div>
+
+
+        <div class="footer-links">
+
+            <a href="/predictions.html">
+                Predictions
+            </a>
+
+            <a href="/countries.html">
+                Countries
+            </a>
+
+            <a href="/history.html">
+                History
+            </a>
+
+            <a href="/methodology.html">
+                Methodology
+            </a>
+
+        </div>
+
+
+        <div class="footer-bottom">
+
+            <span>
+                © <span id="currentYear"></span>
+                PaceFetch. All rights reserved.
+            </span>
+
+            <span class="footer-designed">
+                Designed by
+                <strong>
+                    Pacethel
+                </strong>
+            </span>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+<!-- MOBILE MENU -->
+<div
+    id="mobileMenu"
+    class="mobile-menu"
+    aria-hidden="true"
+>
+
+    <div class="mobile-menu-inner">
+
+        <button
+            type="button"
+            id="mobileMenuClose"
+            class="mobile-menu-close"
+            aria-label="Close menu"
+        >
+            ×
+        </button>
+
+        <nav class="mobile-nav">
+
+            <a href="/">
+                Home
+            </a>
+
+            <a href="/predictions.html">
+                Predictions
+            </a>
+
+            <a href="/countries.html">
+                Countries
+            </a>
+
+            <a href="/history.html">
+                History
+            </a>
+
+            <a href="/methodology.html">
+                Methodology
+            </a>
+
+        </nav>
+
+    </div>
+
+</div>
+
+
+<!-- JAVASCRIPT -->
+
+<script>
+
+const API_ENDPOINT = "/api/predictions";
+
+
+const state = {
+
+    predictions: [],
+
+    filtered: [],
+
+    country: "",
+
+    league: "",
+
+    market: "",
+
+    confidence: 50
+
+};
+
+
+function escapeHTML(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+function formatKickoff(value) {
+
+    if (!value) {
+        return "Kickoff unavailable";
+    }
+
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) {
+        return "Kickoff unavailable";
+    }
+
+    return new Intl.DateTimeFormat(
+        "en-NG",
+        {
+            timeZone: "Africa/Lagos",
+            weekday: "short",
+            day: "2-digit",
+            month: "short",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false
+        }
+    ).format(date) + " WAT";
+
+}
+
+
+function confidenceClass(probability) {
+
+    const value = Number(probability);
+
+    if (value >= 80) {
+        return "confidence-strong";
+    }
+
+    if (value >= 70) {
+        return "confidence-good";
+    }
+
+    if (value >= 50) {
+        return "confidence-moderate";
+    }
+
+    return "confidence-weak";
+
+}
+
+
+function renderPredictionCard(prediction) {
+
+    const probability =
+        Number(prediction.probability || 0);
+
+    const fixtureId =
+        prediction.fixtureId ||
+        prediction.id ||
+        "";
+
+    const home =
+        escapeHTML(
+            prediction.homeTeam ||
+            "Home"
+        );
+
+    const away =
+        escapeHTML(
+            prediction.awayTeam ||
+            "Away"
+        );
+
+    const market =
+        escapeHTML(
+            prediction.market ||
+            "Prediction"
+        );
+
+    const selection =
+        escapeHTML(
+            prediction.selection ||
+            "—"
+        );
+
+    return `
+
+        <article class="prediction-card">
+
+            <div class="prediction-card-top">
+
+                <span class="prediction-market">
+                    ${market}
+                </span>
+
+                <span
+                    class="confidence-badge ${confidenceClass(probability)}"
+                >
+                    ${Math.round(probability)}%
+                </span>
+
+            </div>
+
+
+            <div class="prediction-teams">
+
+                <strong>
+                    ${home}
+                </strong>
+
+                <span>
+                    vs
+                </span>
+
+                <strong>
+                    ${away}
+                </strong>
+
+            </div>
+
+
+            <div class="prediction-selection">
+
+                <span>
+                    Pick
+                </span>
+
+                <strong>
+                    ${selection}
+                </strong>
+
+            </div>
+
+
+            <div class="prediction-card-meta">
+
+                <span>
+                    ${escapeHTML(
+                        prediction.league || ""
+                    )}
+                </span>
+
+                <span>
+                    ${formatKickoff(
+                        prediction.kickoff
+                    )}
+                </span>
+
+            </div>
+
+
+            ${
+                fixtureId
+                    ? `
+                        <a
+                            href="/match.html?fixture=${encodeURIComponent(fixtureId)}"
+                            class="prediction-card-link"
+                        >
+                            View match →
+                        </a>
+                    `
+                    : ""
+            }
+
+        </article>
+
+    `;
+
+}
+
+
+function renderPredictions(list) {
+
+    const container =
+        document.getElementById(
+            "predictionsGrid"
+        );
+
+    if (!container) {
+        return;
+    }
+
+    if (!list.length) {
+
+        container.innerHTML = `
+
+            <div class="empty-state">
+
+                <h3>
+                    No qualifying predictions
+                </h3>
+
+                <p>
+                    There are currently no predictions
+                    meeting the PaceFetch confidence
+                    requirements.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+    container.innerHTML =
+        list
+            .slice(0, 50)
+            .map(renderPredictionCard)
+            .join("");
+
+}
+
+
+function updateStats(list) {
+
+    const total =
+        document.getElementById(
+            "predictionCount"
+        );
+
+    const highest =
+        document.getElementById(
+            "highestProbability"
+        );
+
+
+    if (total) {
+        total.textContent = list.length;
+    }
+
+
+    if (highest) {
+
+        const values =
+            list
+                .map(item =>
+                    Number(item.probability)
+                )
+                .filter(Number.isFinite);
+
+        highest.textContent =
+            values.length
+                ? Math.round(
+                    Math.max(...values)
+                ) + "%"
+                : "—";
+
+    }
+
+}
+
+
+function applyFilters() {
+
+    let list =
+        [...state.predictions];
+
+
+    if (state.country) {
+
+        list =
+            list.filter(
+                item =>
+                    String(
+                        item.country || ""
+                    ).toLowerCase() ===
+                    state.country.toLowerCase()
+            );
+
+    }
+
+
+    if (state.league) {
+
+        list =
+            list.filter(
+                item =>
+                    String(
+                        item.league || ""
+                    ).toLowerCase() ===
+                    state.league.toLowerCase()
+            );
+
+    }
+
+
+    if (state.market) {
+
+        list =
+            list.filter(
+                item =>
+                    String(
+                        item.market || ""
+                    ).toLowerCase() ===
+                    state.market.toLowerCase()
+            );
+
+    }
+
+
+    list =
+        list.filter(
+            item =>
+                Number(
+                    item.probability || 0
+                ) >=
+                Number(
+                    state.confidence
+                )
+        );
+
+
+    list.sort(
+        (a, b) =>
+            Number(b.probability || 0) -
+            Number(a.probability || 0)
+    );
+
+
+    state.filtered = list;
+
+    renderPredictions(list);
+
+    updateStats(list);
+
+}
+
+
+function populateFilters() {
+
+    const countries =
+        [
+            ...new Set(
+                state.predictions
+                    .map(item => item.country)
+                    .filter(Boolean)
+            )
+        ]
+        .sort();
+
+
+    const leagues =
+        [
+            ...new Set(
+                state.predictions
+                    .map(item => item.league)
+                    .filter(Boolean)
+            )
+        ]
+        .sort();
+
+
+    const countrySelect =
+        document.getElementById(
+            "countryFilter"
+        );
+
+    const leagueSelect =
+        document.getElementById(
+            "leagueFilter"
+        );
+
+
+    if (countrySelect) {
+
+        countrySelect.innerHTML =
+            `<option value="">
+                All Countries
+            </option>` +
+            countries
+                .map(
+                    country =>
+                        `<option value="${escapeHTML(country)}">
+                            ${escapeHTML(country)}
+                        </option>`
+                )
+                .join("");
+
+    }
+
+
+    if (leagueSelect) {
+
+        leagueSelect.innerHTML =
+            `<option value="">
+                All Leagues
+            </option>` +
+            leagues
+                .map(
+                    league =>
+                        `<option value="${escapeHTML(league)}">
+                            ${escapeHTML(league)}
+                        </option>`
+                )
+                .join("");
+
+    }
+
+}
+
+
+async function loadPredictions() {
+
+    const loading =
+        document.getElementById(
+            "loadingState"
+        );
+
+    const error =
+        document.getElementById(
+            "errorState"
+        );
+
+
+    try {
+
+        if (loading) {
+            loading.hidden = false;
+        }
+
+        if (error) {
+            error.hidden = true;
+        }
+
+
+        const response =
+            await fetch(
+                API_ENDPOINT,
+                {
+                    method: "GET",
+                    headers: {
+                        "Accept":
+                            "application/json"
+                    },
+                    cache: "no-store"
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+
+            throw new Error(
+                data.error ||
+                "Prediction service unavailable."
+            );
+
+        }
+
+
+        state.predictions =
+            Array.isArray(
+                data.predictions
+            )
+                ? data.predictions
+                : [];
+
+
+        populateFilters();
+
+        applyFilters();
+
+
+    } catch (err) {
+
+        console.error(
+            "PaceFetch:",
+            err
+        );
+
+
+        if (loading) {
+            loading.hidden = true;
+        }
+
+        if (error) {
+            error.hidden = false;
+        }
+
+        renderPredictions([]);
+
+    } finally {
+
+        if (loading) {
+            loading.hidden = true;
+        }
+
+    }
+
+}
+
+
+function initializeFilters() {
+
+    const country =
+        document.getElementById(
+            "countryFilter"
+        );
+
+    const league =
+        document.getElementById(
+            "leagueFilter"
+        );
+
+    const market =
+        document.getElementById(
+            "marketFilter"
+        );
+
+    const confidence =
+        document.getElementById(
+            "confidenceFilter"
+        );
+
+
+    if (country) {
+
+        country.addEventListener(
+            "change",
+            event => {
+
+                state.country =
+                    event.target.value;
+
+                applyFilters();
+
+            }
+        );
+
+    }
+
+
+    if (league) {
+
+        league.addEventListener(
+            "change",
+            event => {
+
+                state.league =
+                    event.target.value;
+
+                applyFilters();
+
+            }
+        );
+
+    }
+
+
+    if (market) {
+
+        market.addEventListener(
+            "change",
+            event => {
+
+                state.market =
+                    event.target.value;
+
+                applyFilters();
+
+            }
+        );
+
+    }
+
+
+    if (confidence) {
+
+        confidence.addEventListener(
+            "change",
+            event => {
+
+                state.confidence =
+                    Number(
+                        event.target.value
+                    ) || 50;
+
+                applyFilters();
+
+            }
+        );
+
+    }
+
+}
+
+
+function initializeMobileMenu() {
+
+    const menu =
+        document.getElementById(
+            "mobileMenu"
+        );
+
+    const openButton =
+        document.getElementById(
+            "mobileMenuOpen"
+        );
+
+    const closeButton =
+        document.getElementById(
+            "mobileMenuClose"
+        );
+
+
+    if (!menu) {
+        return;
+    }
+
+
+    if (openButton) {
+
+        openButton.addEventListener(
+            "click",
+            () => {
+
+                menu.classList.add(
+                    "active"
+                );
+
+                menu.setAttribute(
+                    "aria-hidden",
+                    "false"
+                );
+
+            }
+        );
+
+    }
+
+
+    if (closeButton) {
+
+        closeButton.addEventListener(
+            "click",
+            () => {
+
+                menu.classList.remove(
+                    "active"
+                );
+
+                menu.setAttribute(
+                    "aria-hidden",
+                    "true"
+                );
+
+            }
+        );
+
+    }
+
+}
+
+
+function initializeYear() {
+
+    const year =
+        document.getElementById(
+            "currentYear"
+        );
+
+    if (year) {
+
+        year.textContent =
+            new Date().getFullYear();
+
+    }
+
+}
+
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        initializeFilters();
+
+        initializeMobileMenu();
+
+        initializeYear();
+
+        loadPredictions();
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>
