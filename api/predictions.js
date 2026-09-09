@@ -1,359 +1,330 @@
-// ============================================================
-// REQUEST VALIDATION
-// ============================================================
-
-function getRequestedDate(req) {
-    const requestedDate = req.query?.date;
-
-    // If no date was supplied, use today's Nigeria date.
-    if (!requestedDate) {
-        return getNigeriaDate();
-    }
-
-    // Strict YYYY-MM-DD validation.
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(requestedDate)) {
-        throw new Error(
-            "Invalid date format. Use YYYY-MM-DD."
-        );
-    }
-
-    const parsed = new Date(`${requestedDate}T00:00:00Z`);
-
-    if (Number.isNaN(parsed.getTime())) {
-        throw new Error("Invalid date.");
-    }
-
-    return requestedDate;
-}
-
-
-// ============================================================
-// BUILD DAILY PREDICTIONS
-// ============================================================
-
-async function buildDailyPredictions(date) {
-
-    // --------------------------------------------------------
-    // STEP 1: GET TODAY'S FIXTURES
-    // --------------------------------------------------------
-
-    const fixtures = await getTodayFixtures(date);
-
-    if (!fixtures.length) {
-        return {
-            date,
-            fixtures: [],
-            predictions: [],
-            rejected: 0
-        };
-    }
-
-
-    // --------------------------------------------------------
-    // STEP 2: ENRICH FIXTURES WITH PROVIDER PREDICTIONS
-    // --------------------------------------------------------
-
-    const enrichedFixtures = await enrichFixtures(fixtures);
-
-
-    // --------------------------------------------------------
-    // STEP 3: ATTACH AVAILABLE TEAM DATA
-    // --------------------------------------------------------
-
-    const fixturesWithStats =
-        attachFallbackStats(enrichedFixtures);
-
-
-    // --------------------------------------------------------
-    // STEP 4: PREPARE DATA FOR PREDICTION ENGINE
-    // --------------------------------------------------------
-
-    const engineFixtures =
-        prepareForEngine(fixturesWithStats);
-
-
-    // --------------------------------------------------------
-    // STEP 5: GENERATE PREDICTIONS
-    // --------------------------------------------------------
-
-    const predictions =
-        generateDailyPredictions(
-            engineFixtures,
-            50
-        );
-
-
-    // --------------------------------------------------------
-    // STEP 6: RETURN RESULTS
-    // --------------------------------------------------------
-
-    return {
-        date,
-        fixtures: fixturesWithStats,
-        predictions,
-        rejected:
-            Math.max(
-                0,
-                predictions.length
-                    ? predictions.length
-                    : 0
-            )
-    };
-}
-
-
-// ============================================================
-// CORS
-// ============================================================
-
-function setCorsHeaders(res) {
-
-    res.setHeader(
-        "Access-Control-Allow-Origin",
-        "*"
-    );
-
-    res.setHeader(
-        "Access-Control-Allow-Methods",
-        "GET, OPTIONS"
-    );
-
-    res.setHeader(
-        "Access-Control-Allow-Headers",
-        "Content-Type"
-    );
-
-    res.setHeader(
-        "Cache-Control",
-        "no-store"
-    );
-}
-
-
-// ============================================================
-// API HANDLER
-// ============================================================
+// api/predictions.js
+// PaceFetch - Safe Prediction Diagnostic Endpoint
 
 export default async function handler(req, res) {
+  // --------------------------------------------------
+  // CORS
+  // --------------------------------------------------
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
+  res.setHeader("Cache-Control", "no-store");
 
-    // --------------------------------------------------------
-    // CORS
-    // --------------------------------------------------------
+  if (req.method === "OPTIONS") {
+    return res.status(204).end();
+  }
 
-    setCorsHeaders(res);
+  if (req.method !== "GET") {
+    return res.status(405).json({
+      success: false,
+      error: "Method not allowed"
+    });
+  }
 
+  const API_KEY = process.env.API_FOOTBALL_KEY;
 
-    // --------------------------------------------------------
-    // OPTIONS / PREFLIGHT
-    // --------------------------------------------------------
+  // --------------------------------------------------
+  // Check environment variable
+  // --------------------------------------------------
+  if (!API_KEY) {
+    return res.status(500).json({
+      success: false,
+      stage: "environment",
+      error: "API_FOOTBALL_KEY is missing"
+    });
+  }
 
-    if (req.method === "OPTIONS") {
+  const today = new Date().toISOString().slice(0, 10);
 
-        return res.status(204).end();
+  const result = {
+    success: false,
+    date: today,
+    stages: {},
+    errors: []
+  };
 
-    }
+  // --------------------------------------------------
+  // Helper
+  // --------------------------------------------------
+  async function apiFootball(endpoint) {
+    const response = await fetch(
+      "https://v3.football.api-sports.io" + endpoint,
+      {
+        method: "GET",
+        headers: {
+          "x-apisports-key": API_KEY
+        }
+      }
+    );
 
+    const text = await response.text();
 
-    // --------------------------------------------------------
-    // METHOD VALIDATION
-    // --------------------------------------------------------
-
-    if (req.method !== "GET") {
-
-        return res.status(405).json({
-            success: false,
-            error: "Method not allowed."
-        });
-
-    }
-
-
-    // --------------------------------------------------------
-    // API KEY VALIDATION
-    // --------------------------------------------------------
-
-    if (!API_FOOTBALL_KEY) {
-
-        console.error(
-            "API_FOOTBALL_KEY is missing."
-        );
-
-        return res.status(500).json({
-
-            success: false,
-
-            error:
-                "Prediction service is not configured."
-        });
-
-    }
-
+    let data;
 
     try {
-
-        // ----------------------------------------------------
-        // GET REQUESTED DATE
-        // ----------------------------------------------------
-
-        const date =
-            getRequestedDate(req);
-
-
-        // ----------------------------------------------------
-        // CACHE KEY
-        // ----------------------------------------------------
-
-        const cacheKey =
-            `daily-predictions-${date}`;
-
-
-        // ----------------------------------------------------
-        // CHECK CACHE
-        // ----------------------------------------------------
-
-        const cached =
-            cache.get(cacheKey);
-
-        if (cached) {
-
-            return res.status(200).json({
-
-                success: true,
-
-                cached: true,
-
-                date,
-
-                totalFixtures:
-                    cached.fixtures.length,
-
-                generated:
-                    cached.predictions.length,
-
-                rejected:
-                    cached.rejected,
-
-                published:
-                    cached.predictions.length,
-
-                maximumPublished: 50,
-
-                provider: "API-Football",
-
-                secondaryProviderConfigured:
-                    Boolean(SPORTMONKS_TOKEN),
-
-                predictions:
-                    cached.predictions
-
-            });
-
-        }
-
-
-        // ----------------------------------------------------
-        // BUILD PREDICTIONS
-        // ----------------------------------------------------
-
-        const result =
-            await buildDailyPredictions(date);
-
-
-        // ----------------------------------------------------
-        // LIMIT TO MAXIMUM 50
-        // ----------------------------------------------------
-
-        const publishedPredictions =
-            Array.isArray(result.predictions)
-                ? result.predictions.slice(0, 50)
-                : [];
-
-
-        // ----------------------------------------------------
-        // SAVE TO CACHE
-        // ----------------------------------------------------
-
-        const responseData = {
-
-            fixtures:
-                result.fixtures || [],
-
-            predictions:
-                publishedPredictions,
-
-            rejected:
-                result.rejected || 0
-
-        };
-
-        cache.set(
-            cacheKey,
-            responseData
-        );
-
-
-        // ----------------------------------------------------
-        // FINAL RESPONSE
-        // ----------------------------------------------------
-
-        return res.status(200).json({
-
-            success: true,
-
-            cached: false,
-
-            date,
-
-            totalFixtures:
-                result.fixtures.length,
-
-            generated:
-                publishedPredictions.length,
-
-            rejected:
-                result.rejected,
-
-            published:
-                publishedPredictions.length,
-
-            maximumPublished: 50,
-
-            provider: "API-Football",
-
-            secondaryProviderConfigured:
-                Boolean(SPORTMONKS_TOKEN),
-
-            predictions:
-                publishedPredictions
-
-        });
-
-    } catch (error) {
-
-        // ----------------------------------------------------
-        // ERROR LOGGING
-        // ----------------------------------------------------
-
-        console.error(
-            "PaceFetch prediction error:",
-            error
-        );
-
-
-        // ----------------------------------------------------
-        // SAFE ERROR RESPONSE
-        // ----------------------------------------------------
-
-        return res.status(500).json({
-
-            success: false,
-
-            error:
-                error?.message ||
-                "Unable to generate predictions."
-
-        });
-
+      data = JSON.parse(text);
+    } catch {
+      throw new Error(
+        "API-Football returned non-JSON response. HTTP " +
+        response.status
+      );
     }
 
+    if (!response.ok) {
+      throw new Error(
+        "API-Football HTTP " +
+        response.status +
+        ": " +
+        JSON.stringify(data.errors || data.message || data)
+      );
+    }
+
+    if (data.errors && Object.keys(data.errors).length > 0) {
+      throw new Error(
+        "API-Football error: " +
+        JSON.stringify(data.errors)
+      );
+    }
+
+    return data;
+  }
+
+  // --------------------------------------------------
+  // STAGE 1
+  // Test API connection
+  // --------------------------------------------------
+  try {
+    const test = await apiFootball(
+      "/fixtures?date=" + encodeURIComponent(today)
+    );
+
+    result.stages.apiConnection = {
+      success: true,
+      status: test.response?.status || "fixtures",
+      results: test.results || 0
+    };
+  } catch (error) {
+    result.errors.push({
+      stage: "apiConnection",
+      error: error.message
+    });
+
+    return res.status(500).json(result);
+  }
+
+  // --------------------------------------------------
+  // STAGE 2
+  // Get today's fixtures
+  // --------------------------------------------------
+  let fixturesResponse;
+
+  try {
+    fixturesResponse = await apiFootball(
+      "/fixtures?date=" + encodeURIComponent(today)
+    );
+
+    result.stages.fixtures = {
+      success: true,
+      count: fixturesResponse.results || 0
+    };
+  } catch (error) {
+    result.errors.push({
+      stage: "fixtures",
+      error: error.message
+    });
+
+    return res.status(500).json(result);
+  }
+
+  const rawFixtures = Array.isArray(fixturesResponse.response)
+    ? fixturesResponse.response
+    : [];
+
+  // --------------------------------------------------
+  // STAGE 3
+  // Filter upcoming fixtures
+  // --------------------------------------------------
+
+  const now = Date.now();
+
+  const upcoming = rawFixtures.filter((fixture) => {
+    const timestamp = fixture?.fixture?.timestamp;
+
+    if (!timestamp) return false;
+
+    const status = fixture?.fixture?.status?.short;
+
+    const finishedStatuses = [
+      "FT",
+      "AET",
+      "PEN",
+      "CANC",
+      "PST",
+      "ABD",
+      "AWD",
+      "WO"
+    ];
+
+    if (finishedStatuses.includes(status)) {
+      return false;
+    }
+
+    return timestamp * 1000 > now;
+  });
+
+  result.stages.upcomingFixtures = {
+    success: true,
+    count: upcoming.length
+  };
+
+  if (upcoming.length === 0) {
+    return res.status(200).json({
+      ...result,
+      success: true,
+      message: "No upcoming fixtures remaining today.",
+      predictions: []
+    });
+  }
+
+  // --------------------------------------------------
+  // Only inspect a small number initially.
+  //
+  // This prevents the diagnostic endpoint from
+  // consuming your API quota.
+  // --------------------------------------------------
+
+  const sample = upcoming.slice(0, 3);
+
+  result.stages.sampleFixtures = sample.map((fixture) => ({
+    fixtureId: fixture.fixture?.id,
+    home: fixture.teams?.home?.name,
+    away: fixture.teams?.away?.name,
+    league: fixture.league?.name,
+    country: fixture.league?.country,
+    kickoff: fixture.fixture?.date,
+    status: fixture.fixture?.status?.short
+  }));
+
+  // --------------------------------------------------
+  // STAGE 4
+  // Test provider predictions
+  // --------------------------------------------------
+
+  const providerTests = [];
+
+  for (const fixture of sample) {
+    const fixtureId = fixture.fixture?.id;
+
+    if (!fixtureId) continue;
+
+    try {
+      const prediction = await apiFootball(
+        "/predictions?fixture=" +
+        encodeURIComponent(fixtureId)
+      );
+
+      providerTests.push({
+        fixtureId,
+        success: true,
+        results: prediction.results || 0,
+        hasResponse:
+          Array.isArray(prediction.response) &&
+          prediction.response.length > 0
+      });
+    } catch (error) {
+      providerTests.push({
+        fixtureId,
+        success: false,
+        error: error.message
+      });
+    }
+  }
+
+  result.stages.providerPredictions = providerTests;
+
+  // --------------------------------------------------
+  // STAGE 5
+  // Test team statistics
+  // --------------------------------------------------
+
+  const statisticsTests = [];
+
+  for (const fixture of sample) {
+    const fixtureId = fixture.fixture?.id;
+    const leagueId = fixture.league?.id;
+    const season = fixture.league?.season;
+
+    const homeId = fixture.teams?.home?.id;
+    const awayId = fixture.teams?.away?.id;
+
+    const teams = [
+      {
+        side: "home",
+        teamId: homeId
+      },
+      {
+        side: "away",
+        teamId: awayId
+      }
+    ];
+
+    for (const team of teams) {
+      if (!team.teamId || !leagueId || !season) {
+        statisticsTests.push({
+          fixtureId,
+          side: team.side,
+          success: false,
+          error: "Missing team, league or season ID"
+        });
+
+        continue;
+      }
+
+      try {
+        const stats = await apiFootball(
+          "/teams/statistics?league=" +
+          encodeURIComponent(leagueId) +
+          "&season=" +
+          encodeURIComponent(season) +
+          "&team=" +
+          encodeURIComponent(team.teamId)
+        );
+
+        statisticsTests.push({
+          fixtureId,
+          side: team.side,
+          teamId: team.teamId,
+          success: true,
+          results: stats.results || 0,
+          hasResponse:
+            !!stats.response
+        });
+      } catch (error) {
+        statisticsTests.push({
+          fixtureId,
+          side: team.side,
+          teamId: team.teamId,
+          success: false,
+          error: error.message
+        });
+      }
+    }
+  }
+
+  result.stages.teamStatistics = statisticsTests;
+
+  // --------------------------------------------------
+  // FINAL DIAGNOSTIC RESULT
+  // --------------------------------------------------
+
+  result.success = true;
+
+  result.message =
+    "Diagnostic completed. The prediction endpoint itself is not crashing now because the heavy prediction engine has been isolated.";
+
+  result.predictions = [];
+
+  result.nextStep =
+    "Send this entire JSON response back so the exact failing stage can be fixed.";
+
+  return res.status(200).json(result);
 }
