@@ -1,2586 +1,387 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#063d2b">
-<meta name="color-scheme" content="dark light">
-<meta name="description" content="PaceFetch delivers football news, match predictions, transfer updates, fixtures, leagues and football intelligence in one place.">
-<meta name="keywords" content="football predictions, football news, soccer predictions, football transfers, match predictions, Premier League, Champions League, PaceFetch">
-<meta name="author" content="PaceFetch">
-<meta name="robots" content="index,follow,max-image-preview:large">
-<link rel="canonical" href="https://pacefetch.com/">
-<meta property="og:type" content="website">
-<meta property="og:title" content="PaceFetch — Football Intelligence">
-<meta property="og:description" content="Fetch predictions. Fetch football. Get football news, predictions, transfers and match intelligence.">
-<meta property="og:url" content="https://pacefetch.com/">
-<meta property="og:site_name" content="PaceFetch">
-<meta property="og:image" content="https://pacefetch.com/assets/pacefetch-og.jpg">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="PaceFetch — Football Intelligence">
-<meta name="twitter:description" content="Football news, predictions, transfers and intelligence.">
-<meta name="twitter:image" content="https://pacefetch.com/assets/pacefetch-og.jpg">
-<title>PaceFetch — Football Predictions, News & Transfers</title>
-<script>
-(function(){
-  const saved=localStorage.getItem("pacefetch-theme");
-  document.documentElement.dataset.theme=saved==="light"?"light":"dark";
-})();
-</script>
-<style>
-:root{
---bg:#042d20;
---bg2:#063b2a;
---surface:#084733;
---surface2:#0b503b;
---surface3:#0e5b43;
---text:#f3fff9;
---muted:#a7c5b9;
---line:rgba(255,255,255,.09);
---green:#38e59b;
---green2:#18b979;
---green3:#0d8f5c;
---yellow:#d9ee67;
---amber:#f4b84a;
---red:#ff6262;
---shadow:0 18px 55px rgba(0,0,0,.28);
---radius:20px;
---max:1240px;
-}
-:root[data-theme="light"]{
---bg:#f2f8f5;
---bg2:#e7f2ec;
---surface:#fff;
---surface2:#f4faf7;
---surface3:#e7f5ee;
---text:#08291d;
---muted:#587268;
---line:rgba(3,48,31,.11);
---green:#07945c;
---green2:#087b4d;
---green3:#075f3d;
---yellow:#9caf20;
---amber:#c77d0a;
---red:#d43d3d;
---shadow:0 16px 45px rgba(2,54,35,.11);
-}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-margin:0;
-background:
-radial-gradient(circle at 12% 5%,rgba(31,190,122,.09),transparent 25rem),
-radial-gradient(circle at 90% 20%,rgba(36,220,143,.06),transparent 30rem),
-var(--bg);
-color:var(--text);
-font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-line-height:1.55;
-overflow-x:hidden;
-transition:background .25s ease,color .25s ease;
-}
-body:before{
-content:"";
-position:fixed;
-inset:0;
-pointer-events:none;
-background-image:linear-gradient(rgba(255,255,255,.012) 1px,transparent 1px);
-background-size:100% 5px;
-opacity:.25;
-z-index:-1;
-}
-a{color:inherit;text-decoration:none}
-button,input{font:inherit}
-button{cursor:pointer}
-img{max-width:100%;display:block}
-.container{width:min(var(--max),calc(100% - 32px));margin:auto}
-.sr-only{
-position:absolute;
-width:1px;
-height:1px;
-padding:0;
-margin:-1px;
-overflow:hidden;
-clip:rect(0,0,0,0);
-white-space:nowrap;
-border:0;
-}
-.topbar{
-height:34px;
-border-bottom:1px solid var(--line);
-background:rgba(0,0,0,.12);
-font-size:12px;
-}
-.topbar-inner{
-height:100%;
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:15px;
-}
-.top-message{color:var(--muted)}
-.nigeria-clock{
-display:flex;
-align-items:center;
-gap:7px;
-color:var(--green);
-font-weight:700;
-}
-.clock-dot{
-width:7px;
-height:7px;
-border-radius:50%;
-background:var(--green);
-box-shadow:0 0 12px var(--green);
-}
-.header{
-position:sticky;
-top:0;
-z-index:100;
-background:color-mix(in srgb,var(--bg) 91%,transparent);
-backdrop-filter:blur(18px);
-border-bottom:1px solid var(--line);
-}
-.header-inner{
-min-height:76px;
-display:flex;
-align-items:center;
-gap:22px;
-}
-.brand{
-display:flex;
-align-items:center;
-gap:11px;
-min-width:max-content;
-}
-.logo{
-width:43px;
-height:43px;
-border-radius:14px;
-display:grid;
-place-items:center;
-background:linear-gradient(145deg,var(--green),var(--green3));
-box-shadow:0 9px 25px rgba(15,206,129,.2);
-position:relative;
-overflow:hidden;
-}
-.logo:after{
-content:"";
-position:absolute;
-width:22px;
-height:22px;
-border:2px solid rgba(255,255,255,.75);
-border-radius:50%;
-}
-.logo span{
-font-size:19px;
-font-weight:950;
-z-index:2;
-color:#032819;
-}
-.brand-name{
-font-size:21px;
-font-weight:950;
-letter-spacing:-.7px;
-}
-.brand-sub{
-display:block;
-font-size:9px;
-letter-spacing:1.7px;
-color:var(--green);
-font-weight:800;
-text-transform:uppercase;
-margin-top:-2px;
-}
-.nav{
-display:flex;
-align-items:center;
-gap:5px;
-margin-left:auto;
-}
-.nav a{
-padding:10px 11px;
-border-radius:11px;
-font-size:13px;
-font-weight:750;
-color:var(--muted);
-transition:.2s ease;
-}
-.nav a:hover,.nav a.active{
-color:var(--text);
-background:var(--surface);
-}
-.header-actions{
-display:flex;
-align-items:center;
-gap:8px;
-}
-.icon-btn{
-width:42px;
-height:42px;
-border:1px solid var(--line);
-border-radius:13px;
-background:var(--surface);
-color:var(--text);
-display:grid;
-place-items:center;
-transition:transform .2s ease,border-color .2s ease,background .2s ease;
-}
-.icon-btn:hover{
-transform:translateY(-2px);
-border-color:rgba(56,229,155,.4);
-}
-.search-icon{
-width:19px;
-height:19px;
-fill:none;
-stroke:currentColor;
-stroke-width:2;
-stroke-linecap:round;
-}
-.theme-toggle{
-width:76px;
-height:42px;
-border:1px solid var(--line);
-border-radius:999px;
-padding:4px;
-background:var(--surface);
-display:flex;
-align-items:center;
-justify-content:space-between;
-position:relative;
-color:var(--muted);
-overflow:hidden;
-}
-.theme-toggle:before{
-content:"";
-position:absolute;
-top:4px;
-left:4px;
-width:32px;
-height:32px;
-border-radius:50%;
-background:linear-gradient(145deg,var(--green),var(--green2));
-box-shadow:0 4px 14px rgba(0,0,0,.25);
-transition:transform .25s ease;
-}
-:root[data-theme="light"] .theme-toggle:before{
-transform:translateX(34px);
-}
-.theme-icon{
-width:32px;
-height:32px;
-display:grid;
-place-items:center;
-z-index:1;
-font-size:16px;
-}
-.hero{
-padding:65px 0 42px;
-}
-.hero-grid{
-display:grid;
-grid-template-columns:1.25fr .75fr;
-gap:24px;
-align-items:stretch;
-}
-.hero-main{
-position:relative;
-overflow:hidden;
-border:1px solid rgba(56,229,155,.16);
-border-radius:30px;
-padding:48px;
-background:
-radial-gradient(circle at 90% 0%,rgba(56,229,155,.16),transparent 24rem),
-linear-gradient(145deg,var(--surface),var(--surface2));
-box-shadow:var(--shadow);
-}
-.hero-main:after{
-content:"";
-position:absolute;
-width:280px;
-height:280px;
-right:-120px;
-bottom:-140px;
-border:1px solid rgba(56,229,155,.15);
-border-radius:50%;
-}
-.eyebrow{
-display:inline-flex;
-align-items:center;
-gap:8px;
-padding:7px 11px;
-border-radius:999px;
-background:rgba(56,229,155,.09);
-border:1px solid rgba(56,229,155,.17);
-color:var(--green);
-font-size:11px;
-font-weight:900;
-letter-spacing:1px;
-text-transform:uppercase;
-}
-.eyebrow-dot{
-width:6px;
-height:6px;
-border-radius:50%;
-background:var(--green);
-box-shadow:0 0 10px var(--green);
-}
-.hero h1{
-font-size:clamp(40px,6vw,72px);
-line-height:.96;
-letter-spacing:-4px;
-margin:22px 0 20px;
-max-width:760px;
-}
-.hero h1 span{color:var(--green)}
-.hero-copy{
-font-size:16px;
-color:var(--muted);
-max-width:650px;
-margin:0;
-}
-.hero-buttons{
-display:flex;
-gap:11px;
-flex-wrap:wrap;
-margin-top:29px;
-}
-.btn{
-min-height:46px;
-display:inline-flex;
-align-items:center;
-justify-content:center;
-gap:9px;
-padding:0 17px;
-border-radius:13px;
-border:1px solid var(--line);
-font-size:13px;
-font-weight:850;
-transition:.2s ease;
-}
-.btn:hover{transform:translateY(-2px)}
-.btn-primary{
-background:linear-gradient(135deg,var(--green),var(--green2));
-color:#032519;
-border-color:transparent;
-box-shadow:0 12px 28px rgba(20,200,125,.18);
-}
-.btn-secondary{
-background:var(--surface2);
-color:var(--text);
-}
-.hero-side{
-display:flex;
-flex-direction:column;
-gap:14px;
-}
-.pulse-card{
-flex:1;
-padding:25px;
-border-radius:25px;
-border:1px solid var(--line);
-background:linear-gradient(145deg,var(--surface2),var(--surface));
-box-shadow:var(--shadow);
-}
-.pulse-head{
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:10px;
-}
-.pulse-title{
-font-size:12px;
-font-weight:900;
-letter-spacing:1.1px;
-text-transform:uppercase;
-}
-.live-badge{
-display:inline-flex;
-align-items:center;
-gap:6px;
-font-size:10px;
-font-weight:900;
-color:var(--green);
-}
-.live-badge i{
-width:6px;
-height:6px;
-border-radius:50%;
-background:var(--green);
-animation:pulse 1.5s infinite;
-}
-@keyframes pulse{
-0%,100%{opacity:1;transform:scale(1)}
-50%{opacity:.35;transform:scale(.72)}
-}
-.pulse-score{
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:12px;
-margin-top:27px;
-}
-.pulse-team{
-font-size:13px;
-font-weight:800;
-flex:1;
-}
-.pulse-team:last-child{text-align:right}
-.pulse-number{
-font-size:26px;
-font-weight:950;
-letter-spacing:-1px;
-}
-.pulse-meta{
-display:flex;
-justify-content:space-between;
-margin-top:19px;
-padding-top:15px;
-border-top:1px solid var(--line);
-font-size:11px;
-color:var(--muted);
-}
-.glance{
-padding:10px 0 35px;
-}
-.glance-grid{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:12px;
-}
-.glance-card{
-padding:18px;
-border:1px solid var(--line);
-border-radius:17px;
-background:var(--surface);
-}
-.glance-label{
-font-size:10px;
-font-weight:800;
-color:var(--muted);
-text-transform:uppercase;
-letter-spacing:.8px;
-}
-.glance-value{
-font-size:28px;
-font-weight:950;
-margin-top:3px;
-letter-spacing:-1px;
-}
-.glance-note{
-font-size:10px;
-color:var(--green);
-margin-top:2px;
-font-weight:750;
-}
-.section{
-padding:42px 0;
-}
-.section-head{
-display:flex;
-justify-content:space-between;
-align-items:end;
-gap:20px;
-margin-bottom:20px;
-}
-.section-kicker{
-font-size:10px;
-font-weight:900;
-color:var(--green);
-letter-spacing:1.4px;
-text-transform:uppercase;
-}
-.section-title{
-font-size:29px;
-line-height:1.05;
-letter-spacing:-1.3px;
-margin:5px 0 0;
-}
-.section-description{
-font-size:12px;
-color:var(--muted);
-max-width:560px;
-margin:6px 0 0;
-}
-.text-link{
-font-size:12px;
-font-weight:850;
-color:var(--green);
-white-space:nowrap;
-}
-.matches-strip{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:12px;
-}
-.match-card{
-padding:17px;
-border:1px solid var(--line);
-border-radius:18px;
-background:var(--surface);
-transition:.2s ease;
-}
-.match-card:hover{
-transform:translateY(-3px);
-border-color:rgba(56,229,155,.3);
-}
-.match-top{
-display:flex;
-justify-content:space-between;
-align-items:center;
-font-size:9px;
-font-weight:800;
-color:var(--muted);
-}
-.match-status{
-color:var(--green);
-font-weight:900;
-}
-.match-teams{
-margin-top:16px;
-display:grid;
-grid-template-columns:1fr auto 1fr;
-align-items:center;
-gap:8px;
-}
-.team-name{
-font-size:12px;
-font-weight:850;
-min-width:0;
-overflow-wrap:anywhere;
-}
-.team-name.away{text-align:right}
-.match-score{
-font-size:17px;
-font-weight:950;
-white-space:nowrap;
-}
-.match-bottom{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-top:14px;
-padding-top:12px;
-border-top:1px solid var(--line);
-font-size:10px;
-color:var(--muted);
-}
-.prediction-shell{
-display:grid;
-grid-template-columns:1fr 300px;
-gap:18px;
-}
-.prediction-list{
-display:grid;
-gap:11px;
-}
-.prediction-card{
-padding:18px;
-border:1px solid var(--line);
-border-radius:19px;
-background:linear-gradient(145deg,var(--surface),var(--surface2));
-position:relative;
-overflow:hidden;
-}
-.prediction-card:before{
-content:"";
-position:absolute;
-left:0;
-top:0;
-bottom:0;
-width:3px;
-background:var(--confidence-color,var(--green));
-}
-.prediction-meta{
-display:flex;
-align-items:center;
-gap:8px;
-flex-wrap:wrap;
-font-size:10px;
-color:var(--muted);
-font-weight:750;
-}
-.prediction-meta strong{color:var(--text)}
-.prediction-match{
-display:grid;
-grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
-align-items:center;
-gap:12px;
-margin-top:15px;
-}
-.pred-team{
-font-size:14px;
-font-weight:900;
-min-width:0;
-overflow-wrap:anywhere;
-}
-.pred-team.away{text-align:right}
-.pred-vs{
-font-size:9px;
-font-weight:950;
-color:var(--muted);
-}
-.pred-details{
-display:grid;
-grid-template-columns:1.4fr .8fr .8fr;
-gap:9px;
-margin-top:15px;
-}
-.pred-detail{
-padding:10px;
-border:1px solid var(--line);
-border-radius:12px;
-background:rgba(255,255,255,.018);
-min-width:0;
-}
-.pred-detail small{
-display:block;
-font-size:9px;
-color:var(--muted);
-font-weight:750;
-text-transform:uppercase;
-}
-.pred-detail strong{
-display:block;
-font-size:12px;
-margin-top:3px;
-overflow-wrap:anywhere;
-}
-.confidence{
-display:inline-flex;
-align-items:center;
-gap:7px;
-font-weight:950;
-}
-.confidence-dot{
-width:8px;
-height:8px;
-border-radius:50%;
-background:var(--confidence-color,var(--green));
-box-shadow:0 0 10px color-mix(in srgb,var(--confidence-color,var(--green)) 50%,transparent);
-}
-.confidence-strong{--confidence-color:#31dc8d}
-.confidence-high{--confidence-color:#c8df55}
-.confidence-medium{--confidence-color:#f0ad43}
-.confidence-low{--confidence-color:#f15d61}
-.prediction-side{
-display:grid;
-gap:12px;
-align-content:start;
-}
-.info-card{
-padding:20px;
-border-radius:18px;
-border:1px solid var(--line);
-background:var(--surface);
-}
-.info-card h3{
-font-size:14px;
-margin:0 0 10px;
-}
-.info-card p{
-font-size:11px;
-color:var(--muted);
-margin:0;
-}
-.record{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:7px;
-margin-top:15px;
-}
-.record-item{
-padding:10px 5px;
-border-radius:11px;
-background:var(--surface2);
-text-align:center;
-}
-.record-item strong{
-display:block;
-font-size:17px;
-}
-.record-item span{
-display:block;
-font-size:8px;
-color:var(--muted);
-text-transform:uppercase;
-}
-.confidence-legend{
-display:grid;
-gap:8px;
-margin-top:14px;
-}
-.legend-item{
-display:flex;
-align-items:center;
-justify-content:space-between;
-font-size:10px;
-}
-.legend-left{
-display:flex;
-align-items:center;
-gap:7px;
-color:var(--muted);
-}
-.legend-dot{
-width:8px;
-height:8px;
-border-radius:50%;
-}
-.green-dot{background:#31dc8d}
-.yellow-dot{background:#c8df55}
-.amber-dot{background:#f0ad43}
-.red-dot{background:#f15d61}
-.news-grid{
-display:grid;
-grid-template-columns:1.5fr 1fr 1fr;
-gap:13px;
-}
-.news-card{
-border:1px solid var(--line);
-border-radius:20px;
-overflow:hidden;
-background:var(--surface);
-transition:.2s ease;
-}
-.news-card:hover{
-transform:translateY(-3px);
-border-color:rgba(56,229,155,.28);
-}
-.news-image{
-height:180px;
-background:
-linear-gradient(145deg,rgba(56,229,155,.14),rgba(0,0,0,.18)),
-linear-gradient(135deg,var(--surface3),var(--surface2));
-display:grid;
-place-items:center;
-position:relative;
-overflow:hidden;
-}
-.news-image:before{
-content:"PF";
-font-size:56px;
-font-weight:950;
-color:rgba(56,229,155,.13);
-letter-spacing:-5px;
-}
-.news-tag{
-position:absolute;
-top:12px;
-left:12px;
-padding:5px 8px;
-border-radius:7px;
-background:rgba(0,0,0,.45);
-backdrop-filter:blur(8px);
-font-size:8px;
-font-weight:900;
-color:#fff;
-text-transform:uppercase;
-}
-.news-body{padding:17px}
-.news-title{
-font-size:16px;
-line-height:1.25;
-letter-spacing:-.4px;
-margin:0;
-font-weight:900;
-}
-.news-card.small .news-image{height:130px}
-.news-card.small .news-title{font-size:13px}
-.news-meta{
-display:flex;
-gap:9px;
-flex-wrap:wrap;
-margin-top:12px;
-font-size:9px;
-color:var(--muted);
-}
-.transfer-layout{
-display:grid;
-grid-template-columns:1fr 330px;
-gap:18px;
-}
-.transfer-list{
-border:1px solid var(--line);
-border-radius:20px;
-background:var(--surface);
-overflow:hidden;
-}
-.transfer-row{
-display:grid;
-grid-template-columns:1.2fr .9fr .9fr .7fr;
-align-items:center;
-gap:12px;
-padding:15px 17px;
-border-bottom:1px solid var(--line);
-}
-.transfer-row:last-child{border-bottom:0}
-.transfer-player{
-display:flex;
-align-items:center;
-gap:10px;
-min-width:0;
-}
-.player-avatar{
-width:34px;
-height:34px;
-border-radius:11px;
-display:grid;
-place-items:center;
-background:var(--surface3);
-color:var(--green);
-font-size:11px;
-font-weight:950;
-flex:none;
-}
-.transfer-player strong{
-display:block;
-font-size:11px;
-overflow-wrap:anywhere;
-}
-.transfer-player span,.transfer-cell span{
-display:block;
-font-size:9px;
-color:var(--muted);
-margin-top:1px;
-}
-.transfer-arrow{
-font-size:14px;
-color:var(--green);
-font-weight:950;
-text-align:center;
-}
-.transfer-cell{
-min-width:0;
-font-size:10px;
-font-weight:800;
-overflow-wrap:anywhere;
-}
-.fee{
-color:var(--green);
-font-weight:900;
-}
-.leagues-grid{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:12px;
-}
-.league-card{
-padding:20px;
-border:1px solid var(--line);
-border-radius:19px;
-background:var(--surface);
-position:relative;
-overflow:hidden;
-}
-.league-top{
-display:flex;
-align-items:center;
-gap:12px;
-}
-.league-badge{
-width:42px;
-height:42px;
-border-radius:13px;
-display:grid;
-place-items:center;
-background:var(--surface3);
-font-size:12px;
-font-weight:950;
-color:var(--green);
-}
-.league-name{
-font-size:13px;
-font-weight:900;
-}
-.league-country{
-font-size:9px;
-color:var(--muted);
-margin-top:2px;
-}
-.league-stats{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:7px;
-margin-top:18px;
-}
-.league-stat{
-padding:9px;
-background:var(--surface2);
-border-radius:10px;
-}
-.league-stat span{
-font-size:8px;
-color:var(--muted);
-display:block;
-}
-.league-stat strong{
-font-size:12px;
-display:block;
-margin-top:2px;
-}
-.spotlight{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:15px;
-}
-.spotlight-card{
-padding:24px;
-border-radius:22px;
-border:1px solid var(--line);
-background:
-radial-gradient(circle at 100% 0%,rgba(56,229,155,.11),transparent 17rem),
-var(--surface);
-}
-.spotlight-card h3{
-font-size:20px;
-letter-spacing:-.5px;
-margin:7px 0;
-}
-.spotlight-card p{
-font-size:11px;
-color:var(--muted);
-max-width:470px;
-}
-.spotlight-number{
-font-size:42px;
-font-weight:950;
-letter-spacing:-2px;
-color:var(--green);
-}
-.calendar{
-display:grid;
-grid-template-columns:repeat(7,1fr);
-gap:7px;
-}
-.calendar-day{
-padding:12px 6px;
-border:1px solid var(--line);
-border-radius:12px;
-background:var(--surface);
-text-align:center;
-}
-.calendar-day span{
-display:block;
-font-size:8px;
-color:var(--muted);
-text-transform:uppercase;
-}
-.calendar-day strong{
-display:block;
-font-size:15px;
-margin-top:2px;
-}
-.calendar-day.has-match{
-border-color:rgba(56,229,155,.3);
-}
-.calendar-day.has-match strong{color:var(--green)}
-.how-grid{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:12px;
-}
-.how-card{
-padding:21px;
-border:1px solid var(--line);
-border-radius:18px;
-background:var(--surface);
-}
-.how-number{
-font-size:11px;
-font-weight:950;
-color:var(--green);
-}
-.how-card h3{
-font-size:14px;
-margin:11px 0 6px;
-}
-.how-card p{
-font-size:10px;
-color:var(--muted);
-margin:0;
-}
-.ad-zone{
-margin:20px 0;
-border:1px dashed rgba(56,229,155,.23);
-border-radius:18px;
-min-height:90px;
-display:flex;
-align-items:center;
-justify-content:center;
-background:rgba(56,229,155,.025);
-}
-.ad-label{
-font-size:9px;
-letter-spacing:1px;
-text-transform:uppercase;
-color:var(--muted);
-}
-.sponsor{
-padding:20px;
-border:1px solid var(--line);
-border-radius:19px;
-background:var(--surface);
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:20px;
-}
-.sponsor-copy strong{
-font-size:14px;
-}
-.sponsor-copy p{
-font-size:10px;
-color:var(--muted);
-margin:4px 0 0;
-}
-.sponsor-btn{
-padding:9px 13px;
-border-radius:10px;
-background:var(--surface3);
-color:var(--green);
-font-size:10px;
-font-weight:900;
-white-space:nowrap;
-}
-.faq{
-display:grid;
-gap:9px;
-}
-.faq details{
-border:1px solid var(--line);
-border-radius:15px;
-background:var(--surface);
-padding:0 16px;
-}
-.faq summary{
-padding:16px 0;
-font-size:12px;
-font-weight:850;
-cursor:pointer;
-list-style:none;
-}
-.faq summary::-webkit-details-marker{display:none}
-.faq summary:after{
-content:"+";
-float:right;
-color:var(--green);
-font-size:18px;
-line-height:1;
-}
-.faq details[open] summary:after{content:"−"}
-.faq-answer{
-font-size:11px;
-color:var(--muted);
-padding:0 0 16px;
-max-width:850px;
-}
-.footer{
-margin-top:50px;
-padding:48px 0 95px;
-border-top:1px solid var(--line);
-}
-.footer-grid{
-display:grid;
-grid-template-columns:1.4fr 1fr 1fr 1fr;
-gap:30px;
-}
-.footer-brand p{
-font-size:11px;
-color:var(--muted);
-max-width:340px;
-}
-.footer h4{
-font-size:11px;
-margin:0 0 12px;
-text-transform:uppercase;
-letter-spacing:.8px;
-}
-.footer-links{
-display:grid;
-gap:7px;
-}
-.footer-links a{
-font-size:10px;
-color:var(--muted);
-}
-.footer-links a:hover{color:var(--green)}
-.footer-bottom{
-margin-top:35px;
-padding-top:20px;
-border-top:1px solid var(--line);
-display:flex;
-justify-content:space-between;
-gap:20px;
-font-size:9px;
-color:var(--muted);
-}
-.designed{
-color:var(--green);
-font-weight:900;
-animation:designerGlow 2.8s ease-in-out infinite;
-transition:transform .2s ease;
-}
-.designed:hover{transform:translateY(-2px)}
-@keyframes designerGlow{
-0%,100%{text-shadow:0 0 4px rgba(56,229,155,.1)}
-50%{text-shadow:0 0 14px rgba(56,229,155,.45)}
-}
-.mobile-nav{
-display:none;
-position:fixed;
-bottom:0;
-left:0;
-right:0;
-z-index:200;
-height:67px;
-padding:7px 9px;
-background:color-mix(in srgb,var(--bg) 94%,transparent);
-backdrop-filter:blur(18px);
-border-top:1px solid var(--line);
-}
-.mobile-nav-inner{
-display:grid;
-grid-template-columns:repeat(5,1fr);
-height:100%;
-}
-.mobile-nav a{
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-gap:3px;
-font-size:8px;
-font-weight:800;
-color:var(--muted);
-}
-.mobile-nav a.active{color:var(--green)}
-.mobile-nav-icon{
-font-size:17px;
-line-height:1;
-}
-.search-overlay{
-position:fixed;
-inset:0;
-z-index:500;
-background:rgba(1,19,13,.78);
-backdrop-filter:blur(16px);
-display:none;
-align-items:flex-start;
-justify-content:center;
-padding:90px 18px;
-}
-.search-overlay.open{display:flex}
-.search-box{
-width:min(700px,100%);
-border:1px solid rgba(56,229,155,.25);
-border-radius:22px;
-background:var(--surface);
-box-shadow:var(--shadow);
-overflow:hidden;
-}
-.search-head{
-display:flex;
-align-items:center;
-gap:12px;
-padding:17px;
-border-bottom:1px solid var(--line);
-}
-.search-input{
-flex:1;
-min-width:0;
-border:0;
-outline:0;
-background:transparent;
-color:var(--text);
-font-size:16px;
-}
-.search-close{
-border:0;
-background:var(--surface2);
-color:var(--text);
-width:34px;
-height:34px;
-border-radius:10px;
-}
-.search-results{
-padding:10px;
-display:grid;
-gap:5px;
-}
-.search-result{
-display:block;
-padding:13px;
-border-radius:11px;
-font-size:12px;
-font-weight:800;
-}
-.search-result:hover{background:var(--surface2)}
-.toast{
-position:fixed;
-right:18px;
-bottom:85px;
-z-index:400;
-padding:12px 15px;
-border:1px solid var(--line);
-border-radius:12px;
-background:var(--surface);
-box-shadow:var(--shadow);
-font-size:11px;
-font-weight:800;
-display:none;
-}
-.toast.show{display:block}
-.back-top{
-position:fixed;
-right:18px;
-bottom:20px;
-width:42px;
-height:42px;
-border:1px solid var(--line);
-border-radius:13px;
-background:var(--surface);
-color:var(--green);
-display:none;
-place-items:center;
-z-index:150;
-}
-.back-top.show{display:grid}
-@media(max-width:1050px){
-.nav{gap:1px}
-.nav a{padding:9px 7px;font-size:12px}
-.hero-grid{grid-template-columns:1fr}
-.hero-side{display:grid;grid-template-columns:1fr 1fr}
-.matches-strip{grid-template-columns:repeat(2,1fr)}
-.news-grid{grid-template-columns:1fr 1fr}
-.news-card:first-child{grid-column:span 2}
-.transfer-layout{grid-template-columns:1fr}
-.prediction-shell{grid-template-columns:1fr}
-.prediction-side{grid-template-columns:1fr 1fr}
-.leagues-grid{grid-template-columns:repeat(2,1fr)}
-.how-grid{grid-template-columns:repeat(2,1fr)}
-.footer-grid{grid-template-columns:1fr 1fr}
-}
-@media(max-width:760px){
-.container{width:min(100% - 22px,var(--max))}
-.topbar{display:none}
-.header-inner{min-height:65px;gap:10px}
-.brand-name{font-size:18px}
-.logo{width:38px;height:38px;border-radius:12px}
-.brand-sub{font-size:8px}
-.nav{display:none}
-.header-actions{margin-left:auto}
-.icon-btn{width:39px;height:39px}
-.theme-toggle{width:67px;height:39px}
-.theme-toggle:before{width:29px;height:29px}
-:root[data-theme="light"] .theme-toggle:before{transform:translateX(28px)}
-.theme-icon{width:29px;height:29px;font-size:14px}
-.hero{padding:32px 0 25px}
-.hero-main{padding:28px 22px;border-radius:23px}
-.hero h1{
-font-size:43px;
-letter-spacing:-2.7px;
-}
-.hero-copy{font-size:13px}
-.hero-buttons{display:grid;grid-template-columns:1fr}
-.btn{width:100%}
-.hero-side{grid-template-columns:1fr}
-.glance{padding-bottom:20px}
-.glance-grid{grid-template-columns:1fr 1fr}
-.glance-card{padding:14px}
-.glance-value{font-size:23px}
-.section{padding:30px 0}
-.section-title{font-size:25px}
-.section-head{align-items:flex-start}
-.matches-strip{display:flex;overflow-x:auto;padding-bottom:5px;scrollbar-width:none}
-.matches-strip::-webkit-scrollbar{display:none}
-.match-card{min-width:245px}
-.prediction-card{padding:15px}
-.prediction-match{gap:8px}
-.pred-team{font-size:13px}
-.pred-details{grid-template-columns:1fr 1fr}
-.pred-detail:first-child{grid-column:span 2}
-.prediction-side{grid-template-columns:1fr}
-.news-grid{grid-template-columns:1fr}
-.news-card:first-child{grid-column:auto}
-.news-image{height:165px}
-.news-card.small .news-image{height:145px}
-.transfer-row{
-grid-template-columns:1.2fr .8fr .8fr;
-}
-.transfer-row .transfer-arrow{display:none}
-.transfer-row .fee{display:none}
-.leagues-grid{grid-template-columns:1fr}
-.spotlight{grid-template-columns:1fr}
-.calendar{gap:4px}
-.calendar-day{padding:9px 3px}
-.how-grid{grid-template-columns:1fr 1fr}
-.footer-grid{grid-template-columns:1fr 1fr;gap:22px}
-.footer-bottom{flex-direction:column;align-items:center;text-align:center}
-.mobile-nav{display:block}
-.back-top{bottom:80px}
-}
-@media(max-width:430px){
-.hero h1{font-size:39px}
-.glance-grid{gap:8px}
-.glance-card{padding:12px}
-.prediction-match{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)}
-.pred-team{font-size:12px}
-.pred-details{gap:6px}
-.pred-detail{padding:8px}
-.pred-detail strong{font-size:11px}
-.transfer-row{
-grid-template-columns:1fr .8fr;
-padding:13px;
-}
-.transfer-row .transfer-cell:nth-child(3){display:none}
-.how-grid{grid-template-columns:1fr}
-.footer-grid{grid-template-columns:1fr}
-.sponsor{align-items:flex-start;flex-direction:column}
-.sponsor-btn{width:100%;text-align:center}
-}
-@media(prefers-reduced-motion:reduce){
-*,*::before,*::after{
-animation-duration:.01ms!important;
-animation-iteration-count:1!important;
-scroll-behavior:auto!important;
-transition-duration:.01ms!important;
-}
-}
-</style>
-<script type="application/ld+json">
-{
-"@context":"https://schema.org",
-"@type":"WebSite",
-"name":"PaceFetch",
-"url":"https://pacefetch.com/",
-"description":"Football news, predictions, transfers and football intelligence.",
-"potentialAction":{
-"@type":"SearchAction",
-"target":"https://pacefetch.com/?q={search_term_string}",
-"query-input":"required name=search_term_string"
-}
-}
-</script>
-<script type="application/ld+json">
-{
-"@context":"https://schema.org",
-"@type":"Organization",
-"name":"PaceFetch",
-"url":"https://pacefetch.com/",
-"description":"Football intelligence, predictions, news and transfer updates."
-}
-</script>
-<script type="application/ld+json">
-{
-"@context":"https://schema.org",
-"@type":"FAQPage",
-"mainEntity":[
-{
-"@type":"Question",
-"name":"How many football predictions does PaceFetch publish each day?",
-"acceptedAnswer":{
-"@type":"Answer",
-"text":"PaceFetch can publish up to 50 qualifying daily predictions when enough suitable matches are available. It does not need to force the full 50."
-}
-},
-{
-"@type":"Question",
-"name":"How does PaceFetch calculate prediction confidence?",
-"acceptedAnswer":{
-"@type":"Answer",
-"text":"Confidence is based on available match and market information, including form, home and away performance, goals, team strength and other available signals. Confidence represents model probability, not a guarantee."
-}
-},
-{
-"@type":"Question",
-"name":"Does PaceFetch guarantee winning predictions?",
-"acceptedAnswer":{
-"@type":"Answer",
-"text":"No. Football predictions are probabilistic. A high confidence prediction can still lose."
-}
-},
-{
-"@type":"Question",
-"name":"What does the green confidence colour mean?",
-"acceptedAnswer":{
-"@type":"Answer",
-"text":"Green is reserved for the strongest confidence tier, normally 80 percent or above."
-}
-}
-]
-}
-</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>PaceFetch — Football Predictions & Match Probabilities</title>
+
+  <meta
+    name="description"
+    content="PaceFetch provides football predictions, match probabilities, top picks, fixtures and prediction history."
+  >
+
+  <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
-<div class="topbar">
-<div class="container topbar-inner">
-<div class="top-message">Football intelligence. Updated every day.</div>
-<div class="nigeria-clock">
-<span class="clock-dot"></span>
-<span>Nigeria</span>
-<span id="nigeriaClock">--:--:--</span>
-</div>
-</div>
-</div>
-<header class="header">
-<div class="container header-inner">
-<a class="brand" href="/" aria-label="PaceFetch home">
-<div class="logo" aria-hidden="true"><span>P</span></div>
-<div>
-<div class="brand-name">PaceFetch</div>
-<span class="brand-sub">Football Intelligence</span>
-</div>
-</a>
-<nav class="nav" aria-label="Main navigation">
-<a class="active" href="/">Home</a>
-<a href="/news/">News</a>
-<a href="/prediction/">Predictions</a>
-<a href="/transfer/">Transfers</a>
-<a href="/leagues/">Leagues</a>
-<a href="/teams/">Teams</a>
-</nav>
-<div class="header-actions">
-<button class="icon-btn" id="searchButton" aria-label="Open search">
-<svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
-<circle cx="10.8" cy="10.8" r="6.4"></circle>
-<path d="M15.6 15.6L21 21"></path>
-</svg>
-</button>
-<button class="theme-toggle" id="themeToggle" aria-label="Switch theme" aria-pressed="false">
-<span class="theme-icon">☀</span>
-<span class="theme-icon">☾</span>
-</button>
-</div>
-</div>
-</header>
-<main>
-<section class="hero">
-<div class="container hero-grid">
-<div class="hero-main">
-<div class="eyebrow">
-<span class="eyebrow-dot"></span>
-Football intelligence
-</div>
-<h1>Fetch <span>Predictions.</span><br>Fetch Football.</h1>
-<p class="hero-copy">
-PaceFetch brings football news, match intelligence, transfer updates,
-fixtures and carefully ranked predictions into one fast football destination.
-</p>
-<div class="hero-buttons">
-<a class="btn btn-primary" href="/prediction/">Explore Today's Predictions <span>→</span></a>
-<a class="btn btn-secondary" href="/news/">Read Latest Football News</a>
-</div>
-</div>
-<div class="hero-side">
-<div class="pulse-card">
-<div class="pulse-head">
-<div class="pulse-title">Football Pulse</div>
-<div class="live-badge"><i></i> Live desk</div>
-</div>
-<div class="pulse-score">
-<div class="pulse-team">Today's football</div>
-<div class="pulse-number" id="heroMatchCount">--</div>
-<div class="pulse-team">matches</div>
-</div>
-<div class="pulse-meta">
-<span>Available fixtures</span>
-<span id="heroPulseDate">Today</span>
-</div>
-</div>
-<div class="pulse-card">
-<div class="pulse-head">
-<div class="pulse-title">Daily Picks</div>
-<div class="live-badge"><i></i> Automated</div>
-</div>
-<div class="pulse-score">
-<div class="pulse-team">Qualified</div>
-<div class="pulse-number" id="heroPredictionCount">--</div>
-<div class="pulse-team">of 50 max</div>
-</div>
-<div class="pulse-meta">
-<span>Availability driven</span>
-<span>Ranked by confidence</span>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section class="glance">
-<div class="container">
-<div class="glance-grid">
-<div class="glance-card">
-<div class="glance-label">Matches</div>
-<div class="glance-value" id="glanceMatches">--</div>
-<div class="glance-note">Available today</div>
-</div>
-<div class="glance-card">
-<div class="glance-label">Predictions</div>
-<div class="glance-value" id="glancePredictions">--</div>
-<div class="glance-note">Up to 50 qualifying</div>
-</div>
-<div class="glance-card">
-<div class="glance-label">News</div>
-<div class="glance-value" id="glanceNews">--</div>
-<div class="glance-note">Latest stories</div>
-</div>
-<div class="glance-card">
-<div class="glance-label">Transfers</div>
-<div class="glance-value" id="glanceTransfers">--</div>
-<div class="glance-note">Latest movement</div>
-</div>
-</div>
-</div>
-</section>
-<section class="section" id="live">
-<div class="container">
-<div class="section-head">
-<div>
-<div class="section-kicker">Match centre</div>
-<h2 class="section-title">Live & Upcoming</h2>
-<p class="section-description">A quick look at football happening today and the fixtures coming next.</p>
-</div>
-<a class="text-link" href="/leagues/">View match centre →</a>
-</div>
-<div class="matches-strip" id="matchesContainer">
-<div class="match-card">
-<div class="match-top"><span>Loading</span><span>•••</span></div>
-<div class="match-teams">
-<div class="team-name">Loading match</div>
-<div class="match-score">—</div>
-<div class="team-name away">Please wait</div>
-</div>
-<div class="match-bottom"><span>Football</span><span>Fetching</span></div>
-</div>
-<div class="match-card">
-<div class="match-top"><span>Loading</span><span>•••</span></div>
-<div class="match-teams">
-<div class="team-name">PaceFetch</div>
-<div class="match-score">•</div>
-<div class="team-name away">Match Centre</div>
-</div>
-<div class="match-bottom"><span>Live data</span><span>Updating</span></div>
-</div>
-</div>
-</div>
-</section>
-<section class="section" id="predictions">
-<div class="container">
-<div class="section-head">
-<div>
-<div class="section-kicker">PaceFetch Daily Picks</div>
-<h2 class="section-title">Today's strongest predictions</h2>
-<p class="section-description">Only qualifying available fixtures are selected. The system can publish up to 50, but never needs to force 50.</p>
-</div>
-<a class="text-link" href="/prediction/">See all predictions →</a>
-</div>
-<div class="prediction-shell">
-<div class="prediction-list" id="predictionContainer">
-<article class="prediction-card confidence-strong">
-<div class="prediction-meta">
-<strong>Preparing today's picks</strong>
-<span>•</span>
-<span>Checking available fixtures</span>
-</div>
-<div class="prediction-match">
-<div class="pred-team">PaceFetch</div>
-<div class="pred-vs">VS</div>
-<div class="pred-team away">Prediction Engine</div>
-</div>
-<div class="pred-details">
-<div class="pred-detail">
-<small>Selection</small>
-<strong>Scanning available markets</strong>
-</div>
-<div class="pred-detail">
-<small>Confidence</small>
-<strong class="confidence"><i class="confidence-dot"></i>Pending</strong>
-</div>
-<div class="pred-detail">
-<small>Status</small>
-<strong>Waiting</strong>
-</div>
-</div>
-</article>
-</div>
-<aside class="prediction-side">
-<div class="info-card">
-<h3>Prediction Record</h3>
-<p>Historical performance is tracked from settled predictions rather than changing picks after results.</p>
-<div class="record">
-<div class="record-item"><strong id="recordWins">—</strong><span>Wins</span></div>
-<div class="record-item"><strong id="recordLosses">—</strong><span>Losses</span></div>
-<div class="record-item"><strong id="recordPending">—</strong><span>Pending</span></div>
-</div>
-</div>
-<div class="info-card">
-<h3>Confidence scale</h3>
-<p>Colours make the model's confidence easy to understand at a glance.</p>
-<div class="confidence-legend">
-<div class="legend-item">
-<div class="legend-left"><i class="legend-dot green-dot"></i>80–90%</div>
-<strong>Strong</strong>
-</div>
-<div class="legend-item">
-<div class="legend-left"><i class="legend-dot yellow-dot"></i>70–79%</div>
-<strong>High</strong>
-</div>
-<div class="legend-item">
-<div class="legend-left"><i class="legend-dot amber-dot"></i>50–69%</div>
-<strong>Moderate</strong>
-</div>
-<div class="legend-item">
-<div class="legend-left"><i class="legend-dot red-dot"></i>Below 50%</div>
-<strong>Low</strong>
-</div>
-</div>
-</div>
-</aside>
-</div>
-</div>
-</section>
-<section class="section">
-<div class="container">
-<div class="section-head">
-<div>
-<div class="section-kicker">Football newsroom</div>
-<h2 class="section-title">Latest football news</h2>
-<p class="section-description">Headlines, stories and football developments from across the game.</p>
-</div>
-<a class="text-link" href="/news/">More news →</a>
-</div>
-<div class="news-grid" id="newsContainer">
-<article class="news-card">
-<div class="news-image"><span class="news-tag">Football News</span></div>
-<div class="news-body">
-<h3 class="news-title">Loading the latest football stories...</h3>
-<div class="news-meta"><span>PaceFetch Newsroom</span><span>Updating</span></div>
-</div>
-</article>
-<article class="news-card small">
-<div class="news-image"><span class="news-tag">Latest</span></div>
-<div class="news-body">
-<h3 class="news-title">Football updates are being fetched.</h3>
-<div class="news-meta"><span>News desk</span></div>
-</div>
-</article>
-<article class="news-card small">
-<div class="news-image"><span class="news-tag">Football</span></div>
-<div class="news-body">
-<h3 class="news-title">Stay close to the latest developments.</h3>
-<div class="news-meta"><span>PaceFetch</span></div>
-</div>
-</article>
-</div>
-</div>
-</section>
-<section class="section">
-<div class="container">
-<div class="section-head">
-<div>
-<div class="section-kicker">Transfer centre</div>
-<h2 class="section-title">Latest transfer movement</h2>
-<p class="section-description">Signings, departures and transfer activity presented in a simple format.</p>
-</div>
-<a class="text-link" href="/transfer/">Transfer centre →</a>
-</div>
-<div class="transfer-layout">
-<div class="transfer-list" id="transferContainer">
-<div class="transfer-row">
-<div class="transfer-player">
-<div class="player-avatar">PF</div>
-<div><strong>Loading transfers</strong><span>Checking latest activity</span></div>
-</div>
-<div class="transfer-cell"><span>From</span>—</div>
-<div class="transfer-cell"><span>To</span>—</div>
-<div class="transfer-cell fee">—</div>
-</div>
-<div class="transfer-row">
-<div class="transfer-player">
-<div class="player-avatar">PF</div>
-<div><strong>Transfer desk</strong><span>Awaiting data</span></div>
-</div>
-<div class="transfer-cell"><span>Status</span>Updating</div>
-<div class="transfer-cell"><span>Source</span>PaceFetch</div>
-<div class="transfer-cell fee">—</div>
-</div>
-</div>
-<div class="info-card">
-<h3>Transfer intelligence</h3>
-<p>PaceFetch separates confirmed movement from developing transfer stories wherever the source data allows.</p>
-<div class="record">
-<div class="record-item"><strong id="confirmedTransfers">—</strong><span>Confirmed</span></div>
-<div class="record-item"><strong id="rumourTransfers">—</strong><span>Rumours</span></div>
-<div class="record-item"><strong id="todayTransfers">—</strong><span>Today</span></div>
-</div>
-</div>
-</div>
-</div>
-</section>
-<div class="container">
-<div class="ad-zone" aria-label="Advertisement">
-<span class="ad-label">Advertisement</span>
-</div>
-</div>
-<section class="section">
-<div class="container">
-<div class="section-head">
-<div>
-<div class="section-kicker">Competitions</div>
-<h2 class="section-title">Popular leagues</h2>
-<p class="section-description">Follow major competitions and get closer to the teams, fixtures and predictions that matter.</p>
-</div>
-<a class="text-link" href="/leagues/">All leagues →</a>
-</div>
-<div class="leagues-grid">
-<a class="league-card" href="/leagues/?league=premier-league">
-<div class="league-top">
-<div class="league-badge">PL</div>
-<div>
-<div class="league-name">Premier League</div>
-<div class="league-country">England</div>
-</div>
-</div>
-<div class="league-stats">
-<div class="league-stat"><span>Matches</span><strong>Today</strong></div>
-<div class="league-stat"><span>Teams</span><strong>20</strong></div>
-<div class="league-stat"><span>Status</span><strong>Live</strong></div>
-</div>
-</a>
-<a class="league-card" href="/leagues/?league=la-liga">
-<div class="league-top">
-<div class="league-badge">LL</div>
-<div>
-<div class="league-name">La Liga</div>
-<div class="league-country">Spain</div>
-</div>
-</div>
-<div class="league-stats">
-<div class="league-stat"><span>Matches</span><strong>Today</strong></div>
-<div class="league-stat"><span>Teams</span><strong>20</strong></div>
-<div class="league-stat"><span>Status</span><strong>Active</strong></div>
-</div>
-</a>
-<a class="league-card" href="/leagues/?league=serie-a">
-<div class="league-top">
-<div class="league-badge">SA</div>
-<div>
-<div class="league-name">Serie A</div>
-<div class="league-country">Italy</div>
-</div>
-</div>
-<div class="league-stats">
-<div class="league-stat"><span>Matches</span><strong>Today</strong></div>
-<div class="league-stat"><span>Teams</span><strong>20</strong></div>
-<div class="league-stat"><span>Status</span><strong>Active</strong></div>
-</div>
-</a>
-<a class="league-card" href="/leagues/?league=bundesliga">
-<div class="league-top">
-<div class="league-badge">BL</div>
-<div>
-<div class="league-name">Bundesliga</div>
-<div class="league-country">Germany</div>
-</div>
-</div>
-<div class="league-stats">
-<div class="league-stat"><span>Matches</span><strong>Today</strong></div>
-<div class="league-stat"><span>Teams</span><strong>18</strong></div>
-<div class="league-stat"><span>Status</span><strong>Active</strong></div>
-</div>
-</a>
-<a class="league-card" href="/leagues/?league=champions-league">
-<div class="league-top">
-<div class="league-badge">UCL</div>
-<div>
-<div class="league-name">Champions League</div>
-<div class="league-country">Europe</div>
-</div>
-</div>
-<div class="league-stats">
-<div class="league-stat"><span>Matches</span><strong>Today</strong></div>
-<div class="league-stat"><span>Teams</span><strong>Europe</strong></div>
-<div class="league-stat"><span>Status</span><strong>Elite</strong></div>
-</div>
-</a>
-<a class="league-card" href="/leagues/?league=african-football">
-<div class="league-top">
-<div class="league-badge">AF</div>
-<div>
-<div class="league-name">African Football</div>
-<div class="league-country">Africa</div>
-</div>
-</div>
-<div class="league-stats">
-<div class="league-stat"><span>Coverage</span><strong>Growing</strong></div>
-<div class="league-stat"><span>Region</span><strong>Africa</strong></div>
-<div class="league-stat"><span>Status</span><strong>Active</strong></div>
-</div>
-</a>
-</div>
-</div>
-</section>
-<section class="section">
-<div class="container">
-<div class="section-head">
-<div>
-<div class="section-kicker">Football intelligence</div>
-<h2 class="section-title">How PaceFetch predictions work</h2>
-<p class="section-description">The goal is not to manufacture picks. The goal is to identify the strongest available opportunities.</p>
-</div>
-</div>
-<div class="how-grid">
-<div class="how-card">
-<div class="how-number">01 / SCAN</div>
-<h3>Check availability</h3>
-<p>The system first looks at available upcoming fixtures and markets instead of forcing a fixed number of predictions.</p>
-</div>
-<div class="how-card">
-<div class="how-number">02 / FILTER</div>
-<h3>Remove weak candidates</h3>
-<p>Matches with insufficient or conflicting information can be excluded from the public prediction feed.</p>
-</div>
-<div class="how-card">
-<div class="how-number">03 / RANK</div>
-<h3>Calculate probability</h3>
-<p>Available form, strength, market information and other signals contribute to the model's estimated probability.</p>
-</div>
-<div class="how-card">
-<div class="how-number">04 / PUBLISH</div>
-<h3>Show the strongest</h3>
-<p>The highest-quality qualifying predictions are published, up to a maximum of 50 per day.</p>
-</div>
-</div>
-</div>
-</section>
-<section class="section">
-<div class="container">
-<div class="spotlight">
-<div class="spotlight-card">
-<div class="section-kicker">Daily selection</div>
-<div class="spotlight-number" id="qualifiedNumber">--</div>
-<h3>Qualified predictions today</h3>
-<p>
-The number can change from day to day because PaceFetch only publishes predictions
-when suitable fixtures and data are available.
-</p>
-<a class="btn btn-secondary" href="/prediction/">Open prediction centre →</a>
-</div>
-<div class="spotlight-card">
-<div class="section-kicker">Transparent forecasting</div>
-<div class="spotlight-number">0%</div>
-<h3>Guaranteed results</h3>
-<p>
-Football is uncertain. Confidence indicates model probability and should never be interpreted as a guarantee of a winning result.
-</p>
-<a class="btn btn-secondary" href="/prediction/">Understand the model →</a>
-</div>
-</div>
-</div>
-</section>
-<section class="section">
-<div class="container">
-<div class="section-head">
-<div>
-<div class="section-kicker">Football calendar</div>
-<h2 class="section-title">This week at PaceFetch</h2>
-<p class="section-description">Quick navigation to the coming football days.</p>
-</div>
-</div>
-<div class="calendar" id="calendarContainer"></div>
-</div>
-</section>
-<section class="section">
-<div class="container">
-<div class="sponsor">
-<div class="sponsor-copy">
-<strong>Want your brand in front of football fans?</strong>
-<p>PaceFetch sponsor placements can be managed from the administrator dashboard.</p>
-</div>
-<a class="sponsor-btn" href="mailto:partnerships@pacefetch.com">Partnerships →</a>
-</div>
-</div>
-</section>
-<section class="section">
-<div class="container">
-<div class="section-head">
-<div>
-<div class="section-kicker">Frequently asked</div>
-<h2 class="section-title">PaceFetch FAQ</h2>
-</div>
-</div>
-<div class="faq">
-<details>
-<summary>Can PaceFetch publish 50 predictions every day?</summary>
-<div class="faq-answer">It can publish up to 50 when 50 suitable predictions are available. The system should never manufacture weak selections simply to reach a target number.</div>
-</details>
-<details>
-<summary>What does an 80% confidence prediction mean?</summary>
-<div class="faq-answer">It means the model estimates approximately an 80% probability for the selected outcome under its current inputs. It is not a guarantee.</div>
-</details>
-<details>
-<summary>Why are confidence levels displayed with colours?</summary>
-<div class="faq-answer">Colour makes the probability tier easier to understand quickly: strong green for 80% and above, yellow for the 70s, amber for 50–69%, and red below 50%.</div>
-</details>
-<details>
-<summary>Does PaceFetch only use low odds?</summary>
-<div class="faq-answer">No. Odds can be one input among several. The model should consider the available information and only publish a selection when its overall evidence is strong enough.</div>
-</details>
-<details>
-<summary>Can I use PaceFetch predictions as a guarantee?</summary>
-<div class="faq-answer">No. Predictions are probabilistic information. Even a very high-confidence outcome can fail because football matches contain uncertainty.</div>
-</details>
-</div>
-</div>
-</section>
-</main>
-<footer class="footer">
-<div class="container">
-<div class="footer-grid">
-<div class="footer-brand">
-<a class="brand" href="/">
-<div class="logo" aria-hidden="true"><span>P</span></div>
-<div>
-<div class="brand-name">PaceFetch</div>
-<span class="brand-sub">Football Intelligence</span>
-</div>
-</a>
-<p>Fetch predictions. Fetch football. A modern destination for football news, predictions, transfers and match intelligence.</p>
-</div>
-<div>
-<h4>Explore</h4>
-<div class="footer-links">
-<a href="/">Home</a>
-<a href="/news/">Football News</a>
-<a href="/prediction/">Predictions</a>
-<a href="/transfer/">Transfers</a>
-</div>
-</div>
-<div>
-<h4>Football</h4>
-<div class="footer-links">
-<a href="/leagues/">Leagues</a>
-<a href="/teams/">Teams</a>
-<a href="/news/">Latest News</a>
-<a href="/prediction/">Today's Picks</a>
-</div>
-</div>
-<div>
-<h4>Information</h4>
-<div class="footer-links">
-<a href="/#predictions">Prediction Method</a>
-<a href="/#live">Match Centre</a>
-<a href="/#faq">FAQ</a>
-<a href="mailto:partnerships@pacefetch.com">Contact</a>
-</div>
-</div>
-</div>
-<div class="footer-bottom">
-<span>© <span id="footerYear">2026</span> PaceFetch. All rights reserved.</span>
-<span class="designed">Designed by Pacethel</span>
-</div>
-</div>
-</footer>
-<nav class="mobile-nav" aria-label="Mobile navigation">
-<div class="mobile-nav-inner">
-<a class="active" href="/">
-<span class="mobile-nav-icon">⌂</span>
-<span>Home</span>
-</a>
-<a href="/news/">
-<span class="mobile-nav-icon">▤</span>
-<span>News</span>
-</a>
-<a href="/prediction/">
-<span class="mobile-nav-icon">◉</span>
-<span>Picks</span>
-</a>
-<a href="/transfer/">
-<span class="mobile-nav-icon">⇄</span>
-<span>Transfers</span>
-</a>
-<a href="/teams/">
-<span class="mobile-nav-icon">♟</span>
-<span>Teams</span>
-</a>
-</div>
-</nav>
-<div class="search-overlay" id="searchOverlay" aria-hidden="true">
-<div class="search-box" role="dialog" aria-modal="true" aria-label="PaceFetch search">
-<div class="search-head">
-<svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
-<circle cx="10.8" cy="10.8" r="6.4"></circle>
-<path d="M15.6 15.6L21 21"></path>
-</svg>
-<input class="search-input" id="searchInput" type="search" placeholder="Search news, teams, leagues..." autocomplete="off">
-<button class="search-close" id="searchClose" aria-label="Close search">×</button>
-</div>
-<div class="search-results" id="searchResults">
-<a class="search-result" href="/news/">Search football news</a>
-<a class="search-result" href="/prediction/">Search football predictions</a>
-<a class="search-result" href="/transfer/">Search transfers</a>
-<a class="search-result" href="/teams/">Search teams</a>
-<a class="search-result" href="/leagues/">Search leagues</a>
-</div>
-</div>
-</div>
-<button class="back-top" id="backTop" aria-label="Back to top">↑</button>
-<div class="toast" id="toast" role="status"></div>
-<script>
-const PACEFETCH_API_BASE=window.PACEFETCH_API_BASE||"";
-const THEME_KEY="pacefetch-theme";
-const state={
-theme:"dark",
-matches:[],
-predictions:[],
-news:[],
-transfers:[]
-};
-const demoMatches=[
-{
-home:"Manchester City",
-away:"Fulham",
-score:"—",
-status:"Upcoming",
-time:"18:00",
-league:"Premier League"
-},
-{
-home:"Real Madrid",
-away:"Getafe",
-score:"—",
-status:"Upcoming",
-time:"20:00",
-league:"La Liga"
-},
-{
-home:"Bayern Munich",
-away:"RB Leipzig",
-score:"—",
-status:"Upcoming",
-time:"19:30",
-league:"Bundesliga"
-},
-{
-home:"Inter Milan",
-away:"Roma",
-score:"—",
-status:"Upcoming",
-time:"20:45",
-league:"Serie A"
-}
-];
-const demoPredictions=[
-{
-home:"Manchester City",
-away:"Fulham",
-league:"Premier League",
-time:"18:00",
-pick:"Manchester City",
-odds:"1.18",
-confidence:86,
-risk:"Low"
-},
-{
-home:"Real Madrid",
-away:"Getafe",
-league:"La Liga",
-time:"20:00",
-pick:"Real Madrid",
-odds:"1.22",
-confidence:82,
-risk:"Low"
-},
-{
-home:"Bayern Munich",
-away:"RB Leipzig",
-league:"Bundesliga",
-time:"19:30",
-pick:"Bayern Munich",
-odds:"1.24",
-confidence:79,
-risk:"Medium"
-},
-{
-home:"Inter Milan",
-away:"Roma",
-league:"Serie A",
-time:"20:45",
-pick:"Inter Milan",
-odds:"1.31",
-confidence:74,
-risk:"Medium"
-}
-];
-const demoNews=[
-{
-title:"The latest football developments shaping today's matchday",
-category:"Football News",
-time:"Today",
-author:"PaceFetch Desk"
-},
-{
-title:"Big fixtures to watch as the football calendar moves forward",
-category:"Matchday",
-time:"Today",
-author:"PaceFetch"
-},
-{
-title:"Transfer centre tracks the latest movement across Europe",
-category:"Transfers",
-time:"Today",
-author:"PaceFetch Desk"
-}
-];
-const demoTransfers=[
-{
-player:"Jonathan David",
-from:"Lille",
-to:"European Club",
-fee:"Confirmed",
-status:"Confirmed"
-},
-{
-player:"Victor Osimhen",
-from:"Napoli",
-to:"Transfer Market",
-fee:"Developing",
-status:"Rumour"
-},
-{
-player:"Michael Olise",
-from:"Crystal Palace",
-to:"Bayern Munich",
-fee:"Reported",
-status:"Update"
-}
-];
-function qs(selector){
-return document.querySelector(selector);
-}
-function qsa(selector){
-return [...document.querySelectorAll(selector)];
-}
-function escapeText(value){
-return String(value??"");
-}
-function applyTheme(theme){
-state.theme=theme==="light"?"light":"dark";
-document.documentElement.dataset.theme=state.theme;
-localStorage.setItem(THEME_KEY,state.theme);
-const toggle=qs("#themeToggle");
-if(toggle){
-toggle.setAttribute("aria-pressed",state.theme==="light"?"true":"false");
-toggle.setAttribute("aria-label",state.theme==="light"?"Switch to dark theme":"Switch to light theme");
-}
-}
-function initTheme(){
-const saved=localStorage.getItem(THEME_KEY);
-applyTheme(saved==="light"?"light":"dark");
-}
-function toggleTheme(){
-applyTheme(state.theme==="dark"?"light":"dark");
-showToast(state.theme==="light"?"Light theme enabled":"Dark green theme enabled");
-}
-function showToast(message){
-const toast=qs("#toast");
-if(!toast)return;
-toast.textContent=message;
-toast.classList.add("show");
-clearTimeout(window.toastTimer);
-window.toastTimer=setTimeout(()=>toast.classList.remove("show"),2200);
-}
-function updateClock(){
-const clock=qs("#nigeriaClock");
-if(!clock)return;
-const now=new Date();
-const parts=new Intl.DateTimeFormat("en-NG",{
-timeZone:"Africa/Lagos",
-hour:"2-digit",
-minute:"2-digit",
-second:"2-digit",
-hour12:false
-}).formatToParts(now);
-const get=name=>parts.find(part=>part.type===name)?.value||"";
-clock.textContent=`${get("hour")}:${get("minute")}:${get("second")}`;
-}
-function todayLabel(){
-return new Intl.DateTimeFormat("en-NG",{
-timeZone:"Africa/Lagos",
-weekday:"short",
-month:"short",
-day:"numeric"
-}).format(new Date());
-}
-function confidenceClass(value){
-const n=Number(value)||0;
-if(n>=80)return"confidence-strong";
-if(n>=70)return"confidence-high";
-if(n>=50)return"confidence-medium";
-return"confidence-low";
-}
-function confidenceLabel(value){
-const n=Number(value)||0;
-if(n>=80)return"Strong";
-if(n>=70)return"High";
-if(n>=50)return"Moderate";
-return"Low";
-}
-function safeNumber(value,fallback=0){
-const n=Number(value);
-return Number.isFinite(n)?n:fallback;
-}
-function renderMatches(matches){
-const container=qs("#matchesContainer");
-if(!container)return;
-container.innerHTML="";
-matches.slice(0,8).forEach(match=>{
-const card=document.createElement("article");
-card.className="match-card";
-const top=document.createElement("div");
-top.className="match-top";
-const league=document.createElement("span");
-league.textContent=escapeText(match.league||"Football");
-const status=document.createElement("span");
-status.className="match-status";
-status.textContent=escapeText(match.status||"Upcoming");
-top.append(league,status);
-const teams=document.createElement("div");
-teams.className="match-teams";
-const home=document.createElement("div");
-home.className="team-name";
-home.textContent=escapeText(match.home||"Home");
-const score=document.createElement("div");
-score.className="match-score";
-score.textContent=escapeText(match.score||"—");
-const away=document.createElement("div");
-away.className="team-name away";
-away.textContent=escapeText(match.away||"Away");
-teams.append(home,score,away);
-const bottom=document.createElement("div");
-bottom.className="match-bottom";
-const date=document.createElement("span");
-date.textContent="Today";
-const time=document.createElement("span");
-time.textContent=escapeText(match.time||"TBD");
-bottom.append(date,time);
-card.append(top,teams,bottom);
-container.append(card);
-});
-}
-function renderPredictions(predictions){
-const container=qs("#predictionContainer");
-if(!container)return;
-container.innerHTML="";
-const selected=predictions
-.map(item=>({...item,confidence:safeNumber(item.confidence)}))
-.filter(item=>item.confidence>0)
-.sort((a,b)=>b.confidence-a.confidence)
-.slice(0,50);
-if(!selected.length){
-const empty=document.createElement("article");
-empty.className="prediction-card confidence-low";
-empty.innerHTML="<div class=\"prediction-meta\"><strong>No qualifying predictions yet</strong></div><p style=\"color:var(--muted);font-size:11px\">The system will publish selections when suitable fixtures are available.</p>";
-container.append(empty);
-return;
-}
-selected.slice(0,6).forEach(item=>{
-const article=document.createElement("article");
-article.className=`prediction-card ${confidenceClass(item.confidence)}`;
-const meta=document.createElement("div");
-meta.className="prediction-meta";
-const strong=document.createElement("strong");
-strong.textContent=escapeText(item.league||"Football");
-const dot=document.createElement("span");
-dot.textContent="•";
-const time=document.createElement("span");
-time.textContent=`Today • ${escapeText(item.time||"TBD")}`;
-meta.append(strong,dot,time);
-const match=document.createElement("div");
-match.className="prediction-match";
-const home=document.createElement("div");
-home.className="pred-team";
-home.textContent=escapeText(item.home||"Home");
-const vs=document.createElement("div");
-vs.className="pred-vs";
-vs.textContent="VS";
-const away=document.createElement("div");
-away.className="pred-team away";
-away.textContent=escapeText(item.away||"Away");
-match.append(home,vs,away);
-const details=document.createElement("div");
-details.className="pred-details";
-const pick=document.createElement("div");
-pick.className="pred-detail";
-const pickLabel=document.createElement("small");
-pickLabel.textContent="Our Pick";
-const pickValue=document.createElement("strong");
-pickValue.textContent=escapeText(item.pick||"No pick");
-pick.append(pickLabel,pickValue);
-const conf=document.createElement("div");
-conf.className="pred-detail";
-const confLabel=document.createElement("small");
-confLabel.textContent="Confidence";
-const confValue=document.createElement("strong");
-confValue.className="confidence";
-const confDot=document.createElement("i");
-confDot.className="confidence-dot";
-const confText=document.createTextNode(`${item.confidence}% ${confidenceLabel(item.confidence)}`);
-confValue.append(confDot,confText);
-conf.append(confLabel,confValue);
-const risk=document.createElement("div");
-risk.className="pred-detail";
-const riskLabel=document.createElement("small");
-riskLabel.textContent="Market / Risk";
-const riskValue=document.createElement("strong");
-riskValue.textContent=`${escapeText(item.odds||"—")} • ${escapeText(item.risk||"—")}`;
-risk.append(riskLabel,riskValue);
-details.append(pick,conf,risk);
-article.append(meta,match,details);
-container.append(article);
-});
-updatePredictionCounters(selected.length);
-}
-function updatePredictionCounters(count){
-const value=Math.min(count,50);
-const targets=["#heroPredictionCount","#glancePredictions","#qualifiedNumber"];
-targets.forEach(selector=>{
-const el=qs(selector);
-if(el)el.textContent=String(value);
-});
-}
-function renderNews(news){
-const container=qs("#newsContainer");
-if(!container)return;
-container.innerHTML="";
-news.slice(0,3).forEach((item,index)=>{
-const article=document.createElement("article");
-article.className=`news-card${index?" small":""}`;
-const image=document.createElement("div");
-image.className="news-image";
-const tag=document.createElement("span");
-tag.className="news-tag";
-tag.textContent=escapeText(item.category||"Football");
-image.append(tag);
-const body=document.createElement("div");
-body.className="news-body";
-const title=document.createElement("h3");
-title.className="news-title";
-title.textContent=escapeText(item.title||"Football update");
-const meta=document.createElement("div");
-meta.className="news-meta";
-const author=document.createElement("span");
-author.textContent=escapeText(item.author||"PaceFetch Desk");
-const time=document.createElement("span");
-time.textContent=escapeText(item.time||"Today");
-meta.append(author,time);
-body.append(title,meta);
-article.append(image,body);
-article.addEventListener("click",()=>{
-const slug=encodeURIComponent(
-String(item.slug||item.title||"football-news")
-.toLowerCase()
-.trim()
-.replace(/[^a-z0-9]+/g,"-")
-.replace(/^-|-$/g,"")
-);
-window.location.href=`/article/?slug=${slug}`;
-});
-container.append(article);
-});
-const count=qs("#glanceNews");
-if(count)count.textContent=String(news.length);
-}
-function renderTransfers(transfers){
-const container=qs("#transferContainer");
-if(!container)return;
-container.innerHTML="";
-transfers.slice(0,6).forEach(item=>{
-const row=document.createElement("div");
-row.className="transfer-row";
-const player=document.createElement("div");
-player.className="transfer-player";
-const avatar=document.createElement("div");
-avatar.className="player-avatar";
-avatar.textContent=escapeText((item.player||"PF").slice(0,2).toUpperCase());
-const person=document.createElement("div");
-const name=document.createElement("strong");
-name.textContent=escapeText(item.player||"Player");
-const status=document.createElement("span");
-status.textContent=escapeText(item.status||"Update");
-person.append(name,status);
-player.append(avatar,person);
-const from=document.createElement("div");
-from.className="transfer-cell";
-from.innerHTML="<span>From</span>";
-from.append(document.createTextNode(escapeText(item.from||"—")));
-const arrow=document.createElement("div");
-arrow.className="transfer-arrow";
-arrow.textContent="→";
-const to=document.createElement("div");
-to.className="transfer-cell";
-to.innerHTML="<span>To</span>";
-to.append(document.createTextNode(escapeText(item.to||"—")));
-const fee=document.createElement("div");
-fee.className="transfer-cell fee";
-fee.textContent=escapeText(item.fee||"—");
-row.append(player,from,arrow,to,fee);
-container.append(row);
-});
-const count=qs("#glanceTransfers");
-if(count)count.textContent=String(transfers.length);
-const confirmed=transfers.filter(x=>String(x.status).toLowerCase().includes("confirm")).length;
-const rumours=transfers.filter(x=>String(x.status).toLowerCase().includes("rumour")).length;
-const a=qs("#confirmedTransfers");
-const b=qs("#rumourTransfers");
-const c=qs("#todayTransfers");
-if(a)a.textContent=String(confirmed);
-if(b)b.textContent=String(rumours);
-if(c)c.textContent=String(transfers.length);
-}
-function renderCalendar(){
-const container=qs("#calendarContainer");
-if(!container)return;
-container.innerHTML="";
-const now=new Date();
-for(let i=0;i<7;i++){
-const date=new Date(now);
-date.setDate(now.getDate()+i);
-const day=document.createElement("div");
-day.className="calendar-day";
-if(i<5)day.classList.add("has-match");
-const label=document.createElement("span");
-label.textContent=new Intl.DateTimeFormat("en-NG",{weekday:"short"}).format(date);
-const number=document.createElement("strong");
-number.textContent=new Intl.DateTimeFormat("en-NG",{day:"numeric"}).format(date);
-day.append(label,number);
-container.append(day);
-}
-}
-async function fetchJson(path){
-try{
-const response=await fetch(`${PACEFETCH_API_BASE}${path}`,{
-headers:{Accept:"application/json"}
-});
-if(!response.ok)throw new Error(`HTTP ${response.status}`);
-const data=await response.json();
-return data;
-}catch(error){
-return null;
-}
-}
-function normalizeArray(data,keys=[]){
-if(Array.isArray(data))return data;
-for(const key of keys){
-if(Array.isArray(data?.[key]))return data[key];
-}
-return[];
-}
-async function loadMatches(){
-const data=await fetchJson("/api/matches");
-const matches=normalizeArray(data,["matches","fixtures","data"]);
-state.matches=matches.length?matches:demoMatches;
-renderMatches(state.matches);
-const count=qs("#glanceMatches");
-const hero=qs("#heroMatchCount");
-const total=state.matches.length;
-if(count)count.textContent=String(total);
-if(hero)hero.textContent=String(total);
-}
-async function loadPredictions(){
-const data=await fetchJson("/api/predictions");
-const predictions=normalizeArray(data,["predictions","data"]);
-state.predictions=predictions.length?predictions:demoPredictions;
-renderPredictions(state.predictions);
-}
-async function loadNews(){
-const data=await fetchJson("/api/news");
-const news=normalizeArray(data,["news","articles","data"]);
-state.news=news.length?news:demoNews;
-renderNews(state.news);
-}
-async function loadTransfers(){
-const data=await fetchJson("/api/transfers");
-const transfers=normalizeArray(data,["transfers","data"]);
-state.transfers=transfers.length?transfers:demoTransfers;
-renderTransfers(state.transfers);
-}
-function openSearch(){
-const overlay=qs("#searchOverlay");
-const input=qs("#searchInput");
-if(!overlay)return;
-overlay.classList.add("open");
-overlay.setAttribute("aria-hidden","false");
-document.body.style.overflow="hidden";
-setTimeout(()=>input?.focus(),40);
-}
-function closeSearch(){
-const overlay=qs("#searchOverlay");
-if(!overlay)return;
-overlay.classList.remove("open");
-overlay.setAttribute("aria-hidden","true");
-document.body.style.overflow="";
-}
-function filterSearch(){
-const input=qs("#searchInput");
-const results=qs("#searchResults");
-if(!input||!results)return;
-const query=input.value.trim().toLowerCase();
-qsa(".search-result").forEach(item=>{
-const visible=!query||item.textContent.toLowerCase().includes(query);
-item.style.display=visible?"block":"none";
-});
-}
-function initSearch(){
-qs("#searchButton")?.addEventListener("click",openSearch);
-qs("#searchClose")?.addEventListener("click",closeSearch);
-qs("#searchInput")?.addEventListener("input",filterSearch);
-qs("#searchOverlay")?.addEventListener("click",event=>{
-if(event.target.id==="searchOverlay")closeSearch();
-});
-document.addEventListener("keydown",event=>{
-if(event.key==="Escape")closeSearch();
-if(event.key==="/"&&document.activeElement?.tagName!=="INPUT"){
-event.preventDefault();
-openSearch();
-}
-});
-}
-function initBackTop(){
-const button=qs("#backTop");
-window.addEventListener("scroll",()=>{
-button?.classList.toggle("show",window.scrollY>550);
-},{passive:true});
-button?.addEventListener("click",()=>{
-window.scrollTo({top:0,behavior:"smooth"});
-});
-}
-function initThemeButton(){
-qs("#themeToggle")?.addEventListener("click",toggleTheme);
-}
-function initFooter(){
-const year=qs("#footerYear");
-if(year)year.textContent=String(new Date().getFullYear());
-const pulseDate=qs("#heroPulseDate");
-if(pulseDate)pulseDate.textContent=todayLabel();
-}
-async function boot(){
-initTheme();
-initThemeButton();
-initSearch();
-initBackTop();
-initFooter();
-renderCalendar();
-updateClock();
-setInterval(updateClock,1000);
-await Promise.all([
-loadMatches(),
-loadPredictions(),
-loadNews(),
-loadTransfers()
-]);
-}
-document.addEventListener("DOMContentLoaded",boot);
-</script>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="container nav">
+
+      <a href="index.html" class="logo">
+        <span class="logo-ball">⚽</span>
+        <span>Pace<span>Fetch</span></span>
+      </a>
+
+      <nav class="desktop-nav">
+        <a href="index.html" class="active">Home</a>
+        <a href="predictions.html">Predictions</a>
+        <a href="countries.html">Countries</a>
+        <a href="history.html">History</a>
+        <a href="methodology.html">Methodology</a>
+      </nav>
+
+      <button class="mobile-menu" id="mobileMenu">
+        ☰
+      </button>
+
+    </div>
+  </header>
+
+
+  <!-- MOBILE NAV -->
+  <div class="mobile-nav" id="mobileNav">
+    <a href="index.html">Home</a>
+    <a href="predictions.html">Predictions</a>
+    <a href="countries.html">Countries</a>
+    <a href="history.html">History</a>
+    <a href="methodology.html">Methodology</a>
+  </div>
+
+
+  <!-- HERO -->
+  <main>
+
+    <section class="hero">
+      <div class="container hero-content">
+
+        <div class="hero-badge">
+          <span class="live-dot"></span>
+          DAILY FOOTBALL INTELLIGENCE
+        </div>
+
+        <h1>
+          Smarter Football
+          <span>Predictions.</span>
+        </h1>
+
+        <p>
+          Discover data-driven football predictions, match probabilities,
+          top picks and historical performance — all in one place.
+        </p>
+
+        <div class="hero-actions">
+          <a href="predictions.html" class="btn btn-primary">
+            View Today's Predictions →
+          </a>
+
+          <a href="#top-picks" class="btn btn-secondary">
+            Explore Top Picks
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- STATS -->
+    <section class="stats-section">
+      <div class="container stats-grid">
+
+        <div class="stat-card">
+          <span class="stat-number" id="predictionCount">0</span>
+          <span class="stat-label">Today's Predictions</span>
+        </div>
+
+        <div class="stat-card">
+          <span class="stat-number">50</span>
+          <span class="stat-label">Daily Prediction Limit</span>
+        </div>
+
+        <div class="stat-card">
+          <span class="stat-number">80%+</span>
+          <span class="stat-label">Strong Confidence</span>
+        </div>
+
+        <div class="stat-card">
+          <span class="stat-number">24/7</span>
+          <span class="stat-label">Prediction Archive</span>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- TODAY -->
+    <section class="section">
+      <div class="container">
+
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">TODAY</span>
+            <h2>Today's Predictions</h2>
+          </div>
+
+          <a href="predictions.html" class="view-all">
+            View all →
+          </a>
+        </div>
+
+        <div id="todayPredictions" class="prediction-grid"></div>
+
+      </div>
+    </section>
+
+
+    <!-- TOP PICKS -->
+    <section class="section section-dark" id="top-picks">
+
+      <div class="container">
+
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">HIGHEST CONFIDENCE</span>
+            <h2>Top Picks</h2>
+          </div>
+
+          <span class="updated">
+            Updated daily
+          </span>
+        </div>
+
+        <div id="topPicks" class="top-picks-grid"></div>
+
+      </div>
+
+    </section>
+
+
+    <!-- MARKETS -->
+    <section class="section">
+
+      <div class="container">
+
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">MARKETS</span>
+            <h2>Explore Prediction Markets</h2>
+          </div>
+        </div>
+
+        <div class="market-grid">
+
+          <a href="predictions.html?market=1x2" class="market-card">
+            <div class="market-icon">⚽</div>
+            <h3>1X2</h3>
+            <p>Home, Draw or Away</p>
+          </a>
+
+          <a href="predictions.html?market=over-under" class="market-card">
+            <div class="market-icon">📊</div>
+            <h3>Over / Under</h3>
+            <p>Goal probability markets</p>
+          </a>
+
+          <a href="predictions.html?market=btts" class="market-card">
+            <div class="market-icon">🔥</div>
+            <h3>BTTS</h3>
+            <p>Both Teams To Score</p>
+          </a>
+
+          <a href="predictions.html?market=double-chance" class="market-card">
+            <div class="market-icon">🛡️</div>
+            <h3>Double Chance</h3>
+            <p>1X, X2 and 12</p>
+          </a>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- COUNTRIES -->
+    <section class="section countries-section">
+
+      <div class="container">
+
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">BROWSE FOOTBALL</span>
+            <h2>Popular Countries</h2>
+          </div>
+
+          <a href="countries.html" class="view-all">
+            All countries →
+          </a>
+        </div>
+
+        <div class="country-grid">
+
+          <a href="countries.html?country=england" class="country-card">
+            <span>🏴</span>
+            <strong>England</strong>
+            <small>Premier League</small>
+          </a>
+
+          <a href="countries.html?country=spain" class="country-card">
+            <span>🇪🇸</span>
+            <strong>Spain</strong>
+            <small>La Liga</small>
+          </a>
+
+          <a href="countries.html?country=italy" class="country-card">
+            <span>🇮🇹</span>
+            <strong>Italy</strong>
+            <small>Serie A</small>
+          </a>
+
+          <a href="countries.html?country=germany" class="country-card">
+            <span>🇩🇪</span>
+            <strong>Germany</strong>
+            <small>Bundesliga</small>
+          </a>
+
+          <a href="countries.html?country=france" class="country-card">
+            <span>🇫🇷</span>
+            <strong>France</strong>
+            <small>Ligue 1</small>
+          </a>
+
+          <a href="countries.html?country=nigeria" class="country-card">
+            <span>🇳🇬</span>
+            <strong>Nigeria</strong>
+            <small>NPFL</small>
+          </a>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- METHODOLOGY -->
+    <section class="methodology-section">
+
+      <div class="container methodology-content">
+
+        <div>
+          <span class="eyebrow">HOW IT WORKS</span>
+
+          <h2>
+            Predictions backed by
+            <span>football data.</span>
+          </h2>
+
+          <p>
+            PaceFetch analyzes fixture information, team performance,
+            form, historical data and other available football statistics
+            to produce probability-based predictions.
+          </p>
+
+          <a href="methodology.html" class="btn btn-primary">
+            Learn About Our Methodology →
+          </a>
+        </div>
+
+        <div class="methodology-steps">
+
+          <div class="method-step">
+            <strong>01</strong>
+            <div>
+              <h3>Collect</h3>
+              <p>Football fixtures and statistical data are collected.</p>
+            </div>
+          </div>
+
+          <div class="method-step">
+            <strong>02</strong>
+            <div>
+              <h3>Analyze</h3>
+              <p>Our prediction system evaluates available signals.</p>
+            </div>
+          </div>
+
+          <div class="method-step">
+            <strong>03</strong>
+            <div>
+              <h3>Rank</h3>
+              <p>Predictions are ranked according to confidence.</p>
+            </div>
+          </div>
+
+          <div class="method-step">
+            <strong>04</strong>
+            <div>
+              <h3>Publish</h3>
+              <p>The strongest qualifying predictions are published.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- DISCLAIMER -->
+    <section class="disclaimer">
+
+      <div class="container">
+
+        <p>
+          <strong>Important:</strong>
+          PaceFetch predictions are probability-based estimates and are
+          not guarantees of match results. Always make your own decisions
+          and consider the risks involved.
+        </p>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- FOOTER -->
+  <footer class="footer">
+
+    <div class="container footer-content">
+
+      <div class="footer-brand">
+        <a href="index.html" class="logo">
+          <span class="logo-ball">⚽</span>
+          <span>Pace<span>Fetch</span></span>
+        </a>
+
+        <p>
+          Football predictions powered by data.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="predictions.html">Predictions</a>
+        <a href="history.html">History</a>
+        <a href="methodology.html">Methodology</a>
+        <a href="#">Privacy</a>
+        <a href="#">Contact</a>
+      </div>
+
+    </div>
+
+    <div class="container footer-bottom">
+      © 2026 PaceFetch. All rights reserved.
+    </div>
+
+  </footer>
+
+
+  <script src="js/app.js"></script>
+
 </body>
 </html>
