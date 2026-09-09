@@ -1,387 +1,828 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
 
-  <title>PaceFetch — Football Predictions & Match Probabilities</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-  <meta
-    name="description"
-    content="PaceFetch provides football predictions, match probabilities, top picks, fixtures and prediction history."
-  >
+    <title>
+        PaceFetch Football Predictions | Today's Best Football Tips
+    </title>
 
-  <link rel="stylesheet" href="css/style.css">
+    <meta
+        name="description"
+        content="PaceFetch provides data-driven football predictions, probabilities, match tips, leagues, countries and daily top picks."
+    >
+
+    <meta
+        name="keywords"
+        content="football predictions, soccer predictions, football tips, betting predictions, match predictions, today's football predictions, PaceFetch"
+    >
+
+    <meta name="robots" content="index, follow">
+
+    <link
+        rel="canonical"
+        href="https://pacefetch.com/"
+    >
+
+    <meta
+        property="og:type"
+        content="website"
+    >
+
+    <meta
+        property="og:title"
+        content="PaceFetch Football Predictions"
+    >
+
+    <meta
+        property="og:description"
+        content="Today's football predictions, probabilities and top picks."
+    >
+
+    <meta
+        property="og:url"
+        content="https://pacefetch.com/"
+    >
+
+    <meta
+        property="og:site_name"
+        content="PaceFetch"
+    >
+
+    <link
+        rel="icon"
+        href="/assets/logo.svg"
+        type="image/svg+xml"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/css/style.css"
+    >
+
+    <style>
+        /*
+         * Production homepage additions.
+         * Existing PaceFetch stylesheet remains the main style source.
+         */
+
+        .pf-page {
+            min-height: 100vh;
+        }
+
+        .pf-loading,
+        .pf-error,
+        .pf-empty {
+            padding: 32px 20px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 18px;
+            background: rgba(255,255,255,.025);
+            margin: 20px 0;
+        }
+
+        .pf-loading {
+            color: #b9c7c0;
+        }
+
+        .pf-error {
+            color: #ff8f8f;
+        }
+
+        .pf-empty {
+            color: #aebbb5;
+        }
+
+        .pf-spinner {
+            width: 30px;
+            height: 30px;
+            margin: 0 auto 14px;
+            border: 3px solid rgba(255,255,255,.12);
+            border-top-color: #36d278;
+            border-radius: 50%;
+            animation: pfSpin .8s linear infinite;
+        }
+
+        @keyframes pfSpin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .pf-live-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: rgba(45, 210, 113, .1);
+            color: #5ee58f;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .pf-live-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #45dc7e;
+            box-shadow: 0 0 10px rgba(69,220,126,.7);
+        }
+
+        .pf-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .pf-filter {
+            appearance: none;
+            border: 1px solid rgba(255,255,255,.1);
+            background: #101714;
+            color: #dce7e1;
+            padding: 11px 14px;
+            border-radius: 10px;
+            min-width: 150px;
+            outline: none;
+        }
+
+        .pf-filter:focus {
+            border-color: #38d276;
+        }
+
+        .pf-section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 14px;
+        }
+
+        .pf-section-heading h2 {
+            margin: 0;
+        }
+
+        .pf-count {
+            color: #91a099;
+            font-size: 13px;
+        }
+
+        .pf-predictions-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .pf-card {
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 18px;
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,.045),
+                    rgba(255,255,255,.018)
+                );
+            padding: 18px;
+            transition:
+                transform .2s ease,
+                border-color .2s ease;
+        }
+
+        .pf-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(58,211,119,.3);
+        }
+
+        .pf-card-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            align-items: flex-start;
+            margin-bottom: 14px;
+        }
+
+        .pf-league {
+            color: #8f9d96;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        .pf-country {
+            color: #5dd98b;
+            font-size: 11px;
+            margin-top: 3px;
+        }
+
+        .pf-confidence {
+            padding: 6px 9px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .pf-confidence-strong {
+            color: #63e795;
+            background: rgba(49,220,112,.12);
+        }
+
+        .pf-confidence-good {
+            color: #d7ee67;
+            background: rgba(206,226,70,.11);
+        }
+
+        .pf-confidence-moderate {
+            color: #f2bd58;
+            background: rgba(242,189,88,.11);
+        }
+
+        .pf-confidence-weak {
+            color: #ff7777;
+            background: rgba(255,91,91,.11);
+        }
+
+        .pf-match {
+            margin: 8px 0 16px;
+        }
+
+        .pf-team {
+            font-size: 15px;
+            font-weight: 750;
+            color: #f0f5f2;
+            line-height: 1.35;
+        }
+
+        .pf-vs {
+            color: #64736c;
+            font-size: 11px;
+            margin: 5px 0;
+        }
+
+        .pf-market {
+            border-radius: 13px;
+            background: rgba(0,0,0,.18);
+            border: 1px solid rgba(255,255,255,.06);
+            padding: 12px;
+        }
+
+        .pf-market-label {
+            color: #8f9d96;
+            font-size: 11px;
+            margin-bottom: 5px;
+        }
+
+        .pf-selection {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .pf-selection-name {
+            font-size: 15px;
+            font-weight: 800;
+            color: #ffffff;
+        }
+
+        .pf-probability {
+            font-size: 19px;
+            font-weight: 900;
+            color: #45dc7e;
+        }
+
+        .pf-card-footer {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            align-items: center;
+            margin-top: 13px;
+        }
+
+        .pf-kickoff {
+            color: #7f8d87;
+            font-size: 11px;
+        }
+
+        .pf-view {
+            text-decoration: none;
+            color: #5ce58b;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .pf-top-picks {
+            margin-top: 42px;
+        }
+
+        .pf-top-pick {
+            display: grid;
+            grid-template-columns: 38px 1fr auto;
+            align-items: center;
+            gap: 13px;
+            padding: 14px;
+            border: 1px solid rgba(255,255,255,.07);
+            border-radius: 14px;
+            background: rgba(255,255,255,.025);
+            margin-bottom: 10px;
+        }
+
+        .pf-rank {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            background: rgba(54,210,120,.1);
+            color: #5ce58b;
+            font-size: 13px;
+            font-weight: 900;
+        }
+
+        .pf-pick-teams {
+            color: #f0f5f2;
+            font-weight: 750;
+            font-size: 13px;
+        }
+
+        .pf-pick-market {
+            color: #87958e;
+            font-size: 11px;
+            margin-top: 4px;
+        }
+
+        .pf-pick-probability {
+            color: #5ce58b;
+            font-weight: 900;
+            font-size: 15px;
+        }
+
+        .pf-stat-strip {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin: 22px 0;
+        }
+
+        .pf-stat {
+            border: 1px solid rgba(255,255,255,.07);
+            border-radius: 14px;
+            padding: 16px;
+            background: rgba(255,255,255,.025);
+        }
+
+        .pf-stat-number {
+            font-size: 22px;
+            font-weight: 900;
+            color: #f4f8f6;
+        }
+
+        .pf-stat-label {
+            color: #87958e;
+            font-size: 11px;
+            margin-top: 4px;
+        }
+
+        .pf-hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 22px;
+        }
+
+        .pf-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            padding: 0 17px;
+            border-radius: 11px;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 13px;
+        }
+
+        .pf-btn-primary {
+            background: #35d477;
+            color: #07110b;
+        }
+
+        .pf-btn-secondary {
+            border: 1px solid rgba(255,255,255,.1);
+            background: rgba(255,255,255,.03);
+            color: #dce7e1;
+        }
+
+        .pf-disclaimer {
+            margin-top: 40px;
+            padding: 18px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,.07);
+            background: rgba(255,255,255,.02);
+            color: #7e8b85;
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        @media (max-width: 1000px) {
+            .pf-predictions-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 680px) {
+            .pf-predictions-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pf-stat-strip {
+                grid-template-columns: 1fr;
+            }
+
+            .pf-top-pick {
+                grid-template-columns: 34px 1fr;
+            }
+
+            .pf-pick-probability {
+                grid-column: 2;
+            }
+
+            .pf-filter {
+                width: 100%;
+            }
+
+            .pf-section-heading {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-  <!-- HEADER -->
-  <header class="header">
-    <div class="container nav">
+<div class="pf-page">
 
-      <a href="index.html" class="logo">
-        <span class="logo-ball">⚽</span>
-        <span>Pace<span>Fetch</span></span>
-      </a>
+    <!-- HEADER -->
+    <header class="site-header">
 
-      <nav class="desktop-nav">
-        <a href="index.html" class="active">Home</a>
-        <a href="predictions.html">Predictions</a>
-        <a href="countries.html">Countries</a>
-        <a href="history.html">History</a>
-        <a href="methodology.html">Methodology</a>
-      </nav>
+        <div class="container header-inner">
 
-      <button class="mobile-menu" id="mobileMenu">
-        ☰
-      </button>
+            <a
+                href="/"
+                class="logo"
+                aria-label="PaceFetch Home"
+            >
+                <img
+                    src="/assets/logo.svg"
+                    alt="PaceFetch"
+                    width="42"
+                    height="42"
+                >
 
-    </div>
-  </header>
+                <span>PaceFetch</span>
+            </a>
 
+            <button
+                class="menu-toggle"
+                id="menuToggle"
+                aria-label="Open navigation"
+                aria-expanded="false"
+            >
+                ☰
+            </button>
 
-  <!-- MOBILE NAV -->
-  <div class="mobile-nav" id="mobileNav">
-    <a href="index.html">Home</a>
-    <a href="predictions.html">Predictions</a>
-    <a href="countries.html">Countries</a>
-    <a href="history.html">History</a>
-    <a href="methodology.html">Methodology</a>
-  </div>
+            <nav
+                class="main-nav"
+                id="mainNav"
+            >
+                <a
+                    href="/"
+                    class="active"
+                >
+                    Home
+                </a>
 
+                <a href="/predictions.html">
+                    Predictions
+                </a>
 
-  <!-- HERO -->
-  <main>
+                <a href="/countries.html">
+                    Countries
+                </a>
 
-    <section class="hero">
-      <div class="container hero-content">
+                <a href="/history.html">
+                    History
+                </a>
 
-        <div class="hero-badge">
-          <span class="live-dot"></span>
-          DAILY FOOTBALL INTELLIGENCE
-        </div>
-
-        <h1>
-          Smarter Football
-          <span>Predictions.</span>
-        </h1>
-
-        <p>
-          Discover data-driven football predictions, match probabilities,
-          top picks and historical performance — all in one place.
-        </p>
-
-        <div class="hero-actions">
-          <a href="predictions.html" class="btn btn-primary">
-            View Today's Predictions →
-          </a>
-
-          <a href="#top-picks" class="btn btn-secondary">
-            Explore Top Picks
-          </a>
-        </div>
-
-      </div>
-    </section>
-
-
-    <!-- STATS -->
-    <section class="stats-section">
-      <div class="container stats-grid">
-
-        <div class="stat-card">
-          <span class="stat-number" id="predictionCount">0</span>
-          <span class="stat-label">Today's Predictions</span>
-        </div>
-
-        <div class="stat-card">
-          <span class="stat-number">50</span>
-          <span class="stat-label">Daily Prediction Limit</span>
-        </div>
-
-        <div class="stat-card">
-          <span class="stat-number">80%+</span>
-          <span class="stat-label">Strong Confidence</span>
-        </div>
-
-        <div class="stat-card">
-          <span class="stat-number">24/7</span>
-          <span class="stat-label">Prediction Archive</span>
-        </div>
-
-      </div>
-    </section>
-
-
-    <!-- TODAY -->
-    <section class="section">
-      <div class="container">
-
-        <div class="section-heading">
-          <div>
-            <span class="eyebrow">TODAY</span>
-            <h2>Today's Predictions</h2>
-          </div>
-
-          <a href="predictions.html" class="view-all">
-            View all →
-          </a>
-        </div>
-
-        <div id="todayPredictions" class="prediction-grid"></div>
-
-      </div>
-    </section>
-
-
-    <!-- TOP PICKS -->
-    <section class="section section-dark" id="top-picks">
-
-      <div class="container">
-
-        <div class="section-heading">
-          <div>
-            <span class="eyebrow">HIGHEST CONFIDENCE</span>
-            <h2>Top Picks</h2>
-          </div>
-
-          <span class="updated">
-            Updated daily
-          </span>
-        </div>
-
-        <div id="topPicks" class="top-picks-grid"></div>
-
-      </div>
-
-    </section>
-
-
-    <!-- MARKETS -->
-    <section class="section">
-
-      <div class="container">
-
-        <div class="section-heading">
-          <div>
-            <span class="eyebrow">MARKETS</span>
-            <h2>Explore Prediction Markets</h2>
-          </div>
-        </div>
-
-        <div class="market-grid">
-
-          <a href="predictions.html?market=1x2" class="market-card">
-            <div class="market-icon">⚽</div>
-            <h3>1X2</h3>
-            <p>Home, Draw or Away</p>
-          </a>
-
-          <a href="predictions.html?market=over-under" class="market-card">
-            <div class="market-icon">📊</div>
-            <h3>Over / Under</h3>
-            <p>Goal probability markets</p>
-          </a>
-
-          <a href="predictions.html?market=btts" class="market-card">
-            <div class="market-icon">🔥</div>
-            <h3>BTTS</h3>
-            <p>Both Teams To Score</p>
-          </a>
-
-          <a href="predictions.html?market=double-chance" class="market-card">
-            <div class="market-icon">🛡️</div>
-            <h3>Double Chance</h3>
-            <p>1X, X2 and 12</p>
-          </a>
+                <a href="/methodology.html">
+                    Methodology
+                </a>
+            </nav>
 
         </div>
 
-      </div>
-
-    </section>
+    </header>
 
 
-    <!-- COUNTRIES -->
-    <section class="section countries-section">
+    <!-- HERO -->
+    <main>
 
-      <div class="container">
+        <section class="hero">
 
-        <div class="section-heading">
-          <div>
-            <span class="eyebrow">BROWSE FOOTBALL</span>
-            <h2>Popular Countries</h2>
-          </div>
+            <div class="container">
 
-          <a href="countries.html" class="view-all">
-            All countries →
-          </a>
-        </div>
+                <div class="pf-live-badge">
+                    <span class="pf-live-dot"></span>
+                    LIVE DATA
+                </div>
 
-        <div class="country-grid">
+                <h1>
+                    Football Predictions
+                    Backed by Data
+                </h1>
 
-          <a href="countries.html?country=england" class="country-card">
-            <span>🏴</span>
-            <strong>England</strong>
-            <small>Premier League</small>
-          </a>
+                <p>
+                    Discover today's strongest football predictions,
+                    probability-based tips and top picks from available
+                    match prediction data.
+                </p>
 
-          <a href="countries.html?country=spain" class="country-card">
-            <span>🇪🇸</span>
-            <strong>Spain</strong>
-            <small>La Liga</small>
-          </a>
+                <div class="pf-hero-actions">
 
-          <a href="countries.html?country=italy" class="country-card">
-            <span>🇮🇹</span>
-            <strong>Italy</strong>
-            <small>Serie A</small>
-          </a>
+                    <a
+                        href="/predictions.html"
+                        class="pf-btn pf-btn-primary"
+                    >
+                        View Today's Predictions
+                    </a>
 
-          <a href="countries.html?country=germany" class="country-card">
-            <span>🇩🇪</span>
-            <strong>Germany</strong>
-            <small>Bundesliga</small>
-          </a>
+                    <a
+                        href="/methodology.html"
+                        class="pf-btn pf-btn-secondary"
+                    >
+                        How It Works
+                    </a>
 
-          <a href="countries.html?country=france" class="country-card">
-            <span>🇫🇷</span>
-            <strong>France</strong>
-            <small>Ligue 1</small>
-          </a>
+                </div>
 
-          <a href="countries.html?country=nigeria" class="country-card">
-            <span>🇳🇬</span>
-            <strong>Nigeria</strong>
-            <small>NPFL</small>
-          </a>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- METHODOLOGY -->
-    <section class="methodology-section">
-
-      <div class="container methodology-content">
-
-        <div>
-          <span class="eyebrow">HOW IT WORKS</span>
-
-          <h2>
-            Predictions backed by
-            <span>football data.</span>
-          </h2>
-
-          <p>
-            PaceFetch analyzes fixture information, team performance,
-            form, historical data and other available football statistics
-            to produce probability-based predictions.
-          </p>
-
-          <a href="methodology.html" class="btn btn-primary">
-            Learn About Our Methodology →
-          </a>
-        </div>
-
-        <div class="methodology-steps">
-
-          <div class="method-step">
-            <strong>01</strong>
-            <div>
-              <h3>Collect</h3>
-              <p>Football fixtures and statistical data are collected.</p>
             </div>
-          </div>
 
-          <div class="method-step">
-            <strong>02</strong>
-            <div>
-              <h3>Analyze</h3>
-              <p>Our prediction system evaluates available signals.</p>
-            </div>
-          </div>
-
-          <div class="method-step">
-            <strong>03</strong>
-            <div>
-              <h3>Rank</h3>
-              <p>Predictions are ranked according to confidence.</p>
-            </div>
-          </div>
-
-          <div class="method-step">
-            <strong>04</strong>
-            <div>
-              <h3>Publish</h3>
-              <p>The strongest qualifying predictions are published.</p>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
+        </section>
 
 
-    <!-- DISCLAIMER -->
-    <section class="disclaimer">
+        <!-- MAIN CONTENT -->
+        <section class="section">
 
-      <div class="container">
+            <div class="container">
 
-        <p>
-          <strong>Important:</strong>
-          PaceFetch predictions are probability-based estimates and are
-          not guarantees of match results. Always make your own decisions
-          and consider the risks involved.
-        </p>
+                <!-- STATS -->
+                <div
+                    class="pf-stat-strip"
+                    id="statsStrip"
+                >
 
-      </div>
+                    <div class="pf-stat">
 
-    </section>
+                        <div
+                            class="pf-stat-number"
+                            id="fixtureCount"
+                        >
+                            —
+                        </div>
 
-  </main>
+                        <div class="pf-stat-label">
+                            Upcoming Fixtures
+                        </div>
+
+                    </div>
+
+                    <div class="pf-stat">
+
+                        <div
+                            class="pf-stat-number"
+                            id="predictionCount"
+                        >
+                            —
+                        </div>
+
+                        <div class="pf-stat-label">
+                            Qualifying Predictions
+                        </div>
+
+                    </div>
+
+                    <div class="pf-stat">
+
+                        <div
+                            class="pf-stat-number"
+                            id="topConfidence"
+                        >
+                            —
+                        </div>
+
+                        <div class="pf-stat-label">
+                            Highest Probability
+                        </div>
+
+                    </div>
+
+                </div>
 
 
-  <!-- FOOTER -->
-  <footer class="footer">
+                <!-- TODAY -->
+                <div class="pf-section-heading">
 
-    <div class="container footer-content">
+                    <div>
+                        <h2>
+                            Today's Predictions
+                        </h2>
 
-      <div class="footer-brand">
-        <a href="index.html" class="logo">
-          <span class="logo-ball">⚽</span>
-          <span>Pace<span>Fetch</span></span>
-        </a>
+                        <div
+                            class="pf-count"
+                            id="predictionDate"
+                        >
+                            Loading today's data...
+                        </div>
+                    </div>
 
-        <p>
-          Football predictions powered by data.
-        </p>
-      </div>
+                    <a
+                        href="/predictions.html"
+                        class="pf-view"
+                    >
+                        View All →
+                    </a>
 
-      <div class="footer-links">
-        <a href="predictions.html">Predictions</a>
-        <a href="history.html">History</a>
-        <a href="methodology.html">Methodology</a>
-        <a href="#">Privacy</a>
-        <a href="#">Contact</a>
-      </div>
-
-    </div>
-
-    <div class="container footer-bottom">
-      © 2026 PaceFetch. All rights reserved.
-    </div>
-
-  </footer>
+                </div>
 
 
-  <script src="js/app.js"></script>
+                <!-- FILTERS -->
+                <div class="pf-controls">
 
-</body>
-</html>
+                    <select
+                        id="countryFilter"
+                        class="pf-filter"
+                    >
+                        <option value="">
+                            All Countries
+                        </option>
+                    </select>
+
+                    <select
+                        id="leagueFilter"
+                        class="pf-filter"
+                    >
+                        <option value="">
+                            All Leagues
+                        </option>
+                    </select>
+
+                    <select
+                        id="marketFilter"
+                        class="pf-filter"
+                    >
+                        <option value="">
+                            All Markets
+                        </option>
+                    </select>
+
+                    <select
+                        id="confidenceFilter"
+                        class="pf-filter"
+                    >
+                        <option value="50">
+                            50%+ Confidence
+                        </option>
+
+                        <option value="60">
+                            60%+ Confidence
+                        </option>
+
+                        <option value="70">
+                            70%+ Confidence
+                        </option>
+
+                        <option value="80">
+                            80%+ Confidence
+                        </option>
+                    </select>
+
+                </div>
+
+
+                <!-- LOADING -->
+                <div
+                    id="loadingState"
+                    class="pf-loading"
+                >
+
+                    <div class="pf-spinner"></div>
+
+                    <strong>
+                        Loading today's predictions...
+                    </strong>
+
+                    <div style="margin-top:7px;">
+                        Fetching available football prediction data.
+                    </div>
+
+                </div>
+
+
+                <!-- ERROR -->
+                <div
+                    id="errorState"
+                    class="pf-error"
+                    hidden
+                >
+                    <strong>
+                        Predictions are temporarily unavailable.
+                    </strong>
+
+                    <div
+                        id="errorMessage"
+                        style="margin-top:7px;"
+                    >
+                        Please try again shortly.
+                    </div>
+                </div>
+
+
+                <!-- EMPTY -->
+                <div
+                    id="emptyState"
+                    class="pf-empty"
+                    hidden
+                >
+
+                    <strong>
+                        No qualifying predictions today.
+                    </strong>
+
+                    <div style="margin-top:7px;">
+                        PaceFetch does not manufacture predictions
+                        just to fill the daily list.
+                    </div>
+
+                </div>
+
+
+                <!-- PREDICTIONS -->
+                <div
+                    id="predictionsGrid"
+                    class="pf-predictions-grid"
+                ></div>
+
+
+                <!-- TOP PICKS -->
+                <section class="pf-top-picks">
+
+                    <div class="pf-section-heading">
+
+                        <div>
+
+                            <h2>
+                                Top Picks
+                            </h2>
+
+                            <div class="pf-count">
+                                Strongest available predictions
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div id="topPicksList">
+
+                        <div class="pf-empty">
+                            Top picks will appear when predictions load.
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- QUICK LINKS -->
+                <section
+                    class="section"
+                    style="padding-left:0;padding-right:0;"
+                >
+
+                    <div class="pf-section-heading">
+
+                        <div>
+                            <h2>
+                                Explore PaceFetch
+                            </h2>
+                        </div>
+
+    
