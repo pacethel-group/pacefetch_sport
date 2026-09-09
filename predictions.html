@@ -898,7 +898,7 @@
 
             <!-- EMPTY -->
 
-            <div
+                        <div
                 id="predictions-empty"
                 class="empty-state"
                 style="display:none;"
@@ -920,5 +920,87 @@
             </div>
 
 
+            <!-- =================================================
+                 ERROR STATE
+            ================================================== -->
 
-            <!
+            <div
+                id="predictions-error"
+                class="error-state"
+                style="display:none;"
+            >
+
+                <h3>
+                    Predictions temporarily unavailable
+                </h3>
+
+                <p>
+                    We couldn't load today's
+                    predictions. Please try again shortly.
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             DISCLAIMER
+        ================================================== -->
+
+        <section class="prediction-disclaimer">
+
+            <div class="prediction-disclaimer-inner">
+
+                <strong>
+                    Important:
+                </strong>
+
+                PaceFetch probabilities are
+                statistical model outputs and are
+                not guarantees of match results.
+                Football contains uncertainty and
+                predictions can be wrong.
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer class="site-footer">
+
+        <div class="container">
+
+            <p>
+                © 2026 PaceFetch.
+                Football predictions and analysis.
+            </p>
+
+        </div>
+
+    </footer>
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <!-- PaceFetch API client -->
+    <script src="js/api.js"></script>
+
+    <!-- Real prediction page logic -->
+    <script src="js/predictions.js"></script>
+
+
+</body>
+</html>
