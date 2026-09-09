@@ -1,1638 +1,387 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Football Predictions | PaceFetch</title>
-<meta name="description" content="Free football predictions, confidence ratings, previous prediction results and football statistics on PaceFetch.">
-<meta name="keywords" content="football predictions, soccer predictions, Premier League predictions, Champions League predictions, football tips">
+  <title>PaceFetch — Football Predictions & Match Probabilities</title>
 
-<style>
-:root{
-  --bg:#061c16;
-  --bg2:#0a2921;
-  --card:#0d3329;
-  --card2:#103c30;
-  --green:#10a875;
-  --green2:#087c59;
-  --lightgreen:#b8f1dd;
-  --text:#ffffff;
-  --muted:#91aaa2;
-  --border:rgba(255,255,255,.09);
-  --danger:#ef6464;
-  --warning:#eab94e;
-  --success:#38d996;
-  --shadow:0 12px 35px rgba(0,0,0,.20);
-}
+  <meta
+    name="description"
+    content="PaceFetch provides football predictions, match probabilities, top picks, fixtures and prediction history."
+  >
 
-body.light{
-  --bg:#eef5f2;
-  --bg2:#f7faf9;
-  --card:#ffffff;
-  --card2:#f4f9f7;
-  --green:#087f5b;
-  --green2:#056044;
-  --lightgreen:#dff5ec;
-  --text:#10231e;
-  --muted:#657771;
-  --border:#dce7e3;
-  --shadow:0 12px 30px rgba(0,0,0,.07);
-}
-
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
-
-html{
-  scroll-behavior:smooth;
-}
-
-body{
-  min-height:100vh;
-  background:var(--bg);
-  color:var(--text);
-  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  overflow-x:hidden;
-  transition:.25s;
-}
-
-a{
-  color:inherit;
-  text-decoration:none;
-}
-
-button{
-  font:inherit;
-  cursor:pointer;
-}
-
-/* HEADER */
-
-header{
-  position:sticky;
-  top:0;
-  z-index:1000;
-  height:70px;
-  background:rgba(6,28,22,.96);
-  border-bottom:1px solid rgba(255,255,255,.08);
-  backdrop-filter:blur(14px);
-}
-
-body.light header{
-  background:rgba(255,255,255,.95);
-  border-bottom:1px solid var(--border);
-}
-
-.header-inner{
-  max-width:1180px;
-  height:100%;
-  margin:auto;
-  padding:0 18px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:15px;
-}
-
-.logo{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  flex-shrink:0;
-}
-
-.logo-mark{
-  width:42px;
-  height:42px;
-  border-radius:13px;
-  background:linear-gradient(135deg,#11bb82,#056044);
-  display:grid;
-  place-items:center;
-  font-size:21px;
-}
-
-.logo-name{
-  font-size:20px;
-  font-weight:900;
-}
-
-.logo-tag{
-  display:block;
-  font-size:8px;
-  color:#82a097;
-  letter-spacing:1px;
-  text-transform:uppercase;
-}
-
-nav{
-  display:flex;
-  align-items:center;
-  gap:3px;
-}
-
-nav a{
-  padding:8px 10px;
-  border-radius:8px;
-  color:#abc0b9;
-  font-size:11px;
-  font-weight:700;
-}
-
-nav a:hover,
-nav a.active{
-  background:rgba(255,255,255,.08);
-  color:#fff;
-}
-
-body.light nav a{
-  color:#60736d;
-}
-
-body.light nav a:hover,
-body.light nav a.active{
-  background:var(--lightgreen);
-  color:var(--green);
-}
-
-.header-right{
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-
-.clock{
-  text-align:right;
-  white-space:nowrap;
-}
-
-.clock strong{
-  display:block;
-  font-size:10px;
-}
-
-.clock span{
-  color:#7d9890;
-  font-size:8px;
-}
-
-.icon-btn{
-  width:39px;
-  height:39px;
-  border:1px solid var(--border);
-  border-radius:10px;
-  background:rgba(255,255,255,.06);
-  color:var(--text);
-  display:grid;
-  place-items:center;
-  font-size:17px;
-}
-
-.icon-btn:hover{
-  background:var(--green);
-  color:#fff;
-}
-
-/* PAGE */
-
-.container{
-  width:min(1180px,100%);
-  margin:auto;
-  padding:25px 18px 80px;
-}
-
-.breadcrumb{
-  color:var(--muted);
-  font-size:10px;
-  margin-bottom:15px;
-}
-
-.breadcrumb a{
-  color:var(--green);
-  font-weight:800;
-}
-
-.page-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-end;
-  gap:20px;
-  margin-bottom:22px;
-}
-
-.page-head h1{
-  font-size:clamp(30px,5vw,45px);
-  line-height:1;
-  letter-spacing:-1.5px;
-}
-
-.page-head p{
-  color:var(--muted);
-  font-size:12px;
-  margin-top:9px;
-  max-width:620px;
-}
-
-.live{
-  display:flex;
-  align-items:center;
-  gap:7px;
-  color:var(--success);
-  font-size:10px;
-  font-weight:800;
-  white-space:nowrap;
-}
-
-.live-dot{
-  width:7px;
-  height:7px;
-  border-radius:50%;
-  background:var(--success);
-  box-shadow:0 0 0 5px rgba(56,217,150,.1);
-}
-
-/* FILTERS */
-
-.filters{
-  display:flex;
-  gap:7px;
-  overflow-x:auto;
-  scrollbar-width:none;
-  margin-bottom:20px;
-  padding-bottom:2px;
-}
-
-.filters::-webkit-scrollbar{
-  display:none;
-}
-
-.filter{
-  flex:0 0 auto;
-  border:1px solid var(--border);
-  background:var(--card);
-  color:var(--muted);
-  border-radius:9px;
-  padding:9px 13px;
-  font-size:10px;
-  font-weight:800;
-}
-
-.filter.active,
-.filter:hover{
-  background:var(--green);
-  border-color:var(--green);
-  color:#fff;
-}
-
-/* SUMMARY */
-
-.summary{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:11px;
-  margin-bottom:22px;
-}
-
-.stat{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:15px;
-  box-shadow:var(--shadow);
-}
-
-.stat small{
-  display:block;
-  color:var(--muted);
-  font-size:8px;
-  font-weight:800;
-  text-transform:uppercase;
-  letter-spacing:.5px;
-}
-
-.stat strong{
-  display:block;
-  margin-top:5px;
-  font-size:23px;
-}
-
-.stat.green strong{
-  color:var(--success);
-}
-
-/* MAIN GRID */
-
-.main-grid{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) 300px;
-  gap:20px;
-  align-items:start;
-}
-
-.section-title{
-  display:flex;
-  align-items:center;
-  gap:9px;
-  margin:20px 0 12px;
-}
-
-.section-title h2{
-  font-size:16px;
-}
-
-.line{
-  height:1px;
-  background:var(--border);
-  flex:1;
-}
-
-/* PREDICTION CARD */
-
-.predictions{
-  display:grid;
-  gap:10px;
-}
-
-.prediction-card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:15px;
-  padding:14px;
-  box-shadow:var(--shadow);
-  overflow:hidden;
-}
-
-.prediction-top{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  margin-bottom:13px;
-}
-
-.match-date{
-  color:var(--muted);
-  font-size:9px;
-  font-weight:700;
-  white-space:nowrap;
-}
-
-.league{
-  color:var(--green);
-  background:var(--lightgreen);
-  border-radius:6px;
-  padding:5px 7px;
-  font-size:8px;
-  font-weight:900;
-  white-space:nowrap;
-}
-
-/*
- IMPORTANT:
- The teams stay on the same horizontal line.
- We DO NOT shrink them to tiny text.
-*/
-
-.match-row{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:14px;
-  width:100%;
-  min-width:0;
-}
-
-.team{
-  min-width:0;
-  flex:1 1 0;
-  font-size:17px;
-  font-weight:900;
-  line-height:1.15;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-
-.team.home{
-  text-align:right;
-}
-
-.team.away{
-  text-align:left;
-}
-
-.vs{
-  flex:0 0 auto;
-  color:var(--muted);
-  font-size:9px;
-  font-weight:900;
-  padding:5px 7px;
-  border:1px solid var(--border);
-  border-radius:6px;
-}
-
-.prediction-details{
-  margin-top:14px;
-  display:grid;
-  grid-template-columns:1.2fr 1fr 1fr;
-  gap:7px;
-}
-
-.detail{
-  background:var(--card2);
-  border:1px solid var(--border);
-  border-radius:9px;
-  padding:9px;
-  min-width:0;
-}
-
-.detail small{
-  display:block;
-  color:var(--muted);
-  font-size:7px;
-  text-transform:uppercase;
-  font-weight:800;
-  margin-bottom:4px;
-}
-
-.detail strong{
-  display:block;
-  font-size:12px;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-
-.pick strong{
-  color:var(--success);
-}
-
-.confidence{
-  color:var(--lightgreen);
-}
-
-.risk{
-  color:var(--warning);
-}
-
-.result-row{
-  margin-top:9px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  color:var(--muted);
-  font-size:8px;
-}
-
-.result{
-  padding:4px 7px;
-  border-radius:5px;
-  font-weight:900;
-}
-
-.result.won{
-  background:rgba(56,217,150,.12);
-  color:var(--success);
-}
-
-.result.lost{
-  background:rgba(239,100,100,.12);
-  color:var(--danger);
-}
-
-.result.pending{
-  background:rgba(234,185,78,.12);
-  color:var(--warning);
-}
-
-/* SIDEBAR */
-
-.sidebar-card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:15px;
-  padding:16px;
-  margin-bottom:12px;
-  box-shadow:var(--shadow);
-}
-
-.sidebar-card h3{
-  font-size:14px;
-  margin-bottom:12px;
-}
-
-.tip{
-  color:var(--muted);
-  font-size:9px;
-  line-height:1.6;
-}
-
-.accuracy{
-  font-size:30px;
-  font-weight:950;
-  color:var(--success);
-}
-
-.calendar-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:10px;
-}
-
-.calendar-head strong{
-  font-size:11px;
-}
-
-.calendar-head button{
-  width:27px;
-  height:27px;
-  border:1px solid var(--border);
-  border-radius:7px;
-  background:var(--card2);
-  color:var(--text);
-}
-
-.weekdays,
-.calendar{
-  display:grid;
-  grid-template-columns:repeat(7,1fr);
-  gap:3px;
-}
-
-.weekdays span{
-  text-align:center;
-  color:var(--muted);
-  font-size:7px;
-  font-weight:800;
-  padding:4px 0;
-}
-
-.day{
-  min-height:31px;
-  border:0;
-  border-radius:6px;
-  background:var(--card2);
-  color:var(--text);
-  font-size:8px;
-}
-
-.day:hover,
-.day.selected{
-  background:var(--green);
-  color:#fff;
-}
-
-.day.has-data{
-  position:relative;
-  font-weight:900;
-}
-
-.day.has-data::after{
-  content:"";
-  position:absolute;
-  width:3px;
-  height:3px;
-  background:var(--success);
-  border-radius:50%;
-  bottom:4px;
-  left:50%;
-  transform:translateX(-50%);
-}
-
-/* CALENDAR RESULTS */
-
-.history{
-  margin-top:12px;
-  padding-top:12px;
-  border-top:1px solid var(--border);
-}
-
-.history-title{
-  font-size:9px;
-  font-weight:900;
-  margin-bottom:7px;
-}
-
-.history-item{
-  display:flex;
-  justify-content:space-between;
-  gap:7px;
-  padding:7px 0;
-  border-bottom:1px solid var(--border);
-  font-size:8px;
-}
-
-.history-item:last-child{
-  border-bottom:0;
-}
-
-.history-item span{
-  color:var(--muted);
-}
-
-/* FOOTER */
-
-footer{
-  background:#04140f;
-  text-align:center;
-  padding:40px 20px 80px;
-  color:white;
-}
-
-body.light footer{
-  background:#061c16;
-}
-
-.footer-logo{
-  font-size:20px;
-  font-weight:900;
-}
-
-.footer-text{
-  max-width:500px;
-  margin:8px auto 20px;
-  color:#7f9991;
-  font-size:9px;
-}
-
-.footer-links{
-  display:flex;
-  justify-content:center;
-  flex-wrap:wrap;
-  gap:16px;
-  margin-bottom:22px;
-}
-
-.footer-links a{
-  color:#a2b7b0;
-  font-size:9px;
-}
-
-.designer{
-  display:inline-block;
-  color:#86a69c;
-  font-size:11px;
-  font-weight:800;
-  animation:pulse 3s ease-in-out infinite;
-}
-
-@keyframes pulse{
-  0%,100%{
-    opacity:.55;
-    transform:translateY(0);
-  }
-  50%{
-    opacity:1;
-    transform:translateY(-3px);
-  }
-}
-
-/* MOBILE NAV */
-
-.mobile-nav{
-  display:none;
-}
-
-/* RESPONSIVE */
-
-@media(max-width:900px){
-
-  nav{
-    display:none;
-  }
-
-  .main-grid{
-    grid-template-columns:1fr;
-  }
-
-  .summary{
-    grid-template-columns:repeat(2,1fr);
-  }
-}
-
-@media(max-width:600px){
-
-  header{
-    height:63px;
-  }
-
-  .header-inner{
-    padding:0 12px;
-  }
-
-  .logo-mark{
-    width:38px;
-    height:38px;
-  }
-
-  .logo-name{
-    font-size:18px;
-  }
-
-  .clock{
-    display:none;
-  }
-
-  .container{
-    padding:18px 12px 90px;
-  }
-
-  .page-head{
-    align-items:flex-start;
-    flex-direction:column;
-  }
-
-  .page-head h1{
-    font-size:34px;
-  }
-
-  .summary{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .stat{
-    padding:12px;
-  }
-
-  .stat strong{
-    font-size:20px;
-  }
-
-  /*
-   Teams remain horizontally aligned.
-   Font remains readable.
-  */
-
-  .match-row{
-    gap:8px;
-  }
-
-  .team{
-    font-size:15px;
-  }
-
-  .vs{
-    font-size:8px;
-    padding:4px 5px;
-  }
-
-  /*
-   If the prediction itself cannot fit,
-   it moves BELOW the match — not beside it.
-  */
-
-  .prediction-details{
-    grid-template-columns:1fr 1fr;
-  }
-
-  .detail.pick{
-    grid-column:1/-1;
-  }
-
-  .detail strong{
-    font-size:11px;
-  }
-
-  .mobile-nav{
-    position:fixed;
-    bottom:0;
-    left:0;
-    right:0;
-    height:63px;
-    background:#041a14;
-    border-top:1px solid rgba(255,255,255,.08);
-    z-index:2000;
-    display:grid;
-    grid-template-columns:repeat(5,1fr);
-  }
-
-  .mobile-nav a{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    gap:3px;
-    color:#78958c;
-    font-size:8px;
-    font-weight:800;
-  }
-
-  .mobile-nav a.active{
-    color:#fff;
-  }
-
-  .mobile-icon{
-    font-size:17px;
-  }
-}
-
-@media(max-width:360px){
-
-  .team{
-    font-size:14px;
-  }
-
-  .match-row{
-    gap:5px;
-  }
-
-  .prediction-top{
-    gap:6px;
-  }
-
-  .league,
-  .match-date{
-    font-size:7px;
-  }
-}
-
-@media(prefers-reduced-motion:reduce){
-  *{
-    scroll-behavior:auto!important;
-  }
-
-  .designer{
-    animation:none;
-  }
-}
-</style>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
 
-<header>
-  <div class="header-inner">
+  <!-- HEADER -->
+  <header class="header">
+    <div class="container nav">
 
-    <a href="/" class="logo">
-      <div class="logo-mark">⚽</div>
-      <div>
-        <div class="logo-name">PaceFetch</div>
-        <span class="logo-tag">Football Intelligence</span>
-      </div>
-    </a>
+      <a href="index.html" class="logo">
+        <span class="logo-ball">⚽</span>
+        <span>Pace<span>Fetch</span></span>
+      </a>
 
-    <nav>
-      <a href="/">Home</a>
-      <a href="/news/">News</a>
-      <a href="/prediction/" class="active">Predictions</a>
-      <a href="/transfer/">Transfers</a>
-      <a href="/leagues/">Leagues</a>
-      <a href="/teams/">Teams</a>
-    </nav>
+      <nav class="desktop-nav">
+        <a href="index.html" class="active">Home</a>
+        <a href="predictions.html">Predictions</a>
+        <a href="countries.html">Countries</a>
+        <a href="history.html">History</a>
+        <a href="methodology.html">Methodology</a>
+      </nav>
 
-    <div class="header-right">
-
-      <div class="clock">
-        <strong id="time">--:--:-- GMT +1</strong>
-        <span id="date">Loading...</span>
-      </div>
-
-      <button class="icon-btn" id="themeBtn" aria-label="Toggle theme">
-        ☾
+      <button class="mobile-menu" id="mobileMenu">
+        ☰
       </button>
 
     </div>
-
-  </div>
-</header>
+  </header>
 
 
-<main class="container">
-
-  <div class="breadcrumb">
-    <a href="/">Home</a>
-    <span>›</span>
-    Predictions
-  </div>
-
-
-  <section class="page-head">
-
-    <div>
-      <h1>Football Predictions</h1>
-
-      <p>
-        Free statistical football predictions, confidence ratings,
-        previous results and prediction history from PaceFetch.
-      </p>
-    </div>
-
-    <div class="live">
-      <span class="live-dot"></span>
-      PREDICTION DESK
-    </div>
-
-  </section>
-
-
-  <div class="filters">
-
-    <button class="filter active">All</button>
-    <button class="filter">Premier League</button>
-    <button class="filter">La Liga</button>
-    <button class="filter">Serie A</button>
-    <button class="filter">Bundesliga</button>
-    <button class="filter">Champions League</button>
-    <button class="filter">African Football</button>
-
+  <!-- MOBILE NAV -->
+  <div class="mobile-nav" id="mobileNav">
+    <a href="index.html">Home</a>
+    <a href="predictions.html">Predictions</a>
+    <a href="countries.html">Countries</a>
+    <a href="history.html">History</a>
+    <a href="methodology.html">Methodology</a>
   </div>
 
 
-  <section class="summary">
+  <!-- HERO -->
+  <main>
 
-    <div class="stat">
-      <small>Predictions</small>
-      <strong id="predictionCount">25</strong>
-    </div>
+    <section class="hero">
+      <div class="container hero-content">
 
-    <div class="stat green">
-      <small>Won</small>
-      <strong id="wonCount">20</strong>
-    </div>
+        <div class="hero-badge">
+          <span class="live-dot"></span>
+          DAILY FOOTBALL INTELLIGENCE
+        </div>
 
-    <div class="stat">
-      <small>Accuracy</small>
-      <strong id="accuracy">80%</strong>
-    </div>
+        <h1>
+          Smarter Football
+          <span>Predictions.</span>
+        </h1>
 
-    <div class="stat">
-      <small>Updated</small>
-      <strong>Today</strong>
-    </div>
+        <p>
+          Discover data-driven football predictions, match probabilities,
+          top picks and historical performance — all in one place.
+        </p>
 
-  </section>
+        <div class="hero-actions">
+          <a href="predictions.html" class="btn btn-primary">
+            View Today's Predictions →
+          </a>
 
+          <a href="#top-picks" class="btn btn-secondary">
+            Explore Top Picks
+          </a>
+        </div>
 
-  <div class="main-grid">
-
-    <section>
-
-      <div class="section-title">
-        <h2>Today's Predictions</h2>
-        <div class="line"></div>
       </div>
+    </section>
 
 
-      <div class="predictions" id="predictionList">
+    <!-- STATS -->
+    <section class="stats-section">
+      <div class="container stats-grid">
 
-        <!-- PREDICTION 1 -->
+        <div class="stat-card">
+          <span class="stat-number" id="predictionCount">0</span>
+          <span class="stat-label">Today's Predictions</span>
+        </div>
 
-        <article class="prediction-card">
+        <div class="stat-card">
+          <span class="stat-number">50</span>
+          <span class="stat-label">Daily Prediction Limit</span>
+        </div>
 
-          <div class="prediction-top">
-            <span class="match-date">Today • 18:30</span>
-            <span class="league">Bundesliga</span>
+        <div class="stat-card">
+          <span class="stat-number">80%+</span>
+          <span class="stat-label">Strong Confidence</span>
+        </div>
+
+        <div class="stat-card">
+          <span class="stat-number">24/7</span>
+          <span class="stat-label">Prediction Archive</span>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- TODAY -->
+    <section class="section">
+      <div class="container">
+
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">TODAY</span>
+            <h2>Today's Predictions</h2>
           </div>
 
-          <div class="match-row">
+          <a href="predictions.html" class="view-all">
+            View all →
+          </a>
+        </div>
 
-            <div class="team home">
-              Bayern Munich
-            </div>
+        <div id="todayPredictions" class="prediction-grid"></div>
 
-            <div class="vs">
-              VS
-            </div>
+      </div>
+    </section>
 
-            <div class="team away">
-              Leipzig
-            </div>
 
+    <!-- TOP PICKS -->
+    <section class="section section-dark" id="top-picks">
+
+      <div class="container">
+
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">HIGHEST CONFIDENCE</span>
+            <h2>Top Picks</h2>
           </div>
 
-          <div class="prediction-details">
-
-            <div class="detail pick">
-              <small>Our Pick</small>
-              <strong>Over 2.5 Goals</strong>
-            </div>
-
-            <div class="detail">
-              <small>Confidence</small>
-              <strong class="confidence">74%</strong>
-            </div>
-
-            <div class="detail">
-              <small>Risk</small>
-              <strong class="risk">Medium</strong>
-            </div>
-
-          </div>
-
-          <div class="result-row">
-            <span>Statistical model prediction</span>
-            <span class="result pending">Pending</span>
-          </div>
-
-        </article>
-
-
-        <!-- PREDICTION 2 -->
-
-        <article class="prediction-card">
-
-          <div class="prediction-top">
-            <span class="match-date">Today • 20:00</span>
-            <span class="league">Premier League</span>
-          </div>
-
-          <div class="match-row">
-
-            <div class="team home">
-              Arsenal
-            </div>
-
-            <div class="vs">
-              VS
-            </div>
-
-            <div class="team away">
-              Chelsea
-            </div>
-
-          </div>
-
-          <div class="prediction-details">
-
-            <div class="detail pick">
-              <small>Our Pick</small>
-              <strong>Over 1.5 Goals</strong>
-            </div>
-
-            <div class="detail">
-              <small>Confidence</small>
-              <strong class="confidence">81%</strong>
-            </div>
-
-            <div class="detail">
-              <small>Risk</small>
-              <strong class="risk">Low</strong>
-            </div>
-
-          </div>
-
-          <div class="result-row">
-            <span>Statistical model prediction</span>
-            <span class="result pending">Pending</span>
-          </div>
-
-        </article>
-
-
-        <!-- PREDICTION 3 -->
-
-        <article class="prediction-card">
-
-          <div class="prediction-top">
-            <span class="match-date">Today • 21:00</span>
-            <span class="league">La Liga</span>
-          </div>
-
-          <div class="match-row">
-
-            <div class="team home">
-              Barcelona
-            </div>
-
-            <div class="vs">
-              VS
-            </div>
-
-            <div class="team away">
-              Sevilla
-            </div>
-
-          </div>
-
-          <div class="prediction-details">
-
-            <div class="detail pick">
-              <small>Our Pick</small>
-              <strong>Barcelona or Draw</strong>
-            </div>
-
-            <div class="detail">
-              <small>Confidence</small>
-              <strong class="confidence">78%</strong>
-            </div>
-
-            <div class="detail">
-              <small>Risk</small>
-              <strong class="risk">Low</strong>
-            </div>
-
-          </div>
-
-          <div class="result-row">
-            <span>Statistical model prediction</span>
-            <span class="result pending">Pending</span>
-          </div>
-
-        </article>
-
-
-        <!-- PREDICTION 4 -->
-
-        <article class="prediction-card">
-
-          <div class="prediction-top">
-            <span class="match-date">Today • 19:45</span>
-            <span class="league">Serie A</span>
-          </div>
-
-          <div class="match-row">
-
-            <div class="team home">
-              Inter Milan
-            </div>
-
-            <div class="vs">
-              VS
-            </div>
-
-            <div class="team away">
-              Napoli
-            </div>
-
-          </div>
-
-          <div class="prediction-details">
-
-            <div class="detail pick">
-              <small>Our Pick</small>
-              <strong>Both Teams To Score</strong>
-            </div>
-
-            <div class="detail">
-              <small>Confidence</small>
-              <strong class="confidence">72%</strong>
-            </div>
-
-            <div class="detail">
-              <small>Risk</small>
-              <strong class="risk">Medium</strong>
-            </div>
-
-          </div>
-
-          <div class="result-row">
-            <span>Statistical model prediction</span>
-            <span class="result pending">Pending</span>
-          </div>
-
-        </article>
-
-
-        <!-- PREDICTION 5 -->
-
-        <article class="prediction-card">
-
-          <div class="prediction-top">
-            <span class="match-date">Today • 17:00</span>
-            <span class="league">Champions League</span>
-          </div>
-
-          <div class="match-row">
-
-            <div class="team home">
-              Real Madrid
-            </div>
-
-            <div class="vs">
-              VS
-            </div>
-
-            <div class="team away">
-              Dortmund
-            </div>
-
-          </div>
-
-          <div class="prediction-details">
-
-            <div class="detail pick">
-              <small>Our Pick</small>
-              <strong>Real Madrid or Draw</strong>
-            </div>
-
-            <div class="detail">
-              <small>Confidence</small>
-              <strong class="confidence">83%</strong>
-            </div>
-
-            <div class="detail">
-              <small>Risk</small>
-              <strong class="risk">Low</strong>
-            </div>
-
-          </div>
-
-          <div class="result-row">
-            <span>Statistical model prediction</span>
-            <span class="result pending">Pending</span>
-          </div>
-
-        </article>
+          <span class="updated">
+            Updated daily
+          </span>
+        </div>
+
+        <div id="topPicks" class="top-picks-grid"></div>
 
       </div>
 
     </section>
 
 
-    <!-- SIDEBAR -->
+    <!-- MARKETS -->
+    <section class="section">
 
-    <aside>
+      <div class="container">
 
-      <div class="sidebar-card">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">MARKETS</span>
+            <h2>Explore Prediction Markets</h2>
+          </div>
+        </div>
 
-        <h3>Prediction Record</h3>
+        <div class="market-grid">
 
-        <div class="accuracy">80%</div>
+          <a href="predictions.html?market=1x2" class="market-card">
+            <div class="market-icon">⚽</div>
+            <h3>1X2</h3>
+            <p>Home, Draw or Away</p>
+          </a>
 
-        <p class="tip">
-          Previous prediction performance is displayed here.
-          Results should be updated after matches are completed.
-        </p>
+          <a href="predictions.html?market=over-under" class="market-card">
+            <div class="market-icon">📊</div>
+            <h3>Over / Under</h3>
+            <p>Goal probability markets</p>
+          </a>
+
+          <a href="predictions.html?market=btts" class="market-card">
+            <div class="market-icon">🔥</div>
+            <h3>BTTS</h3>
+            <p>Both Teams To Score</p>
+          </a>
+
+          <a href="predictions.html?market=double-chance" class="market-card">
+            <div class="market-icon">🛡️</div>
+            <h3>Double Chance</h3>
+            <p>1X, X2 and 12</p>
+          </a>
+
+        </div>
 
       </div>
 
+    </section>
 
-      <div class="sidebar-card">
 
-        <div class="calendar-head">
+    <!-- COUNTRIES -->
+    <section class="section countries-section">
 
-          <button id="prevMonth">‹</button>
+      <div class="container">
 
-          <strong id="monthTitle">
-            September 2026
-          </strong>
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">BROWSE FOOTBALL</span>
+            <h2>Popular Countries</h2>
+          </div>
 
-          <button id="nextMonth">›</button>
+          <a href="countries.html" class="view-all">
+            All countries →
+          </a>
+        </div>
+
+        <div class="country-grid">
+
+          <a href="countries.html?country=england" class="country-card">
+            <span>🏴</span>
+            <strong>England</strong>
+            <small>Premier League</small>
+          </a>
+
+          <a href="countries.html?country=spain" class="country-card">
+            <span>🇪🇸</span>
+            <strong>Spain</strong>
+            <small>La Liga</small>
+          </a>
+
+          <a href="countries.html?country=italy" class="country-card">
+            <span>🇮🇹</span>
+            <strong>Italy</strong>
+            <small>Serie A</small>
+          </a>
+
+          <a href="countries.html?country=germany" class="country-card">
+            <span>🇩🇪</span>
+            <strong>Germany</strong>
+            <small>Bundesliga</small>
+          </a>
+
+          <a href="countries.html?country=france" class="country-card">
+            <span>🇫🇷</span>
+            <strong>France</strong>
+            <small>Ligue 1</small>
+          </a>
+
+          <a href="countries.html?country=nigeria" class="country-card">
+            <span>🇳🇬</span>
+            <strong>Nigeria</strong>
+            <small>NPFL</small>
+          </a>
 
         </div>
 
+      </div>
 
-        <div class="weekdays">
-          <span>S</span>
-          <span>M</span>
-          <span>T</span>
-          <span>W</span>
-          <span>T</span>
-          <span>F</span>
-          <span>S</span>
+    </section>
+
+
+    <!-- METHODOLOGY -->
+    <section class="methodology-section">
+
+      <div class="container methodology-content">
+
+        <div>
+          <span class="eyebrow">HOW IT WORKS</span>
+
+          <h2>
+            Predictions backed by
+            <span>football data.</span>
+          </h2>
+
+          <p>
+            PaceFetch analyzes fixture information, team performance,
+            form, historical data and other available football statistics
+            to produce probability-based predictions.
+          </p>
+
+          <a href="methodology.html" class="btn btn-primary">
+            Learn About Our Methodology →
+          </a>
         </div>
 
-        <div class="calendar" id="calendar"></div>
+        <div class="methodology-steps">
 
-        <div class="history" id="history">
+          <div class="method-step">
+            <strong>01</strong>
+            <div>
+              <h3>Collect</h3>
+              <p>Football fixtures and statistical data are collected.</p>
+            </div>
+          </div>
 
-          <div class="history-title">
-            Select a date to view prediction history
+          <div class="method-step">
+            <strong>02</strong>
+            <div>
+              <h3>Analyze</h3>
+              <p>Our prediction system evaluates available signals.</p>
+            </div>
+          </div>
+
+          <div class="method-step">
+            <strong>03</strong>
+            <div>
+              <h3>Rank</h3>
+              <p>Predictions are ranked according to confidence.</p>
+            </div>
+          </div>
+
+          <div class="method-step">
+            <strong>04</strong>
+            <div>
+              <h3>Publish</h3>
+              <p>The strongest qualifying predictions are published.</p>
+            </div>
           </div>
 
         </div>
 
       </div>
 
+    </section>
 
-      <div class="sidebar-card">
 
-        <h3>Important</h3>
+    <!-- DISCLAIMER -->
+    <section class="disclaimer">
 
-        <p class="tip">
-          PaceFetch predictions are statistical opinions based on
-          available football information and should not be treated
-          as guaranteed outcomes.
+      <div class="container">
+
+        <p>
+          <strong>Important:</strong>
+          PaceFetch predictions are probability-based estimates and are
+          not guarantees of match results. Always make your own decisions
+          and consider the risks involved.
         </p>
 
       </div>
 
-    </aside>
+    </section>
 
-  </div>
+  </main>
 
-</main>
 
+  <!-- FOOTER -->
+  <footer class="footer">
 
-<footer>
+    <div class="container footer-content">
 
-  <div class="footer-logo">
-    PaceFetch
-  </div>
+      <div class="footer-brand">
+        <a href="index.html" class="logo">
+          <span class="logo-ball">⚽</span>
+          <span>Pace<span>Fetch</span></span>
+        </a>
 
-  <p class="footer-text">
-    Football predictions, news, scores, transfers and football
-    intelligence — completely free.
-  </p>
-
-  <div class="footer-links">
-    <a href="/">Home</a>
-    <a href="/news/">News</a>
-    <a href="/prediction/">Predictions</a>
-    <a href="/transfer/">Transfers</a>
-    <a href="/leagues/">Leagues</a>
-    <a href="/teams/">Teams</a>
-  </div>
-
-  <div class="designer">
-    Designed by Pacethel
-  </div>
-
-</footer>
-
-
-<div class="mobile-nav">
-
-  <a href="/">
-    <span class="mobile-icon">⌂</span>
-    Home
-  </a>
-
-  <a href="/news/">
-    <span class="mobile-icon">📰</span>
-    News
-  </a>
-
-  <a href="/prediction/" class="active">
-    <span class="mobile-icon">🎯</span>
-    Picks
-  </a>
-
-  <a href="/transfer/">
-    <span class="mobile-icon">↔</span>
-    Transfers
-  </a>
-
-  <a href="/leagues/">
-    <span class="mobile-icon">🏆</span>
-    Leagues
-  </a>
-
-</div>
-
-
-<script>
-
-/* =========================
-   CLOCK — GMT +1
-========================= */
-
-function updateClock(){
-
-  const now = new Date();
-
-  const options = {
-    timeZone:"Africa/Lagos",
-    hour:"2-digit",
-    minute:"2-digit",
-    second:"2-digit",
-    hour12:false
-  };
-
-  const dateOptions = {
-    timeZone:"Africa/Lagos",
-    weekday:"short",
-    day:"2-digit",
-    month:"short",
-    year:"numeric"
-  };
-
-  document.getElementById("time").textContent =
-    new Intl.DateTimeFormat("en-NG",options).format(now) + " GMT +1";
-
-  document.getElementById("date").textContent =
-    new Intl.DateTimeFormat("en-NG",dateOptions).format(now);
-}
-
-updateClock();
-setInterval(updateClock,1000);
-
-
-/* =========================
-   LIGHT / DARK MODE
-========================= */
-
-const themeBtn = document.getElementById("themeBtn");
-
-const savedTheme = localStorage.getItem("pacefetch-theme");
-
-if(savedTheme === "light"){
-  document.body.classList.add("light");
-  themeBtn.textContent = "☀";
-}
-
-themeBtn.addEventListener("click",()=>{
-
-  document.body.classList.toggle("light");
-
-  const light = document.body.classList.contains("light");
-
-  themeBtn.textContent = light ? "☀" : "☾";
-
-  localStorage.setItem(
-    "pacefetch-theme",
-    light ? "light" : "dark"
-  );
-
-});
-
-
-/* =========================
-   FILTER BUTTONS
-========================= */
-
-document.querySelectorAll(".filter").forEach(button=>{
-
-  button.addEventListener("click",()=>{
-
-    document.querySelectorAll(".filter")
-      .forEach(b=>b.classList.remove("active"));
-
-    button.classList.add("active");
-
-  });
-
-});
-
-
-/* =========================
-   CALENDAR
-========================= */
-
-const calendar = document.getElementById("calendar");
-const monthTitle = document.getElementById("monthTitle");
-const history = document.getElementById("history");
-
-let calendarDate = new Date();
-
-const predictionHistory = {
-
-  "2026-09-01":[
-    ["Arsenal","2 - 1","Won"],
-    ["Barcelona","3 - 0","Won"]
-  ],
-
-  "2026-09-02":[
-    ["Inter Milan","1 - 1","Won"],
-    ["Dortmund","0 - 2","Lost"]
-  ],
-
-  "2026-09-03":[
-    ["Liverpool","2 - 0","Won"],
-    ["Real Madrid","3 - 1","Won"]
-  ],
-
-  "2026-09-04":[
-    ["Chelsea","1 - 0","Won"]
-  ],
-
-  "2026-09-05":[
-    ["Bayern Munich","3 - 2","Won"],
-    ["Napoli","1 - 2","Won"]
-  ]
-
-};
-
-
-function renderCalendar(){
-
-  calendar.innerHTML="";
-
-  const year = calendarDate.getFullYear();
-  const month = calendarDate.getMonth();
-
-  monthTitle.textContent =
-    new Intl.DateTimeFormat("en-US",{
-      month:"long",
-      year:"numeric"
-    }).format(calendarDate);
-
-  const firstDay =
-    new Date(year,month,1).getDay();
-
-  const daysInMonth =
-    new Date(year,month+1,0).getDate();
-
-  for(let i=0;i<firstDay;i++){
-
-    const blank = document.createElement("div");
-
-    calendar.appendChild(blank);
-
-  }
-
-  for(let day=1;day<=daysInMonth;day++){
-
-    const button =
-      document.createElement("button");
-
-    button.className="day";
-
-    button.textContent=day;
-
-    const key =
-      `${year}-${String(month+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
-
-    if(predictionHistory[key]){
-      button.classList.add("has-data");
-    }
-
-    button.addEventListener("click",()=>{
-
-      document
-        .querySelectorAll(".day")
-        .forEach(d=>d.classList.remove("selected"));
-
-      button.classList.add("selected");
-
-      showHistory(key,day);
-
-    });
-
-    calendar.appendChild(button);
-
-  }
-
-}
-
-
-function showHistory(key,day){
-
-  const games = predictionHistory[key];
-
-  if(!games){
-
-    history.innerHTML=`
-
-      <div class="history-title">
-        ${day} — No previous predictions recorded
+        <p>
+          Football predictions powered by data.
+        </p>
       </div>
 
-    `;
+      <div class="footer-links">
+        <a href="predictions.html">Predictions</a>
+        <a href="history.html">History</a>
+        <a href="methodology.html">Methodology</a>
+        <a href="#">Privacy</a>
+        <a href="#">Contact</a>
+      </div>
 
-    return;
-  }
-
-  let html=`
-
-    <div class="history-title">
-      Predictions — ${day}
     </div>
 
-  `;
+    <div class="container footer-bottom">
+      © 2026 PaceFetch. All rights reserved.
+    </div>
 
-  games.forEach(game=>{
-
-    html+=`
-
-      <div class="history-item">
-
-        <strong>${game[0]}</strong>
-
-        <span>${game[1]} • ${game[2]}</span>
-
-      </div>
-
-    `;
-
-  });
-
-  history.innerHTML=html;
-
-}
+  </footer>
 
 
-document.getElementById("prevMonth")
-.addEventListener("click",()=>{
-
-  calendarDate.setMonth(
-    calendarDate.getMonth()-1
-  );
-
-  renderCalendar();
-
-});
-
-
-document.getElementById("nextMonth")
-.addEventListener("click",()=>{
-
-  calendarDate.setMonth(
-    calendarDate.getMonth()+1
-  );
-
-  renderCalendar();
-
-});
-
-
-renderCalendar();
-
-</script>
+  <script src="js/app.js"></script>
 
 </body>
 </html>
