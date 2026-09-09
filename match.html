@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Match Prediction | PaceFetch</title>
+
+  <meta
+    name="description"
+    content="Detailed football match prediction, probabilities, markets, form and analysis from PaceFetch."
+  >
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    .match-page {
+      padding: 45px 0 80px;
+    }
+
+    .breadcrumbs {
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 25px;
+    }
+
+    .breadcrumbs a {
+      color: var(--primary);
+    }
+
+    .match-header {
+      padding: 35px 25px;
+
+      background:
+        radial-gradient(
+          circle at 50% 0%,
+          rgba(25,230,140,.08),
+          transparent 45%
+        ),
+        var(--card);
+
+      border: 1px solid var(--border);
+      border-radius: 18px;
+
+      text-align: center;
+    }
+
+    .match-league {
+      color: var(--primary);
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .match-date {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .match-teams {
+      margin: 35px auto;
+
+      max-width: 700px;
+
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .match-team {
+      font-size: clamp(20px, 4vw, 30px);
+      font-weight: 900;
+    }
+
+    .versus {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .kickoff {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .match-confidence {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+
+      padding: 8px 13px;
+
+      background: rgba(25,230,140,.08);
+      border: 1px solid rgba(25,230,140,.2);
+      border-radius: 8px;
+
+      color: var(--primary);
+
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .probability-section {
+      margin-top: 25px;
+    }
+
+    .subheading {
+      margin-bottom: 15px;
+
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .probability-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .probability-card {
+      padding: 20px;
+
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    .probability-label {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .probability-value {
+      margin-top: 5px;
+
+      font-size: 32px;
+      font-weight: 900;
+    }
+
+    .probability-bar {
+      height: 5px;
+
+      margin-top: 14px;
+
+      background: #202833;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .probability-fill {
+      height: 100%;
+      background: var(--primary);
+      border-radius: inherit;
+    }
+
+    .markets-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .market-box {
+      padding: 20px;
+
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    .market-box-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+
+      margin-bottom: 15px;
+    }
+
+    .market-box h3 {
+      font-size: 14px;
+    }
+
+    .market-box-header span {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .market-option {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      padding: 11px 0;
+
+      border-top: 1px solid var(--border);
+    }
+
+    .market-option:first-child {
+      border-top: none;
+    }
+
+    .market-option-name {
+      color: #dce2e8;
+      font-size: 12px;
+    }
+
+    .market-option-value {
+      font-weight: 900;
+      font-size: 13px;
+    }
+
+    .form-h2h-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .info-card {
+      padding: 22px;
+
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    .info-card h3 {
+      margin-bottom: 15px;
+      font-size: 15px;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 7px;
+    }
+
+    .form-result {
+      width: 32px;
+      height: 32px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 7px;
+
+      background: #151d27;
+
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .form-result.win {
+      color: var(--primary);
+      border: 1px solid rgba(25,230,140,.2);
+    }
+
+    .form-result.draw {
+      color: var(--amber);
+      border: 1px solid rgba(245,173,39,.2);
+    }
+
+    .form-result.loss {
+      color: var(--red);
+      border: 1px solid rgba(255,77,94,.2);
+    }
+
+    .analysis {
+      margin-top: 25px;
+      padding: 25px;
+
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    .analysis h3 {
+      margin-bottom: 12px;
+      font-size: 18px;
+    }
+
+    .analysis p {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .last-updated {
+      margin-top: 20px;
+
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    @media (max-width: 700px) {
+      .match-teams {
+        gap: 8px;
+      }
+
+      .probability-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .markets-grid,
+      .form-h2h-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header class="header">
+
+  <div class="container nav">
+
+    <a href="index.html" class="logo">
+      <span class="logo-ball">⚽</span>
+      <span>Pace<span>Fetch</span></span>
+    </a>
+
+    <nav class="desktop-nav">
+
+      <a href="index.html">
+        Home
+      </a>
+
+      <a href="predictions.html" class="active">
+        Predictions
+      </a>
+
+      <a href="countries.html">
+        Countries
+      </a>
+
+      <a href="history.html">
+        History
+      </a>
+
+      <a href="methodology.html">
+        Methodology
+      </a>
+
+    </nav>
+
+    <button
+      class="mobile-menu"
+      id="mobileMenu"
+    >
+      ☰
+    </button>
+
+  </div>
+
+</header>
+
+
+<div class="mobile-nav" id="mobileNav">
+
+  <a href="index.html">
+    Home
+  </a>
+
+  <a href="predictions.html">
+    Predictions
+  </a>
+
+  <a href="countries.html">
+    Countries
+  </a>
+
+  <a href="history.html">
+    History
+  </a>
+
+  <a href="methodology.html">
+    Methodology
+  </a>
+
+</div>
+
+
+<main class="match-page">
+
+  <div class="container">
+
+    <!-- BREADCRUMB -->
+
+    <div class="breadcrumbs">
+
+      <a href="index.html">
+        Home
+      </a>
+
+      &nbsp; / &nbsp;
+
+      <a href="predictions.html">
+        Predictions
+      </a>
+
+      &nbsp; / &nbsp;
+
+      Arsenal vs Chelsea
+
+    </div>
+
+
+    <!-- MATCH HEADER -->
+
+    <section class="match-header">
+
+      <div class="match-league">
+        England · Premier League
+      </div>
+
+      <div class="match-date">
+        Today · 18:30
+      </div>
+
+
+      <div class="match-teams">
+
+        <div class="match-team">
+          Arsenal
+        </div>
+
+        <div>
+          <div class="versus">
+            VS
+          </div>
+
+          <div class="kickoff">
+            18:30
+          </div>
+        </div>
+
+        <div class="match-team">
+          Chelsea
+        </div>
+
+      </div>
+
+
+      <div class="match-confidence">
+
+        <span class="live-dot"></span>
+
+        Strong Prediction
+
+      </div>
+
+    </section>
+
+
+    <!-- 1X2 -->
+
+    <section class="probability-section">
+
+      <h2 class="subheading">
+        Match Result Probability
+      </h2>
+
+      <div class="probability-grid">
+
+        <div class="probability-card">
+
+          <div class="probability-label">
+            HOME WIN
+          </div>
+
+          <div class="probability-value">
+            61%
+          </div>
+
+          <div class="probability-bar">
+            <div
+              class="probability-fill"
+              style="width:61%"
+            ></div>
+          </div>
+
+        </div>
+
+
+        <div class="probability-card">
+
+          <div class="probability-label">
+            DRAW
+          </div>
+
+          <div class="probability-value">
+            23%
+          </div>
+
+          <div class="probability-bar">
+            <div
+              class="probability-fill"
+              style="width:23%"
+            ></div>
+          </div>
+
+        </div>
+
+
+        <div class="probability-card">
+
+          <div class="probability-label">
+            AWAY WIN
+          </div>
+
+          <div class="probability-value">
+            16%
+          </div>
+
+          <div class="probability-bar">
+            <div
+              class="probability-fill"
+              style="width:16%"
+            ></div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- MARKETS -->
+
+    <section class="probability-section">
+
+      <h2 class="subheading">
+        Prediction Markets
+      </h2>
+
+
+      <div class="markets-grid">
+
+
+        <!-- GOALS -->
+
+        <div class="market-box">
+
+          <div class="market-box-header">
+
+            <h3>
+              Over / Under Goals
+            </h3>
+
+            <span>
+              Goal probabilities
+            </span>
+
+          </div>
+
+
+          <div class="market-option">
+            <span class="market-option-name">
+              Over 0.5
+            </span>
+
+            <strong class="market-option-value">
+              94%
+            </strong>
+          </div>
+
+
+          <div class="market-option">
+            <span class="market-option-name">
+              Over 1.5
+            </span>
+
+            <strong class="market-option-value">
+              82%
+            </strong>
+          </div>
+
+
+          <div class="market-option">
+            <span class="market-option-name">
+              Over 2.5
+            </span>
+
+            <strong class="market-option-value">
+              64%
+            </strong>
+          </div>
+
+
+          <div class="market-option">
+            <span class="market-option-name">
+              Over 3.5
+            </span>
+
+            <strong class="market-option-value">
+              39%
+            </strong>
+          </div>
+
+        </div>
+
+
+        <!-- BTTS -->
+
+        <div class="market-box">
+
+          <div class="market-box-header">
+
+            <h3>
+              Both Teams To Score
+            </h3>
+
+            <span>
+              BTTS
+            </span>
+
+          </div>
+
+
+          <div class="market-option">
+
+            <span class="market-option-name">
+              Yes
+            </span>
+
+            <strong class="market-option-value">
+              64%
+            </strong>
+
+          </div>
+
+
+          <div class="market-option">
+
+            <span class="market-option-name">
+              No
+            </span>
+
+            <strong class="market-option-value">
+              36%
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <!-- DOUBLE CHANCE -->
+
+        <div class="market-box">
+
+          <div class="market-box-header">
+
+            <h3>
+              Double Chance
+            </h3>
+
+            <span>
+              Safer result combinations
+            </span>
+
+          </div>
+
+
+          <div class="market-option">
+
+            <span class="market-option-name">
+              1X
+            </span>
+
+            <strong class="market-option-value">
+              84%
+            </strong>
+
+          </div>
+
+
+          <div class="market-option">
+
+            <span class="market-option-name">
+              X2
+            </span>
+
+            <strong class="market-option-value">
+              39%
+            </strong>
+
+          </div>
+
+
+          <div class="market-option">
+
+            <span class="market-option-name">
+              12
+            </span>
+
+            <strong class="market-option-value">
+              77%
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <!-- TEAM GOALS -->
+
+        <div class="market-box">
+
+          <div class="market-box-header">
+
+            <h3>
+              Team Goals
+            </h3>
+
+            <span>
+              Goal expectations
+            </span>
+
+          </div>
+
+
+          <div class="market-option">
+
+            <span class="market-option-name">
+              Arsenal Over 0.5
+            </span>
+
+            <strong class="market-option-value">
+              87%
+            </strong>
+
+          </div>
+
+
+          <div class="market-option">
+
+            <span class="market-option-name">
+              Chelsea Over 0.5
+            </span>
+
+            <strong class="market-option-value">
+              68%
+            </strong>
+
+          </div>
+
+
+          <div class="market-option">
+
+            <span class="market-option-name">
+              Arsenal Over 1.5
+            </span>
+
+            <strong class="market-option-value">
+              56%
+            </strong>
+
+          </div>
+
+        </div>
+
+
+      </div>
+
+    </section>
+
+
+    <!-- FORM / H2H -->
+
+    <section class="probability-section">
+
+      <h2 class="subheading">
+        Team Information
+      </h2>
+
+
+      <div class="form-h2h-grid">
+
+
+        <div class="info-card">
+
+          <h3>
+            Arsenal — Recent Form
+          </h3>
+
+          <div class="form-row">
+
+            <span class="form-result win">
+              W
+            </span>
+
+            <span class="form-result win">
+              W
+            </span>
+
+            <span class="form-result draw">
+              D
+            </span>
+
+            <span class="form-result win">
+              W
+            </span>
+
+            <span class="form-result loss">
+              L
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="info-card">
+
+          <h3>
+            Chelsea — Recent Form
+          </h3>
+
+          <div class="form-row">
+
+            <span class="form-result win">
+              W
+            </span>
+
+            <span class="form-result draw">
+              D
+            </span>
+
+            <span class="form-result loss">
+              L
+            </span>
+
+            <span class="form-result win">
+              W
+            </span>
+
+            <span class="form-result draw">
+              D
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="info-card">
+
+          <h3>
+            Head-to-Head
+          </h3>
+
+          <p style="color:var(--muted);font-size:12px;">
+            Historical meetings between these teams
+            will be displayed here when the live football
+            data connection is active.
+          </p>
+
+        </div>
+
+
+        <div class="info-card">
+
+          <h3>
+            Statistical Factors
+          </h3>
+
+          <p style="color:var(--muted);font-size:12px;">
+            Form, goals, home/away performance,
+            injuries and other available statistical
+            factors will feed the prediction engine.
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ANALYSIS -->
+
+    <section class="analysis">
+
+      <h3>
+        PaceFetch Prediction Analysis
+      </h3>
+
+      <p>
+        The current model example gives Arsenal a 61%
+        estimated probability of winning, compared with
+        23% for a draw and 16% for a Chelsea victory.
+        The strongest displayed market is the 1X double
+        chance at 84%.
+      </p>
+
+      <div class="last-updated">
+        Last updated: Awaiting live data connection
+      </div>
+
+    </section>
+
+
+  </div>
+
+</main>
+
+
+<footer class="footer">
+
+  <div class="container footer-content">
+
+    <div class="footer-brand">
+
+      <a href="index.html" class="logo">
+        <span class="logo-ball">⚽</span>
+        <span>Pace<span>Fetch</span></span>
+      </a>
+
+      <p>
+        Football predictions powered by data.
+      </p>
+
+    </div>
+
+
+    <div class="footer-links">
+
+      <a href="predictions.html">
+        Predictions
+      </a>
+
+      <a href="history.html">
+        History
+      </a>
+
+      <a href="methodology.html">
+        Methodology
+      </a>
+
+      <a href="#">
+        Privacy
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <div class="container footer-bottom">
+    © 2026 PaceFetch. All rights reserved.
+  </div>
+
+</footer>
+
+
+<script src="js/app.js"></script>
+
+</body>
+</html>
