@@ -19,26 +19,43 @@ function round(value, decimals = 2) {
     return Math.round(Number(value) * factor) / factor;
 }
 
-function safeNumber(value, fallback = 0) {
+function safeNumber(value, fallback = null) {
     const n = Number(value);
-    return Number.isFinite(n) ? n : fallback;
+
+    return Number.isFinite(n)
+        ? n
+        : fallback;
+}
+
+function validProbability(value) {
+    const n = Number(value);
+
+    return Number.isFinite(n) &&
+        n >= 0 &&
+        n <= 100;
 }
 
 function normalizePercentages(values) {
-    const total = Object.values(values).reduce(
-        (sum, value) => sum + safeNumber(value),
+    const clean = {};
+
+    for (const [key, value] of Object.entries(values)) {
+        clean[key] = safeNumber(value, 0);
+    }
+
+    const total = Object.values(clean).reduce(
+        (sum, value) => sum + value,
         0
     );
 
     if (total <= 0) {
-        return values;
+        return clean;
     }
 
     const result = {};
 
-    for (const [key, value] of Object.entries(values)) {
+    for (const [key, value] of Object.entries(clean)) {
         result[key] = round(
-            (safeNumber(value) / total) * 100
+            (value / total) * 100
         );
     }
 
@@ -47,230 +64,147 @@ function normalizePercentages(values) {
 
 
 /* -------------------------------------------------------
-   POISSON
+   PROVIDER PROBABILITY EXTRACTION
 ------------------------------------------------------- */
 
-function factorial(n) {
-    if (n <= 1) return 1;
+/*
+ * API-Football's prediction response normally gives
+ * home / draw / away percentages.
+ *
+ * This function accepts several possible formats so the
+ * engine remains compatible with our provider adapter.
+ */
 
-    let result = 1;
+function extractProvider1X2(providerPrediction) {
 
-    for (let i = 2; i <= n; i++) {
-        result *= i;
+    if (!providerPrediction) {
+        return null;
     }
 
-    return result;
-}
+    const sources = [
+        providerPrediction,
+        providerPrediction.percent,
+        providerPrediction.percentages,
+        providerPrediction.probabilities,
+        providerPrediction.predictions,
+        providerPrediction.data
+    ].filter(Boolean);
 
-function poissonProbability(lambda, goals) {
-    lambda = Math.max(0.01, safeNumber(lambda));
+    for (const source of sources) {
 
-    return (
-        Math.exp(-lambda) *
-        Math.pow(lambda, goals) /
-        factorial(goals)
-    );
-}
+        const home = safeNumber(
+            source.home ??
+            source.Home ??
+            source["home"]
+        );
 
-function createGoalMatrix(homeExpectedGoals, awayExpectedGoals) {
-    const matrix = [];
+        const draw = safeNumber(
+            source.draw ??
+            source.Draw ??
+            source["draw"]
+        );
 
-    for (let home = 0; home <= 8; home++) {
-        for (let away = 0; away <= 8; away++) {
-            const probability =
-                poissonProbability(homeExpectedGoals, home) *
-                poissonProbability(awayExpectedGoals, away);
+        const away = safeNumber(
+            source.away ??
+            source.Away ??
+            source["away"]
+        );
 
-            matrix.push({
+        if (
+            validProbability(home) &&
+            validProbability(draw) &&
+            validProbability(away)
+        ) {
+            return normalizePercentages({
                 home,
-                away,
-                probability
+                draw,
+                away
             });
         }
     }
 
-    return matrix;
+    return null;
 }
 
 
 /* -------------------------------------------------------
-   MARKET CALCULATIONS
+   OPTIONAL PROVIDER MARKETS
 ------------------------------------------------------- */
 
-function calculateMarkets(homeExpectedGoals, awayExpectedGoals) {
+function getProviderMarket(providerPrediction, names) {
 
-    const matrix = createGoalMatrix(
-        homeExpectedGoals,
-        awayExpectedGoals
-    );
+    if (!providerPrediction) {
+        return null;
+    }
 
-    let homeWin = 0;
-    let draw = 0;
-    let awayWin = 0;
+    const sources = [
+        providerPrediction,
+        providerPrediction.markets,
+        providerPrediction.probabilities,
+        providerPrediction.predictions,
+        providerPrediction.percent,
+        providerPrediction.percentages
+    ].filter(Boolean);
 
-    let bttsYes = 0;
+    for (const source of sources) {
 
-    let over05 = 0;
-    let over15 = 0;
-    let over25 = 0;
-    let over35 = 0;
+        for (const name of names) {
 
-    for (const result of matrix) {
-        const {
-            home,
-            away,
-            probability
-        } = result;
+            const value = source[name];
 
-        if (home > away) {
-            homeWin += probability;
-        }
-
-        if (home === away) {
-            draw += probability;
-        }
-
-        if (home < away) {
-            awayWin += probability;
-        }
-
-        if (home >= 1 && away >= 1) {
-            bttsYes += probability;
-        }
-
-        const totalGoals = home + away;
-
-        if (totalGoals >= 1) {
-            over05 += probability;
-        }
-
-        if (totalGoals >= 2) {
-            over15 += probability;
-        }
-
-        if (totalGoals >= 3) {
-            over25 += probability;
-        }
-
-        if (totalGoals >= 4) {
-            over35 += probability;
+            if (validProbability(value)) {
+                return round(value);
+            }
         }
     }
 
-    const oneX = homeWin + draw;
-    const xTwo = draw + awayWin;
-    const twelve = homeWin + awayWin;
+    return null;
+}
+
+
+/* -------------------------------------------------------
+   CONFIDENCE
+------------------------------------------------------- */
+
+function addConfidence(prediction) {
+
+    const confidence = calculateConfidence({
+        probability: prediction.probability,
+        dataQuality: prediction.dataQuality,
+        providerAgreement: prediction.providerAgreement,
+        sampleQuality: prediction.sampleQuality
+    });
+
+    const tier = getConfidenceTier(confidence);
 
     return {
-        oneX2: normalizePercentages({
-            home: homeWin * 100,
-            draw: draw * 100,
-            away: awayWin * 100
-        }),
+        ...prediction,
 
-        doubleChance: {
-            "1X": round(oneX * 100),
-            "X2": round(xTwo * 100),
-            "12": round(twelve * 100)
-        },
+        probability: round(
+            prediction.probability
+        ),
 
-        overUnder: {
-            "over_0_5": round(over05 * 100),
-            "under_0_5": round((1 - over05) * 100),
+        confidence: round(
+            confidence
+        ),
 
-            "over_1_5": round(over15 * 100),
-            "under_1_5": round((1 - over15) * 100),
+        confidenceTier: tier.tier,
 
-            "over_2_5": round(over25 * 100),
-            "under_2_5": round((1 - over25) * 100),
+        confidenceLabel: tier.label,
 
-            "over_3_5": round(over35 * 100),
-            "under_3_5": round((1 - over35) * 100)
-        },
+        confidenceColor: tier.color,
 
-        btts: {
-            yes: round(bttsYes * 100),
-            no: round((1 - bttsYes) * 100)
-        }
+        modelVersion: "PF-1.1"
     };
 }
 
 
 /* -------------------------------------------------------
-   EXPECTED GOALS
-------------------------------------------------------- */
-
-function calculateExpectedGoals({
-    homeGoalsFor,
-    homeGoalsAgainst,
-    awayGoalsFor,
-    awayGoalsAgainst
-}) {
-
-    /*
-     * Conservative baseline.
-     *
-     * Later this will be upgraded with:
-     * xG
-     * home/away strength
-     * league averages
-     * injuries
-     * lineups
-     * provider model probabilities
-     */
-
-    const homeAttack = safeNumber(homeGoalsFor, 1.3);
-    const homeDefense = safeNumber(homeGoalsAgainst, 1.2);
-
-    const awayAttack = safeNumber(awayGoalsFor, 1.1);
-    const awayDefense = safeNumber(awayGoalsAgainst, 1.3);
-
-    const homeExpected =
-        (homeAttack + awayDefense) / 2;
-
-    const awayExpected =
-        (awayAttack + homeDefense) / 2;
-
-    return {
-        home: clamp(homeExpected, 0.2, 4),
-        away: clamp(awayExpected, 0.2, 4)
-    };
-}
-
-
-/* -------------------------------------------------------
-   PROVIDER PROBABILITY BLENDING
-------------------------------------------------------- */
-
-function blendProbability(modelProbability, providerProbability) {
-
-    if (
-        providerProbability === undefined ||
-        providerProbability === null
-    ) {
-        return modelProbability;
-    }
-
-    const provider = safeNumber(providerProbability);
-
-    /*
-     * Provider model receives slightly greater weight
-     * when it is available.
-     */
-    return round(
-        (modelProbability * 0.40) +
-        (provider * 0.60)
-    );
-}
-
-
-/* -------------------------------------------------------
-   BUILD PREDICTIONS
+   BUILD PROVIDER-BASED PREDICTIONS
 ------------------------------------------------------- */
 
 function buildPredictionList({
     fixture,
-    markets,
     providerPrediction = null
 }) {
 
@@ -287,169 +221,268 @@ function buildPredictionList({
         "Away";
 
     const base = {
-        fixtureId: fixture.id,
+        fixtureId:
+            fixture.id ||
+            fixture.fixtureId,
+
         homeTeam,
+
         awayTeam,
-        kickoff: fixture.kickoff,
-        league: fixture.league,
-        country: fixture.country,
-        source: fixture.source || "PaceFetch Model"
+
+        kickoff:
+            fixture.kickoff ||
+            fixture.date,
+
+        league:
+            fixture.league,
+
+        country:
+            fixture.country,
+
+        source:
+            "API-Football"
     };
 
 
-    /* 1X2 */
+    /* ---------------------------------------------------
+       1X2
+    --------------------------------------------------- */
 
-    const homeProbability = blendProbability(
-        markets.oneX2.home,
-        providerPrediction?.home
-    );
-
-    const drawProbability = blendProbability(
-        markets.oneX2.draw,
-        providerPrediction?.draw
-    );
-
-    const awayProbability = blendProbability(
-        markets.oneX2.away,
-        providerPrediction?.away
-    );
-
-    const oneX2 = normalizePercentages({
-        home: homeProbability,
-        draw: drawProbability,
-        away: awayProbability
-    });
+    const provider1X2 =
+        extractProvider1X2(
+            providerPrediction
+        );
 
 
-    const winnerEntries = [
-        {
-            selection: homeTeam,
-            probability: oneX2.home,
-            market: "1X2"
-        },
-        {
-            selection: "Draw",
-            probability: oneX2.draw,
-            market: "1X2"
-        },
-        {
-            selection: awayTeam,
-            probability: oneX2.away,
-            market: "1X2"
-        }
-    ];
+    /*
+     * We do NOT manufacture a 1X2 probability.
+     *
+     * If API-Football doesn't provide usable
+     * probabilities, this fixture produces no
+     * prediction rather than a fake one.
+     */
 
-    const strongestWinner =
+    if (provider1X2) {
+
+        const winnerEntries = [
+            {
+                selection: homeTeam,
+                probability: provider1X2.home
+            },
+            {
+                selection: "Draw",
+                probability: provider1X2.draw
+            },
+            {
+                selection: awayTeam,
+                probability: provider1X2.away
+            }
+        ];
+
         winnerEntries.sort(
-            (a, b) => b.probability - a.probability
+            (a, b) =>
+                b.probability -
+                a.probability
+        );
+
+        const strongest =
+            winnerEntries[0];
+
+
+        predictions.push(
+            addConfidence({
+                ...base,
+
+                market: "1X2",
+
+                selection:
+                    strongest.selection,
+
+                probability:
+                    strongest.probability,
+
+                /*
+                 * Real provider prediction is being used.
+                 */
+                dataQuality: 90,
+
+                providerAgreement: 100,
+
+                /*
+                 * This is provider data rather
+                 * than our unavailable historical
+                 * statistics.
+                 */
+                sampleQuality: 80
+            })
+        );
+
+
+        /* ------------------------------------------------
+           DOUBLE CHANCE
+        ------------------------------------------------ */
+
+        const oneX =
+            provider1X2.home +
+            provider1X2.draw;
+
+        const xTwo =
+            provider1X2.draw +
+            provider1X2.away;
+
+        const twelve =
+            provider1X2.home +
+            provider1X2.away;
+
+
+        const doubleChance = [
+            {
+                selection: "1X",
+                probability: oneX
+            },
+            {
+                selection: "X2",
+                probability: xTwo
+            },
+            {
+                selection: "12",
+                probability: twelve
+            }
+        ].sort(
+            (a, b) =>
+                b.probability -
+                a.probability
         )[0];
 
 
-    predictions.push({
-        ...base,
-        market: "1X2",
-        selection: strongestWinner.selection,
-        probability: round(strongestWinner.probability),
-        dataQuality: 75,
-        sampleQuality: 70,
-        providerAgreement: providerPrediction ? 85 : 50
-    });
+        predictions.push(
+            addConfidence({
+                ...base,
 
+                market: "Double Chance",
 
-    /* OVER 1.5 */
+                selection:
+                    doubleChance.selection,
 
-    predictions.push({
-        ...base,
-        market: "Over/Under 1.5",
-        selection: "Over 1.5",
-        probability: markets.overUnder.over_1_5,
-        dataQuality: 75,
-        sampleQuality: 70,
-        providerAgreement: 50
-    });
+                probability:
+                    doubleChance.probability,
 
+                dataQuality: 90,
 
-    /* OVER 2.5 */
+                providerAgreement: 100,
 
-    predictions.push({
-        ...base,
-        market: "Over/Under 2.5",
-        selection: "Over 2.5",
-        probability: markets.overUnder.over_2_5,
-        dataQuality: 75,
-        sampleQuality: 70,
-        providerAgreement: 50
-    });
-
-
-    /* BTTS */
-
-    predictions.push({
-        ...base,
-        market: "BTTS",
-        selection: "BTTS Yes",
-        probability: markets.btts.yes,
-        dataQuality: 75,
-        sampleQuality: 70,
-        providerAgreement: 50
-    });
-
-
-    /* DOUBLE CHANCE */
-
-    const doubleChance = [
-        {
-            selection: "1X",
-            probability: markets.doubleChance["1X"]
-        },
-        {
-            selection: "X2",
-            probability: markets.doubleChance["X2"]
-        },
-        {
-            selection: "12",
-            probability: markets.doubleChance["12"]
-        }
-    ].sort(
-        (a, b) => b.probability - a.probability
-    )[0];
-
-    predictions.push({
-        ...base,
-        market: "Double Chance",
-        selection: doubleChance.selection,
-        probability: doubleChance.probability,
-        dataQuality: 75,
-        sampleQuality: 70,
-        providerAgreement: 50
-    });
+                sampleQuality: 80
+            })
+        );
+    }
 
 
     /* ---------------------------------------------------
-       CONFIDENCE
+       OPTIONAL PROVIDER MARKETS
+       Only publish these if the provider actually gives
+       us a probability.
     --------------------------------------------------- */
 
-    return predictions.map(prediction => {
+    const over15 =
+        getProviderMarket(
+            providerPrediction,
+            [
+                "over_1_5",
+                "over1_5",
+                "over15",
+                "OVER_1_5"
+            ]
+        );
 
-        const confidence = calculateConfidence({
-            probability: prediction.probability,
-            dataQuality: prediction.dataQuality,
-            providerAgreement: prediction.providerAgreement,
-            sampleQuality: prediction.sampleQuality
-        });
+    if (over15 !== null) {
 
-        const tier = getConfidenceTier(confidence);
+        predictions.push(
+            addConfidence({
+                ...base,
 
-        return {
-            ...prediction,
-            probability: round(prediction.probability),
-            confidence: round(confidence),
-            confidenceTier: tier.tier,
-            confidenceLabel: tier.label,
-            confidenceColor: tier.color,
-            modelVersion: "PF-1.0"
-        };
-    });
+                market: "Over/Under 1.5",
+
+                selection: "Over 1.5",
+
+                probability: over15,
+
+                dataQuality: 90,
+
+                providerAgreement: 100,
+
+                sampleQuality: 80
+            })
+        );
+    }
+
+
+    const over25 =
+        getProviderMarket(
+            providerPrediction,
+            [
+                "over_2_5",
+                "over2_5",
+                "over25",
+                "OVER_2_5"
+            ]
+        );
+
+    if (over25 !== null) {
+
+        predictions.push(
+            addConfidence({
+                ...base,
+
+                market: "Over/Under 2.5",
+
+                selection: "Over 2.5",
+
+                probability: over25,
+
+                dataQuality: 90,
+
+                providerAgreement: 100,
+
+                sampleQuality: 80
+            })
+        );
+    }
+
+
+    const bttsYes =
+        getProviderMarket(
+            providerPrediction,
+            [
+                "btts_yes",
+                "bttsYes",
+                "BTTS_YES",
+                "btts"
+            ]
+        );
+
+    if (bttsYes !== null) {
+
+        predictions.push(
+            addConfidence({
+                ...base,
+
+                market: "BTTS",
+
+                selection: "BTTS Yes",
+
+                probability: bttsYes,
+
+                dataQuality: 90,
+
+                providerAgreement: 100,
+
+                sampleQuality: 80
+            })
+        );
+    }
+
+
+    return predictions;
 }
 
 
@@ -463,29 +496,30 @@ function generatePredictions({
     providerPrediction = null
 }) {
 
-    const expectedGoals = calculateExpectedGoals({
-        homeGoalsFor: teamStats.homeGoalsFor,
-        homeGoalsAgainst: teamStats.homeGoalsAgainst,
+    /*
+     * teamStats is intentionally NOT required anymore.
+     *
+     * API-Football's current free-plan restriction means
+     * 2026 team statistics cannot reliably be requested.
+     *
+     * Therefore the production engine uses real provider
+     * probabilities instead of invented fallback statistics.
+     */
 
-        awayGoalsFor: teamStats.awayGoalsFor,
-        awayGoalsAgainst: teamStats.awayGoalsAgainst
-    });
+    const predictions =
+        buildPredictionList({
+            fixture,
+            providerPrediction
+        });
 
-    const markets = calculateMarkets(
-        expectedGoals.home,
-        expectedGoals.away
-    );
-
-    const predictions = buildPredictionList({
-        fixture,
-        markets,
-        providerPrediction
-    });
 
     return {
         fixture,
-        expectedGoals,
-        markets,
+
+        expectedGoals: null,
+
+        markets: null,
+
         predictions
     };
 }
@@ -504,17 +538,27 @@ function generateDailyPredictions(
 
     for (const fixture of fixtures) {
 
-        if (!fixture) continue;
+        if (!fixture) {
+            continue;
+        }
 
-        /*
-         * Team statistics should be populated by the
-         * provider adapter before reaching this function.
-         */
-        const result = generatePredictions({
-            fixture,
-            teamStats: fixture.teamStats || {},
-            providerPrediction: fixture.providerPrediction || null
-        });
+
+        const result =
+            generatePredictions({
+                fixture,
+
+                /*
+                 * Kept for backwards compatibility.
+                 * It is no longer required.
+                 */
+                teamStats:
+                    fixture.teamStats || {},
+
+                providerPrediction:
+                    fixture.providerPrediction ||
+                    null
+            });
+
 
         allPredictions.push(
             ...result.predictions
@@ -522,11 +566,35 @@ function generateDailyPredictions(
     }
 
 
+    /*
+     * Remove anything that doesn't have a valid
+     * probability.
+     */
+
+    const usable =
+        allPredictions.filter(
+            prediction =>
+                validProbability(
+                    prediction.probability
+                )
+        );
+
+
+    /*
+     * Your existing validator handles:
+     *
+     * - missing fields
+     * - probability below 50%
+     * - bad data quality
+     * - invalid prediction objects
+     */
+
     const validation =
         validatePredictionSet(
-            allPredictions,
+            usable,
             maximum
         );
+
 
     const ranked =
         getTopPredictions(
@@ -534,18 +602,47 @@ function generateDailyPredictions(
             maximum
         );
 
+
     return {
-        generated: allPredictions.length,
-        rejected: validation.rejected.length,
-        published: ranked.length,
-        predictions: ranked
+        generated:
+            allPredictions.length,
+
+        usable:
+            usable.length,
+
+        rejected:
+            validation.rejected.length,
+
+        published:
+            ranked.length,
+
+        predictions:
+            ranked
     };
 }
 
 
+/* -------------------------------------------------------
+   EXPORTS
+------------------------------------------------------- */
+
 module.exports = {
     generatePredictions,
+
     generateDailyPredictions,
-    calculateMarkets,
-    calculateExpectedGoals
+
+    /*
+     * Kept for compatibility with any existing imports.
+     *
+     * The production engine no longer depends on Poisson
+     * calculations because we don't have reliable 2026
+     * team statistics on the current API plan.
+     */
+    calculateMarkets: function () {
+        return null;
+    },
+
+    calculateExpectedGoals: function () {
+        return null;
+    }
 };
