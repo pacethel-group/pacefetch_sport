@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Methodology | PaceFetch</title>
+  <meta name="description" content="Learn how PaceFetch football predictions are calculated, scored and presented.">
+  <style>
+    :root {
+      --bg: #06110c;
+      --card: #0c1c14;
+      --card2: #10261b;
+      --text: #f1f7f3;
+      --muted: #9caf9f;
+      --green: #18c477;
+      --green2: #0e8f55;
+      --border: rgba(255,255,255,.08);
+      --yellow: #d8e95b;
+      --amber: #f0a83a;
+      --red: #ef5350;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(6,17,12,.96);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+    }
+
+    .nav {
+      max-width: 1200px;
+      margin: auto;
+      min-height: 70px;
+      padding: 0 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .logo {
+      font-size: 25px;
+      font-weight: 900;
+      letter-spacing: -.7px;
+    }
+
+    .logo span {
+      color: var(--green);
+    }
+
+    nav {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      padding: 8px 11px;
+      color: var(--muted);
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    nav a:hover,
+    nav a.active {
+      color: white;
+      background: rgba(24,196,119,.12);
+    }
+
+    .hero {
+      max-width: 1100px;
+      margin: auto;
+      padding: 70px 20px 35px;
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 7px 13px;
+      border: 1px solid rgba(24,196,119,.3);
+      border-radius: 999px;
+      color: var(--green);
+      background: rgba(24,196,119,.08);
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: clamp(34px, 6vw, 62px);
+      line-height: 1.05;
+      margin-bottom: 18px;
+    }
+
+    .hero p {
+      max-width: 760px;
+      margin: auto;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+      margin: 20px 0;
+    }
+
+    .card {
+      background: linear-gradient(145deg, var(--card), var(--card2));
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 25px;
+    }
+
+    .card h2 {
+      font-size: 21px;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      color: var(--muted);
+    }
+
+    .number {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: rgba(24,196,119,.12);
+      color: var(--green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      margin-bottom: 15px;
+    }
+
+    .section-title {
+      margin: 50px 0 18px;
+      font-size: 29px;
+    }
+
+    .confidence {
+      display: grid;
+      gap: 12px;
+    }
+
+    .confidence-row {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 16px;
+      border-radius: 13px;
+      background: rgba(255,255,255,.035);
+      border: 1px solid var(--border);
+    }
+
+    .confidence-score {
+      min-width: 70px;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .strong { color: var(--green); }
+    .good { color: var(--yellow); }
+    .medium { color: var(--amber); }
+    .low { color: var(--red); }
+
+    .disclaimer {
+      margin: 35px 0;
+      padding: 22px;
+      border-left: 4px solid var(--amber);
+      background: rgba(240,168,58,.07);
+      border-radius: 8px;
+      color: #d9dedb;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      margin-top: 60px;
+      padding: 35px 20px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .designed {
+      margin-top: 8px;
+      color: var(--green);
+      font-weight: 700;
+    }
+
+    @media (max-width: 700px) {
+      .nav {
+        flex-direction: column;
+        padding: 14px;
+      }
+
+      nav {
+        justify-content: center;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding-top: 45px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="nav">
+    <a class="logo" href="index.html">Pace<span>Fetch</span></a>
+
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="predictions.html">Predictions</a>
+      <a href="countries.html">Countries</a>
+      <a href="history.html">History</a>
+      <a class="active" href="methodology.html">Methodology</a>
+      <a href="transfer/index.html">Transfers</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <span class="badge">PaceFetch Prediction System</span>
+  <h1>Our Methodology</h1>
+  <p>
+    PaceFetch combines football data, statistical analysis and market-specific
+    indicators to produce probability-based predictions.
+  </p>
+</section>
+
+<main class="container">
+
+  <h2 class="section-title">How It Works</h2>
+
+  <div class="grid">
+
+    <div class="card">
+      <div class="number">01</div>
+      <h2>Match Data</h2>
+      <p>
+        We analyse available information about upcoming matches, including
+        recent performances, home and away records, goals, results and
+        competition context.
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="number">02</div>
+      <h2>Team Performance</h2>
+      <p>
+        Recent team form is evaluated to identify patterns that may influence
+        the probability of different outcomes.
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="number">03</div>
+      <h2>Market Analysis</h2>
+      <p>
+        Different prediction markets are considered independently. A team
+        being favoured to win does not automatically mean every other market
+        has the same probability.
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="number">04</div>
+      <h2>Probability</h2>
+      <p>
+        The available indicators are converted into probability estimates.
+        Predictions are then ranked according to their calculated confidence.
+      </p>
+    </div>
+
+  </div>
+
+  <h2 class="section-title">Confidence Levels</h2>
+
+  <div class="confidence">
+
+    <div class="confidence-row">
+      <div class="confidence-score strong">80%+</div>
+      <div>
+        <strong>Strong Confidence</strong>
+        <p>High statistical confidence based on the available indicators.</p>
+      </div>
+    </div>
+
+    <div class="confidence-row">
+      <div class="confidence-score good">70–79%</div>
+      <div>
+        <strong>Good Confidence</strong>
+        <p>A relatively strong probability, but still subject to match uncertainty.</p>
+      </div>
+    </div>
+
+    <div class="confidence-row">
+      <div class="confidence-score medium">50–69%</div>
+      <div>
+        <strong>Moderate Confidence</strong>
+        <p>The prediction has some statistical support but carries greater uncertainty.</p>
+      </div>
+    </div>
+
+    <div class="confidence-row">
+      <div class="confidence-score low">&lt;50%</div>
+      <div>
+        <strong>Low Confidence</strong>
+        <p>A weaker probability that should not be treated as a strong prediction.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <h2 class="section-title">Important Principles</h2>
+
+  <div class="grid">
+
+    <div class="card">
+      <h2>Probability Is Not Certainty</h2>
+      <p>
+        A 90% probability does not mean an outcome is guaranteed. Football
+        contains unpredictable events such as injuries, red cards, tactical
+        changes and individual mistakes.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>Availability Matters</h2>
+      <p>
+        PaceFetch does not need to force a fixed number of predictions when
+        suitable matches are unavailable. The system can publish fewer
+        predictions when qualifying fixtures are limited.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>Markets Are Different</h2>
+      <p>
+        Match result, both teams to score, totals and other markets have
+        different statistical characteristics and are evaluated separately.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>Historical Results</h2>
+      <p>
+        Previous predictions can be recorded and compared with actual match
+        results to measure the performance of the prediction system over time.
+      </p>
+    </div>
+
+  </div>
+
+  <div class="disclaimer">
+    <strong>Important:</strong>
+    PaceFetch predictions are statistical estimates for informational and
+    entertainment purposes. They are not guarantees of match results and
+    should never be treated as certain financial outcomes.
+  </div>
+
+</main>
+
+<footer>
+  <div>© 2026 PaceFetch. All rights reserved.</div>
+  <div class="designed">Designed by Pacethel</div>
+</footer>
+
+</body>
+  </html>
