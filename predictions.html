@@ -956,7 +956,7 @@
     }
 
 
-    /*
+        /*
     |--------------------------------------------------------------------------
     | Build filters
     |--------------------------------------------------------------------------
@@ -996,4 +996,557 @@
 
             elements.marketFilter,
 
-            state.predi
+            state.predictions.map(
+                prediction =>
+                    prediction.market
+            ),
+
+            "All markets"
+
+        );
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Render cards
+    |--------------------------------------------------------------------------
+    */
+
+    function renderPredictions() {
+
+        elements.grid.innerHTML =
+            "";
+
+
+        if (
+            state.filtered.length === 0
+        ) {
+
+            elements.status.className =
+                "prediction-status empty";
+
+            elements.status.textContent =
+                state.predictions.length === 0
+
+                    ? "No qualifying predictions are available today."
+
+                    : "No predictions match your selected filters.";
+
+            return;
+
+        }
+
+
+        elements.status.className =
+            "prediction-status";
+
+        elements.status.textContent =
+            `${state.filtered.length} qualifying prediction${state.filtered.length === 1 ? "" : "s"} shown.`;
+
+
+        state.filtered.forEach(
+            prediction => {
+
+                const probability =
+                    Number(
+                        prediction.probability
+                    ) || 0;
+
+
+                const confidence =
+                    Number(
+                        prediction.confidence
+                    ) || probability;
+
+
+                const tier =
+                    confidenceClass(
+                        prediction
+                    );
+
+
+                const rank =
+                    prediction.rank
+                    ||
+                    "";
+
+
+                const fixtureId =
+                    prediction.fixtureId;
+
+
+                const card =
+                    document.createElement(
+                        "a"
+                    );
+
+
+                card.className =
+                    "pf-prediction-card";
+
+
+                card.href =
+                    `/match.html?fixture=${encodeURIComponent(fixtureId)}`;
+
+
+                card.innerHTML = `
+
+                    <div class="pf-card-top">
+
+                        <span class="pf-market">
+
+                            ${escapeHTML(
+                                prediction.market ||
+                                "Prediction"
+                            )}
+
+                        </span>
+
+                        <span
+                            class="pf-confidence ${tier}"
+                        >
+
+                            ${escapeHTML(
+                                prediction.confidenceTier ||
+                                (
+                                    confidence >= 80
+                                        ? "Strong"
+                                        : confidence >= 70
+                                            ? "Good"
+                                            : "Moderate"
+                                )
+                            )}
+
+                            ·
+
+                            ${confidence.toFixed(1)}%
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="pf-teams">
+
+                        <div class="pf-team">
+
+                            ${escapeHTML(
+                                prediction.homeTeam
+                            )}
+
+                        </div>
+
+                        <div class="pf-vs">
+                            vs
+                        </div>
+
+                        <div class="pf-team">
+
+                            ${escapeHTML(
+                                prediction.awayTeam
+                            )}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="pf-selection">
+
+                        <div>
+
+                            <div class="pf-selection-label">
+                                Prediction
+                            </div>
+
+                            <div class="pf-selection-value">
+
+                                ${escapeHTML(
+                                    prediction.selection
+                                )}
+
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            class="pf-probability ${tier}"
+                        >
+
+                            ${probability.toFixed(0)}%
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="pf-meta">
+
+                        ${
+                            rank
+                                ? `<span class="pf-rank">
+                                    #${escapeHTML(rank)}
+                                   </span>`
+                                : ""
+                        }
+
+                        <span>
+
+                            ${escapeHTML(
+                                prediction.country ||
+                                "Unknown country"
+                            )}
+
+                        </span>
+
+                        <span>
+
+                            ${escapeHTML(
+                                prediction.league ||
+                                "Unknown league"
+                            )}
+
+                        </span>
+
+                        <span>
+
+                            ${formatKickoff(
+                                prediction.kickoff
+                            )}
+
+                        </span>
+
+                    </div>
+
+                `;
+
+
+                elements.grid.appendChild(
+                    card
+                );
+
+            }
+        );
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Apply filters
+    |--------------------------------------------------------------------------
+    */
+
+    function applyFilters() {
+
+        const country =
+            elements.countryFilter.value;
+
+
+        const league =
+            elements.leagueFilter.value;
+
+
+        const market =
+            elements.marketFilter.value;
+
+
+        const confidence =
+            Number(
+                elements.confidenceFilter.value
+            ) || 0;
+
+
+        state.filtered =
+            state.predictions.filter(
+                prediction => {
+
+                    const matchesCountry =
+                        country === "all"
+                        ||
+                        prediction.country ===
+                            country;
+
+
+                    const matchesLeague =
+                        league === "all"
+                        ||
+                        prediction.league ===
+                            league;
+
+
+                    const matchesMarket =
+                        market === "all"
+                        ||
+                        prediction.market ===
+                            market;
+
+
+                    const matchesConfidence =
+                        (
+                            Number(
+                                prediction.confidence
+                            ) || 0
+                        ) >= confidence;
+
+
+                    return (
+                        matchesCountry &&
+                        matchesLeague &&
+                        matchesMarket &&
+                        matchesConfidence
+                    );
+
+                }
+            );
+
+
+        renderPredictions();
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Update summary
+    |--------------------------------------------------------------------------
+    */
+
+    function updateSummary(
+        data
+    ) {
+
+        const summary =
+            data.summary || {};
+
+
+        elements.totalFixtures.textContent =
+            Number(
+                summary.totalFixtures
+            ) || 0;
+
+
+        elements.upcomingFixtures.textContent =
+            Number(
+                summary.upcomingFixtures
+            ) || 0;
+
+
+        elements.publishedPredictions.textContent =
+            Number(
+                summary.published
+            ) || 0;
+
+
+        const probabilities =
+            state.predictions
+                .map(
+                    prediction =>
+                        Number(
+                            prediction.probability
+                        )
+                )
+                .filter(
+                    Number.isFinite
+                );
+
+
+        const highest =
+            probabilities.length
+                ? Math.max(
+                    ...probabilities
+                )
+                : 0;
+
+
+        elements.highestProbability.textContent =
+            highest
+                ? `${highest.toFixed(0)}%`
+                : "—";
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Load live predictions
+    |--------------------------------------------------------------------------
+    */
+
+    async function loadPredictions() {
+
+        elements.status.className =
+            "prediction-status";
+
+        elements.status.textContent =
+            "Loading today's predictions...";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/predictions",
+                    {
+                        method: "GET",
+                        cache: "no-store",
+                        headers: {
+                            "Accept":
+                                "application/json"
+                        }
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (
+                !response.ok ||
+                !data.success
+            ) {
+
+                throw new Error(
+
+                    data.message ||
+                    data.error ||
+                    "Unable to load predictions."
+
+                );
+
+            }
+
+
+            state.predictions =
+                Array.isArray(
+                    data.predictions
+                )
+                    ? data.predictions
+                    : [];
+
+
+            buildFilters();
+
+            updateSummary(
+                data
+            );
+
+            applyFilters();
+
+
+        } catch (error) {
+
+            console.error(
+                "PaceFetch predictions:",
+                error
+            );
+
+
+            elements.grid.innerHTML =
+                "";
+
+
+            elements.status.className =
+                "prediction-status error";
+
+
+            elements.status.textContent =
+                "Unable to load today's predictions. Please try again shortly.";
+
+        }
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Filter events
+    |--------------------------------------------------------------------------
+    */
+
+    elements.countryFilter
+        .addEventListener(
+            "change",
+            applyFilters
+        );
+
+
+    elements.leagueFilter
+        .addEventListener(
+            "change",
+            applyFilters
+        );
+
+
+    elements.marketFilter
+        .addEventListener(
+            "change",
+            applyFilters
+        );
+
+
+    elements.confidenceFilter
+        .addEventListener(
+            "change",
+            applyFilters
+        );
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Mobile navigation
+    |--------------------------------------------------------------------------
+    */
+
+    const menuToggle =
+        document.getElementById(
+            "menuToggle"
+        );
+
+
+    const mainNav =
+        document.getElementById(
+            "mainNav"
+        );
+
+
+    if (
+        menuToggle &&
+        mainNav
+    ) {
+
+        menuToggle.addEventListener(
+            "click",
+            function () {
+
+                mainNav.classList.toggle(
+                    "open"
+                );
+
+            }
+        );
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Start
+    |--------------------------------------------------------------------------
+    */
+
+    loadPredictions();
+
+
+})();
+
+</script>
+
+
+</body>
+</html>
+    
