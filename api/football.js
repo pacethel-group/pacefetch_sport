@@ -1148,4 +1148,211 @@ async function handler(
          */
 
         if (
-      
+            action ===
+            "fixture-statistics"
+        ) {
+
+            const fixtureId =
+                getQueryValue(
+                    req,
+                    "fixture"
+                ) ||
+                getQueryValue(
+                    req,
+                    "id"
+                );
+
+
+            if (!fixtureId) {
+
+                return sendJSON(
+                    res,
+                    400,
+                    {
+                        success: false,
+
+                        error:
+                            "Missing fixture ID."
+                    }
+                );
+
+            }
+
+
+            const data =
+                await getFixtureStatistics(
+                    fixtureId
+                );
+
+
+            return sendJSON(
+                res,
+                200,
+                {
+
+                    success: true,
+
+                    action:
+                        "fixture-statistics",
+
+                    fixtureId:
+                        Number(
+                            fixtureId
+                        ),
+
+                    response:
+                        data.response ||
+                        [],
+
+                    results:
+                        data.results ||
+                        0
+
+                }
+            );
+
+        }
+
+
+        /*
+         * --------------------------------------------------------------
+         * Team
+         * --------------------------------------------------------------
+         */
+
+        if (
+            action ===
+            "team"
+        ) {
+
+            const teamId =
+                getQueryValue(
+                    req,
+                    "team"
+                ) ||
+                getQueryValue(
+                    req,
+                    "id"
+                );
+
+
+            if (!teamId) {
+
+                return sendJSON(
+                    res,
+                    400,
+                    {
+                        success: false,
+
+                        error:
+                            "Missing team ID."
+                    }
+                );
+
+            }
+
+
+            const data =
+                await getTeam(
+                    teamId
+                );
+
+
+            return sendJSON(
+                res,
+                200,
+                {
+
+                    success: true,
+
+                    action:
+                        "team",
+
+                    teamId:
+                        Number(
+                            teamId
+                        ),
+
+                    response:
+                        data.response ||
+                        [],
+
+                    results:
+                        data.results ||
+                        0
+
+                }
+            );
+
+        }
+
+
+        /*
+         * --------------------------------------------------------------
+         * Unknown action
+         * --------------------------------------------------------------
+         */
+
+        return sendJSON(
+            res,
+            400,
+            {
+
+                success: false,
+
+                error:
+                    `Unknown action "${action}".`,
+
+                supportedActions: [
+
+                    "fixtures",
+
+                    "fixture",
+
+                    "prediction",
+
+                    "predictions",
+
+                    "h2h",
+
+                    "statistics",
+
+                    "events",
+
+                    "lineups",
+
+                    "fixture-statistics",
+
+                    "team"
+
+                ]
+
+            }
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "PaceFetch football API:",
+            error
+        );
+
+
+        return sendJSON(
+            res,
+            500,
+            {
+
+                success: false,
+
+                error:
+                    error.message ||
+                    "Unable to retrieve football data."
+
+            }
+        );
+
+    }
+
+};
