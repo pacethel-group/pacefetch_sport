@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -14,653 +15,366 @@
 
     <meta
         name="description"
-        content="PaceFetch football predictions with probability-based match analysis, confidence ratings and top picks."
+        content="PaceFetch football predictions powered by real provider data. Browse today's qualifying predictions by country, league, market and confidence."
     >
 
     <meta
         name="robots"
-        content="index, follow"
+        content="index,follow"
+    >
+
+    <link
+        rel="canonical"
+        href="https://pacefetch.com/predictions.html"
+    >
+
+    <link
+        rel="icon"
+        href="/assets/logo.svg"
+        type="image/svg+xml"
     >
 
     <link
         rel="stylesheet"
-        href="css/style.css"
+        href="/css/style.css"
     >
 
     <style>
 
-        /* =====================================================
-           PACEFETCH PREDICTIONS PAGE
-        ===================================================== */
-
-        .predictions-page {
-            min-height: 100vh;
-            padding-bottom: 80px;
+        .prediction-page {
+            padding-bottom: 70px;
         }
 
-
-        /* =====================================================
-           PAGE HERO
-        ===================================================== */
-
-        .predictions-hero {
-            padding: 90px 20px 55px;
-            text-align: center;
-        }
-
-        .predictions-hero .section-kicker {
-            display: inline-block;
-            margin-bottom: 12px;
-            font-size: 13px;
-            font-weight: 800;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: #72ff9d;
-        }
-
-        .predictions-hero h1 {
-            margin: 0 auto 16px;
-            max-width: 850px;
-            font-size: clamp(36px, 6vw, 64px);
-            line-height: 1.05;
-        }
-
-        .predictions-hero p {
-            max-width: 700px;
-            margin: 0 auto;
-            color: #9ba7a0;
-            font-size: 17px;
-            line-height: 1.7;
-        }
-
-
-        /* =====================================================
-           FILTER PANEL
-        ===================================================== */
-
-        .prediction-filters {
-            max-width: 1200px;
-            margin: 0 auto 35px;
-            padding: 20px;
-
+        .prediction-toolbar {
             display: grid;
             grid-template-columns:
-                repeat(4, minmax(0, 1fr))
-                auto;
-
-            gap: 14px;
-
-            background: #101612;
-            border: 1px solid #202a23;
-            border-radius: 16px;
+                repeat(4, minmax(0, 1fr));
+            gap: 12px;
+            margin: 24px 0;
         }
 
-        .filter-group {
-            display: flex;
-            flex-direction: column;
-            gap: 7px;
-        }
-
-        .filter-group label {
-            font-size: 12px;
-            font-weight: 700;
-            color: #8d9a92;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-        }
-
-        .filter-group select {
+        .prediction-toolbar select {
             width: 100%;
-            min-height: 45px;
-            padding: 0 13px;
-
-            color: #ffffff;
-            background: #171e19;
-
-            border: 1px solid #29352d;
-            border-radius: 9px;
-
+            padding: 13px 14px;
+            border: 1px solid
+                rgba(255,255,255,.10);
+            border-radius: 10px;
+            background: #111816;
+            color: #fff;
             outline: none;
-            cursor: pointer;
         }
 
-        .filter-group select:focus {
-            border-color: #72ff9d;
+        .prediction-toolbar select:focus {
+            border-color:
+                rgba(46,213,115,.55);
         }
 
-        .reset-filter-btn {
-            align-self: end;
-
-            min-height: 45px;
-            padding: 0 18px;
-
-            border: 0;
-            border-radius: 9px;
-
-            background: #72ff9d;
-            color: #07110a;
-
-            font-weight: 800;
-            cursor: pointer;
-
-            transition:
-                transform 0.2s ease,
-                opacity 0.2s ease;
+        .prediction-summary {
+            display: grid;
+            grid-template-columns:
+                repeat(4, minmax(0, 1fr));
+            gap: 12px;
+            margin-bottom: 24px;
         }
 
-        .reset-filter-btn:hover {
-            transform: translateY(-2px);
-            opacity: 0.9;
+        .prediction-stat {
+            padding: 18px;
+            border-radius: 14px;
+            background: #101614;
+            border: 1px solid
+                rgba(255,255,255,.07);
         }
 
-
-        /* =====================================================
-           SECTION HEADER
-        ===================================================== */
-
-        .predictions-section {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
+        .prediction-stat strong {
+            display: block;
+            font-size: 26px;
+            margin-bottom: 5px;
         }
 
-        .predictions-section-heading {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-
-            gap: 20px;
-            margin-bottom: 25px;
-        }
-
-        .predictions-section-heading h2 {
-            margin: 0;
-            font-size: 30px;
-        }
-
-        .predictions-section-heading p {
-            margin: 7px 0 0;
-            color: #7f8c84;
-        }
-
-        .prediction-count {
-            display: inline-flex;
-            align-items: center;
-
-            padding: 8px 12px;
-
-            border-radius: 999px;
-
-            background: #17231b;
-            border: 1px solid #26372b;
-
-            color: #72ff9d;
-
+        .prediction-stat span {
+            color: #8e9a95;
             font-size: 13px;
-            font-weight: 800;
-            white-space: nowrap;
         }
 
-
-        /* =====================================================
-           LOADING
-        ===================================================== */
-
-        .loading-state {
-            padding: 55px 20px;
-
-            text-align: center;
-
-            color: #89958d;
-
-            background: #101612;
-            border: 1px solid #202a23;
-            border-radius: 16px;
-        }
-
-        .loading-spinner {
-            width: 35px;
-            height: 35px;
-
-            margin: 0 auto 15px;
-
-            border: 3px solid #28332c;
-            border-top-color: #72ff9d;
-
-            border-radius: 50%;
-
-            animation: pacefetchSpin 0.8s linear infinite;
-        }
-
-        @keyframes pacefetchSpin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-
-        /* =====================================================
-           PREDICTIONS GRID
-        ===================================================== */
-
-        .predictions-grid {
-            display: grid;
-
-            grid-template-columns:
-                repeat(3, minmax(0, 1fr));
-
-            gap: 18px;
-        }
-
-
-        /* =====================================================
-           PREDICTION CARD
-        ===================================================== */
-
-        .real-prediction-card {
-            position: relative;
-
-            padding: 20px;
-
-            background: #101612;
-
-            border: 1px solid #202a23;
-            border-radius: 16px;
-
-            overflow: hidden;
-
-            transition:
-                transform 0.2s ease,
-                border-color 0.2s ease;
-        }
-
-        .real-prediction-card:hover {
-            transform: translateY(-3px);
-            border-color: #334438;
-        }
-
-        .real-prediction-card::before {
-            content: "";
-
-            position: absolute;
-
-            top: 0;
-            left: 0;
-            right: 0;
-
-            height: 3px;
-
-            background: #6b7470;
-        }
-
-        .real-prediction-card.confidence-strong::before {
-            background: #32e875;
-        }
-
-        .real-prediction-card.confidence-good::before {
-            background: #c7f542;
-        }
-
-        .real-prediction-card.confidence-moderate::before {
-            background: #f0ad3d;
-        }
-
-        .real-prediction-card.confidence-weak::before {
-            background: #e95656;
-        }
-
-
-        /* =====================================================
-           CARD TOP
-        ===================================================== */
-
-        .real-card-top {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            gap: 12px;
-
-            margin-bottom: 18px;
-        }
-
-        .real-card-league {
-            min-width: 0;
-
-            color: #7f8c84;
-
-            font-size: 12px;
-            font-weight: 700;
-
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .real-confidence {
-            flex-shrink: 0;
-
-            padding: 6px 9px;
-
-            border-radius: 999px;
-
-            font-size: 12px;
-            font-weight: 900;
-        }
-
-        .confidence-strong .real-confidence {
-            background: #153c22;
-            color: #72ff9d;
-        }
-
-        .confidence-good .real-confidence {
-            background: #394216;
-            color: #d8f76a;
-        }
-
-        .confidence-moderate .real-confidence {
-            background: #493517;
-            color: #ffc65d;
-        }
-
-        .confidence-weak .real-confidence {
-            background: #421b1b;
-            color: #ff7777;
-        }
-
-
-        /* =====================================================
-           MATCH
-        ===================================================== */
-
-        .real-match {
-            display: grid;
-
-            grid-template-columns:
-                1fr
-                auto
-                1fr;
-
-            align-items: center;
-
-            gap: 12px;
-
+        .prediction-status {
+            padding: 18px;
+            border-radius: 14px;
+            background: #101614;
+            border: 1px solid
+                rgba(255,255,255,.07);
+            color: #aeb8b4;
             margin-bottom: 20px;
         }
 
-        .real-team {
-            font-size: 15px;
-            line-height: 1.4;
+        .prediction-status.error {
+            border-color:
+                rgba(255,70,70,.35);
+            color: #ff8585;
         }
 
-        .real-team.away {
-            text-align: right;
-        }
-
-        .vs-text {
-            color: #5f6a63;
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-
-        /* =====================================================
-           SELECTION
-        ===================================================== */
-
-        .real-selection {
-            padding: 14px;
-
-            background: #171e19;
-
-            border: 1px solid #263128;
-            border-radius: 11px;
-        }
-
-        .real-market {
-            display: block;
-
-            margin-bottom: 6px;
-
-            color: #7f8c84;
-
-            font-size: 11px;
-            font-weight: 800;
-
-            text-transform: uppercase;
-            letter-spacing: 0.7px;
-        }
-
-        .real-selection-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            gap: 15px;
-        }
-
-        .real-selection-name {
-            font-size: 16px;
-            font-weight: 800;
-        }
-
-        .real-probability {
-            color: #72ff9d;
-            font-size: 20px;
-            font-weight: 900;
-        }
-
-
-        /* =====================================================
-           CARD FOOTER
-        ===================================================== */
-
-        .real-card-footer {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            gap: 10px;
-
-            margin-top: 15px;
-
-            color: #69756d;
-
-            font-size: 11px;
-        }
-
-
-        /* =====================================================
-           EMPTY STATE
-        ===================================================== */
-
-        .empty-state {
-            padding: 65px 25px;
-
+        .prediction-status.empty {
             text-align: center;
-
-            background: #101612;
-
-            border: 1px solid #202a23;
-            border-radius: 16px;
+            padding: 45px 20px;
         }
 
-        .empty-icon {
-            font-size: 45px;
+        .prediction-grid {
+            display: grid;
+            grid-template-columns:
+                repeat(3, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .pf-prediction-card {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            padding: 18px;
+            border-radius: 16px;
+            background: #101614;
+            border: 1px solid
+                rgba(255,255,255,.07);
+            transition:
+                transform .2s ease,
+                border-color .2s ease,
+                box-shadow .2s ease;
+        }
+
+        .pf-prediction-card:hover {
+            transform: translateY(-3px);
+            border-color:
+                rgba(46,213,115,.38);
+            box-shadow:
+                0 12px 30px
+                rgba(0,0,0,.20);
+        }
+
+        .pf-card-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .pf-market {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .7px;
+            color: #8e9a95;
+        }
+
+        .pf-confidence {
+            font-size: 12px;
+            font-weight: 800;
+            padding: 6px 9px;
+            border-radius: 999px;
+        }
+
+        .pf-confidence.strong {
+            color: #55e889;
+            background:
+                rgba(55,220,120,.10);
+        }
+
+        .pf-confidence.good {
+            color: #d4ed55;
+            background:
+                rgba(210,235,70,.10);
+        }
+
+        .pf-confidence.moderate {
+            color: #ffbd52;
+            background:
+                rgba(255,185,60,.10);
+        }
+
+        .pf-confidence.weak {
+            color: #ff6b6b;
+            background:
+                rgba(255,70,70,.10);
+        }
+
+        .pf-teams {
             margin-bottom: 15px;
         }
 
-        .empty-state h3 {
-            margin: 0 0 10px;
-            font-size: 22px;
+        .pf-team {
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 1.35;
         }
 
-        .empty-state p {
-            max-width: 550px;
-            margin: 0 auto;
-
-            color: #7f8c84;
-            line-height: 1.7;
+        .pf-team + .pf-team {
+            margin-top: 4px;
         }
 
-
-        /* =====================================================
-           ERROR STATE
-        ===================================================== */
-
-        .error-state {
-            padding: 45px 25px;
-
-            text-align: center;
-
-            background: #171313;
-
-            border: 1px solid #432525;
-            border-radius: 16px;
+        .pf-vs {
+            color: #697570;
+            font-size: 11px;
+            margin: 4px 0;
         }
 
-        .error-state h3 {
-            margin: 0 0 10px;
+        .pf-selection {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin: 16px 0;
+            padding: 13px;
+            border-radius: 11px;
+            background:
+                rgba(46,213,115,.06);
         }
 
-        .error-state p {
-            color: #9f8888;
-            line-height: 1.6;
-        }
-
-
-        /* =====================================================
-           DISCLAIMER
-        ===================================================== */
-
-        .prediction-disclaimer {
-            max-width: 1200px;
-
-            margin: 35px auto 0;
-
-            padding: 0 20px;
-        }
-
-        .prediction-disclaimer-inner {
-            padding: 18px;
-
-            background: #101612;
-
-            border: 1px solid #202a23;
-            border-radius: 12px;
-
-            color: #747f78;
-
+        .pf-selection-label {
+            color: #8e9a95;
             font-size: 12px;
-            line-height: 1.7;
         }
 
+        .pf-selection-value {
+            font-size: 18px;
+            font-weight: 900;
+            color: #fff;
+        }
 
-        /* =====================================================
-           MOBILE
-        ===================================================== */
+        .pf-probability {
+            font-size: 24px;
+            font-weight: 900;
+        }
 
-        @media (max-width: 1000px) {
+        .pf-probability.strong {
+            color: #55e889;
+        }
 
-            .prediction-filters {
+        .pf-probability.good {
+            color: #d4ed55;
+        }
+
+        .pf-probability.moderate {
+            color: #ffbd52;
+        }
+
+        .pf-probability.weak {
+            color: #ff6b6b;
+        }
+
+        .pf-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 14px;
+            color: #78837f;
+            font-size: 11px;
+        }
+
+        .pf-rank {
+            color: #b9c4bf;
+            font-weight: 700;
+        }
+
+        @media (
+            max-width: 900px
+        ) {
+
+            .prediction-grid {
                 grid-template-columns:
                     repeat(2, minmax(0, 1fr));
             }
 
-            .reset-filter-btn {
-                align-self: stretch;
-            }
-
-            .predictions-grid {
+            .prediction-toolbar {
                 grid-template-columns:
                     repeat(2, minmax(0, 1fr));
             }
+
+            .prediction-summary {
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+            }
+
         }
 
+        @media (
+            max-width: 600px
+        ) {
 
-        @media (max-width: 650px) {
-
-            .predictions-hero {
-                padding:
-                    65px
-                    18px
-                    40px;
-            }
-
-            .prediction-filters {
-                grid-template-columns: 1fr;
-
-                margin-left: 18px;
-                margin-right: 18px;
-            }
-
-            .predictions-section {
-                padding: 0 18px;
-            }
-
-            .predictions-section-heading {
-                align-items: flex-start;
-                flex-direction: column;
-            }
-
-            .predictions-grid {
+            .prediction-grid {
                 grid-template-columns: 1fr;
             }
 
-            .real-prediction-card {
-                padding: 18px;
+            .prediction-toolbar {
+                grid-template-columns: 1fr;
             }
 
-            .prediction-disclaimer {
-                padding: 0 18px;
+            .prediction-summary {
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
             }
+
+            .prediction-stat strong {
+                font-size: 22px;
+            }
+
         }
 
     </style>
+
 </head>
 
 
 <body>
 
+<div class="site-shell">
 
-    <!-- =====================================================
-         HEADER
-    ====================================================== -->
+
+    <!-- HEADER -->
 
     <header class="site-header">
 
         <div class="container header-inner">
 
             <a
-                href="index.html"
-                class="logo"
+                href="/"
+                class="brand"
             >
-                Pace<span>Fetch</span>
+
+                <img
+                    src="/assets/logo.svg"
+                    alt="PaceFetch"
+                    class="brand-logo"
+                >
+
+                <span>
+                    PaceFetch
+                </span>
+
             </a>
 
 
-            <nav class="main-nav">
+            <nav
+                class="main-nav"
+                id="mainNav"
+            >
 
-                <a href="index.html">
+                <a href="/">
                     Home
                 </a>
 
                 <a
-                    href="predictions.html"
+                    href="/predictions.html"
                     class="active"
                 >
                     Predictions
                 </a>
 
-                <a href="history.html">
-                    History
-                </a>
-
-                <a href="countries.html">
+                <a href="/countries.html">
                     Countries
                 </a>
 
-                <a href="methodology.html">
+                <a href="/history.html">
+                    History
+                </a>
+
+                <a href="/methodology.html">
                     Methodology
                 </a>
 
@@ -668,7 +382,8 @@
 
 
             <button
-                class="mobile-menu-btn"
+                class="menu-toggle"
+                id="menuToggle"
                 type="button"
                 aria-label="Open menu"
             >
@@ -680,309 +395,269 @@
     </header>
 
 
+    <!-- MAIN -->
 
-    <!-- =====================================================
-         MAIN
-    ====================================================== -->
+    <main
+        class="prediction-page"
+    >
 
-    <main class="predictions-page">
-
-
-        <!-- =================================================
-             HERO
-        ================================================== -->
-
-        <section class="predictions-hero">
-
-            <span class="section-kicker">
-                PACEFETCH FOOTBALL
-            </span>
-
-            <h1>
-                Today's Football Predictions
-            </h1>
-
-            <p>
-                Data-driven football probabilities,
-                ranked by confidence and filtered
-                before publication.
-            </p>
-
-        </section>
+        <div class="container">
 
 
+            <!-- HERO -->
 
-        <!-- =================================================
-             FILTERS
-        ================================================== -->
+            <section class="page-hero">
 
-        <section
-            class="prediction-filters"
-            aria-label="Prediction filters"
-        >
+                <div class="pf-section-heading">
 
-            <div class="filter-group">
+                    <div>
 
-                <label for="country-filter">
-                    Country
-                </label>
+                        <div
+                            class="eyebrow"
+                            style="
+                                color:#55e889;
+                                font-size:12px;
+                                font-weight:800;
+                                letter-spacing:1px;
+                                text-transform:uppercase;
+                                margin-bottom:8px;
+                            "
+                        >
+                            LIVE DATA
+                        </div>
 
-                <select id="country-filter">
+                        <h1>
+                            Today's Football Predictions
+                        </h1>
 
-                    <option value="">
-                        All Countries
+                        <p>
+                            Real provider-backed predictions
+                            ranked by probability and confidence.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- SUMMARY -->
+
+            <section
+                class="prediction-summary"
+                aria-label="Prediction summary"
+            >
+
+                <div class="prediction-stat">
+
+                    <strong id="totalFixtures">
+                        —
+                    </strong>
+
+                    <span>
+                        Today's fixtures
+                    </span>
+
+                </div>
+
+
+                <div class="prediction-stat">
+
+                    <strong id="upcomingFixtures">
+                        —
+                    </strong>
+
+                    <span>
+                        Upcoming fixtures
+                    </span>
+
+                </div>
+
+
+                <div class="prediction-stat">
+
+                    <strong id="publishedPredictions">
+                        —
+                    </strong>
+
+                    <span>
+                        Published predictions
+                    </span>
+
+                </div>
+
+
+                <div class="prediction-stat">
+
+                    <strong id="highestProbability">
+                        —
+                    </strong>
+
+                    <span>
+                        Highest probability
+                    </span>
+
+                </div>
+
+            </section>
+
+
+            <!-- FILTERS -->
+
+            <section
+                class="prediction-toolbar"
+                aria-label="Prediction filters"
+            >
+
+                <select
+                    id="countryFilter"
+                    aria-label="Filter by country"
+                >
+
+                    <option value="all">
+                        All countries
                     </option>
 
                 </select>
 
-            </div>
 
+                <select
+                    id="leagueFilter"
+                    aria-label="Filter by league"
+                >
 
-            <div class="filter-group">
-
-                <label for="league-filter">
-                    League
-                </label>
-
-                <select id="league-filter">
-
-                    <option value="">
-                        All Leagues
+                    <option value="all">
+                        All leagues
                     </option>
 
                 </select>
 
-            </div>
 
+                <select
+                    id="marketFilter"
+                    aria-label="Filter by market"
+                >
 
-            <div class="filter-group">
-
-                <label for="market-filter">
-                    Market
-                </label>
-
-                <select id="market-filter">
-
-                    <option value="">
-                        All Markets
-                    </option>
-
-                    <option value="1X2">
-                        1X2
-                    </option>
-
-                    <option value="Over/Under 1.5">
-                        Over/Under 1.5
-                    </option>
-
-                    <option value="Over/Under 2.5">
-                        Over/Under 2.5
-                    </option>
-
-                    <option value="BTTS">
-                        BTTS
-                    </option>
-
-                    <option value="Double Chance">
-                        Double Chance
+                    <option value="all">
+                        All markets
                     </option>
 
                 </select>
 
-            </div>
 
-
-            <div class="filter-group">
-
-                <label for="confidence-filter">
-                    Minimum Confidence
-                </label>
-
-                <select id="confidence-filter">
+                <select
+                    id="confidenceFilter"
+                    aria-label="Filter by confidence"
+                >
 
                     <option value="0">
-                        Any
+                        All confidence
                     </option>
 
                     <option value="50">
-                        50%+
-                    </option>
-
-                    <option value="60">
-                        60%+
+                        50%+ confidence
                     </option>
 
                     <option value="70">
-                        70%+
+                        70%+ confidence
                     </option>
 
                     <option value="80">
-                        80%+
+                        80%+ confidence
                     </option>
 
                 </select>
 
-            </div>
+            </section>
 
 
-            <button
-                id="reset-filters"
-                class="reset-filter-btn"
-                type="button"
-            >
-                Reset
-            </button>
-
-        </section>
-
-
-
-        <!-- =================================================
-             PREDICTIONS
-        ================================================== -->
-
-        <section class="predictions-section">
-
-
-            <div class="predictions-section-heading">
-
-                <div>
-
-                    <h2>
-                        Qualifying Predictions
-                    </h2>
-
-                    <p>
-                        Ranked from strongest to weakest.
-                    </p>
-
-                </div>
-
-
-                <span
-                    id="prediction-count"
-                    class="prediction-count"
-                >
-                    Loading...
-                </span>
-
-            </div>
-
-
-
-            <!-- LOADING -->
+            <!-- STATUS -->
 
             <div
-                id="predictions-loading"
-                class="loading-state"
+                id="predictionStatus"
+                class="prediction-status"
             >
-
-                <div class="loading-spinner"></div>
-
-                <div>
-                    Loading today's predictions...
-                </div>
-
+                Loading today's predictions...
             </div>
 
 
+            <!-- PREDICTIONS -->
 
-            <!-- REAL PREDICTIONS -->
+            <section>
 
-            <div
-                id="predictions-container"
-                class="predictions-grid"
-            ></div>
+                <div
+                    class="prediction-grid"
+                    id="predictionGrid"
+                ></div>
 
-
-
-            <!-- EMPTY -->
-
-                        <div
-                id="predictions-empty"
-                class="empty-state"
-                style="display:none;"
-            >
-
-                <div class="empty-icon">
-                    ⚽
-                </div>
-
-                <h3>
-                    No qualifying predictions today
-                </h3>
-
-                <p>
-                    PaceFetch found no predictions
-                    strong enough to publish today.
-                </p>
-
-            </div>
+            </section>
 
 
-            <!-- =================================================
-                 ERROR STATE
-            ================================================== -->
-
-            <div
-                id="predictions-error"
-                class="error-state"
-                style="display:none;"
-            >
-
-                <h3>
-                    Predictions temporarily unavailable
-                </h3>
-
-                <p>
-                    We couldn't load today's
-                    predictions. Please try again shortly.
-                </p>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- =================================================
-             DISCLAIMER
-        ================================================== -->
-
-        <section class="prediction-disclaimer">
-
-            <div class="prediction-disclaimer-inner">
-
-                <strong>
-                    Important:
-                </strong>
-
-                PaceFetch probabilities are
-                statistical model outputs and are
-                not guarantees of match results.
-                Football contains uncertainty and
-                predictions can be wrong.
-
-            </div>
-
-        </section>
-
+        </div>
 
     </main>
 
 
-
-    <!-- =====================================================
-         FOOTER
-    ====================================================== -->
+    <!-- FOOTER -->
 
     <footer class="site-footer">
 
         <div class="container">
 
+            <div class="footer-brand">
+
+                <img
+                    src="/assets/logo.svg"
+                    alt="PaceFetch"
+                    class="brand-logo"
+                >
+
+                <strong>
+                    PaceFetch
+                </strong>
+
+            </div>
+
+
             <p>
-                © 2026 PaceFetch.
-                Football predictions and analysis.
+                Football predictions, fixtures,
+                leagues and match intelligence.
+            </p>
+
+
+            <div class="footer-links">
+
+                <a href="/">
+                    Home
+                </a>
+
+                <a href="/predictions.html">
+                    Predictions
+                </a>
+
+                <a href="/countries.html">
+                    Countries
+                </a>
+
+                <a href="/history.html">
+                    History
+                </a>
+
+                <a href="/methodology.html">
+                    Methodology
+                </a>
+
+            </div>
+
+
+            <p class="footer-copy">
+
+                Designed by
+                <strong>
+                    Pacethel
+                </strong>
+
             </p>
 
         </div>
@@ -990,17 +665,335 @@
     </footer>
 
 
-
-    <!-- =====================================================
-         JAVASCRIPT
-    ====================================================== -->
-
-    <!-- PaceFetch API client -->
-    <script src="js/api.js"></script>
-
-    <!-- Real prediction page logic -->
-    <script src="js/predictions.js"></script>
+</div>
 
 
-</body>
-</html>
+<script>
+
+(function () {
+
+    "use strict";
+
+
+    const state = {
+
+        predictions: [],
+
+        filtered: []
+
+    };
+
+
+    const elements = {
+
+        grid:
+            document.getElementById(
+                "predictionGrid"
+            ),
+
+        status:
+            document.getElementById(
+                "predictionStatus"
+            ),
+
+        totalFixtures:
+            document.getElementById(
+                "totalFixtures"
+            ),
+
+        upcomingFixtures:
+            document.getElementById(
+                "upcomingFixtures"
+            ),
+
+        publishedPredictions:
+            document.getElementById(
+                "publishedPredictions"
+            ),
+
+        highestProbability:
+            document.getElementById(
+                "highestProbability"
+            ),
+
+        countryFilter:
+            document.getElementById(
+                "countryFilter"
+            ),
+
+        leagueFilter:
+            document.getElementById(
+                "leagueFilter"
+            ),
+
+        marketFilter:
+            document.getElementById(
+                "marketFilter"
+            ),
+
+        confidenceFilter:
+            document.getElementById(
+                "confidenceFilter"
+            )
+
+    };
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Escape HTML
+    |--------------------------------------------------------------------------
+    */
+
+    function escapeHTML(value) {
+
+        return String(
+            value ?? ""
+        )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Confidence class
+    |--------------------------------------------------------------------------
+    */
+
+    function confidenceClass(
+        prediction
+    ) {
+
+        const probability =
+            Number(
+                prediction.probability
+            ) || 0;
+
+
+        if (
+            probability >= 80
+        ) {
+
+            return "strong";
+
+        }
+
+
+        if (
+            probability >= 70
+        ) {
+
+            return "good";
+
+        }
+
+
+        if (
+            probability >= 50
+        ) {
+
+            return "moderate";
+
+        }
+
+
+        return "weak";
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Format kickoff
+    |--------------------------------------------------------------------------
+    */
+
+    function formatKickoff(
+        value
+    ) {
+
+        if (!value) {
+            return "Time unavailable";
+        }
+
+
+        const date =
+            new Date(
+                value
+            );
+
+
+        if (
+            Number.isNaN(
+                date.getTime()
+            )
+        ) {
+
+            return "Time unavailable";
+
+        }
+
+
+        return new Intl.DateTimeFormat(
+            "en-NG",
+            {
+                timeZone:
+                    "Africa/Lagos",
+
+                day:
+                    "2-digit",
+
+                month:
+                    "short",
+
+                hour:
+                    "2-digit",
+
+                minute:
+                    "2-digit",
+
+                hour12:
+                    true
+            }
+        ).format(
+            date
+        );
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Populate filter
+    |--------------------------------------------------------------------------
+    */
+
+    function populateFilter(
+        element,
+        values,
+        defaultLabel
+    ) {
+
+        const unique =
+            Array.from(
+                new Set(
+                    values
+                        .filter(Boolean)
+                        .map(
+                            value =>
+                                String(value)
+                        )
+                )
+            )
+            .sort(
+                (a, b) =>
+                    a.localeCompare(
+                        b
+                    )
+            );
+
+
+        element.innerHTML = "";
+
+
+        const defaultOption =
+            document.createElement(
+                "option"
+            );
+
+        defaultOption.value =
+            "all";
+
+        defaultOption.textContent =
+            defaultLabel;
+
+        element.appendChild(
+            defaultOption
+        );
+
+
+        unique.forEach(
+            value => {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+                option.value =
+                    value;
+
+                option.textContent =
+                    value;
+
+                element.appendChild(
+                    option
+                );
+
+            }
+        );
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Build filters
+    |--------------------------------------------------------------------------
+    */
+
+    function buildFilters() {
+
+        populateFilter(
+
+            elements.countryFilter,
+
+            state.predictions.map(
+                prediction =>
+                    prediction.country
+            ),
+
+            "All countries"
+
+        );
+
+
+        populateFilter(
+
+            elements.leagueFilter,
+
+            state.predictions.map(
+                prediction =>
+                    prediction.league
+            ),
+
+            "All leagues"
+
+        );
+
+
+        populateFilter(
+
+            elements.marketFilter,
+
+            state.predi
