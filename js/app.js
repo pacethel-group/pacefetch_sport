@@ -1,271 +1,281 @@
-/* =========================================================
-   PaceFetch - Main Application
-   ========================================================= */
-
-(function () {
-    "use strict";
-
-    const PaceFetch = {
-        API_BASE: "",
-
-        getApiUrl(path) {
-            return `${this.API_BASE}${path}`;
-        },
-
-        async fetchJSON(path, options = {}) {
-            const response = await fetch(this.getApiUrl(path), {
-                ...options,
-                headers: {
-                    "Accept": "application/json",
-                    ...(options.headers || {})
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error(`Request failed: ${response.status}`);
-            }
-
-            return response.json();
-        },
-
-        escapeHTML(value) {
-            const div = document.createElement("div");
-            div.textContent = value ?? "";
-            return div.innerHTML;
-        },
-
-        formatDate(dateString, options = {}) {
-            if (!dateString) return "";
-
-            const date = new Date(dateString);
+/*
+  PaceFetch Frontend
+  ------------------
+  This file currently uses demo prediction objects.
+
+  Later, these objects will be replaced by data
+  returned from our secure PaceFetch backend.
+*/
+
+
+const demoPredictions = [
+  {
+    league: "Premier League",
+    country: "England",
+    home: "Arsenal",
+    away: "Chelsea",
+    time: "18:30",
+    market: "Double Chance",
+    selection: "Arsenal or Draw",
+    probability: 84
+  },
+
+  {
+    league: "La Liga",
+    country: "Spain",
+    home: "Barcelona",
+    away: "Sevilla",
+    time: "20:00",
+    market: "Over 1.5 Goals",
+    selection: "Over 1.5",
+    probability: 82
+  },
+
+  {
+    league: "Serie A",
+    country: "Italy",
+    home: "Inter",
+    away: "Torino",
+    time: "19:45",
+    market: "1X2",
+    selection: "Inter Win",
+    probability: 78
+  },
+
+  {
+    league: "Bundesliga",
+    country: "Germany",
+    home: "Bayern Munich",
+    away: "Mainz",
+    time: "17:30",
+    market: "BTTS",
+    selection: "BTTS — Yes",
+    probability: 71
+  },
+
+  {
+    league: "Ligue 1",
+    country: "France",
+    home: "PSG",
+    away: "Lyon",
+    time: "20:00",
+    market: "Over 2.5 Goals",
+    selection: "Over 2.5",
+    probability: 73
+  },
+
+  {
+    league: "NPFL",
+    country: "Nigeria",
+    home: "Enyimba",
+    away: "Rangers",
+    time: "16:00",
+    market: "Double Chance",
+    selection: "Enyimba or Draw",
+    probability: 69
+  }
+];
+
+
+function getConfidenceClass(probability) {
+
+  if (probability >= 80) {
+    return "strong";
+  }
+
+  if (probability >= 70) {
+    return "medium";
+  }
+
+  if (probability >= 50) {
+    return "amber";
+  }
+
+  return "red";
+}
+
+
+function createPredictionCard(prediction) {
+
+  const confidenceClass =
+    getConfidenceClass(prediction.probability);
 
-            if (Number.isNaN(date.getTime())) {
-                return dateString;
-            }
+  return `
+    <article class="prediction-card">
 
-            return new Intl.DateTimeFormat(
-                "en-NG",
-                {
-                    timeZone: "Africa/Lagos",
-                    dateStyle: options.dateStyle || "medium",
-                    timeStyle: options.timeStyle || undefined
-                }
-            ).format(date);
-        },
-
-        formatNigeriaTime(dateString) {
-            if (!dateString) return "";
-
-            const date = new Date(dateString);
-
-            if (Number.isNaN(date.getTime())) {
-                return dateString;
-            }
-
-            return new Intl.DateTimeFormat("en-NG", {
-                timeZone: "Africa/Lagos",
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: true
-            }).format(date);
-        },
-
-        showToast(message, type = "info") {
-            let toast = document.querySelector(".pf-toast");
-
-            if (!toast) {
-                toast = document.createElement("div");
-                toast.className = "pf-toast";
-                document.body.appendChild(toast);
-            }
-
-            toast.textContent = message;
-            toast.dataset.type = type;
-            toast.classList.add("show");
-
-            clearTimeout(this.toastTimer);
-
-            this.toastTimer = setTimeout(() => {
-                toast.classList.remove("show");
-            }, 2800);
-        }
-    };
-
-    window.PaceFetch = PaceFetch;
-
-
-    /* =====================================================
-       Mobile Menu
-       ===================================================== */
-
-    function initMobileMenu() {
-        const menuButton = document.querySelector(
-            "[data-mobile-menu], .mobile-menu-btn, #mobileMenuBtn"
-        );
-
-        const mobileMenu = document.querySelector(
-            "[data-mobile-nav], .mobile-nav, #mobileNav"
-        );
-
-        if (!menuButton || !mobileMenu) return;
-
-        menuButton.addEventListener("click", () => {
-            mobileMenu.classList.toggle("active");
-
-            const expanded =
-                mobileMenu.classList.contains("active");
+      <div class="match-meta">
+        <span class="league-name">
+          ${prediction.country} · ${prediction.league}
+        </span>
 
-            menuButton.setAttribute(
-                "aria-expanded",
-                expanded ? "true" : "false"
-            );
-        });
-    }
-
-
-    /* =====================================================
-       Search
-       ===================================================== */
+        <span>${prediction.time}</span>
+      </div>
 
-    function initSearch() {
-        const searchButtons = document.querySelectorAll(
-            "[data-search], .search-btn, #searchBtn"
-        );
-
-        const overlay = document.querySelector(
-            "[data-search-overlay], .search-overlay, #searchOverlay"
-        );
-
-        if (!overlay) return;
-
-        const input = overlay.querySelector(
-            "input[type='search'], input[type='text']"
-        );
+      <div class="teams">
 
-        const closeButton = overlay.querySelector(
-            "[data-search-close], .search-close, #searchClose"
-        );
-
-        function openSearch() {
-            overlay.classList.add("active");
-
-            setTimeout(() => {
-                if (input) input.focus();
-            }, 100);
-        }
-
-        function closeSearch() {
-            overlay.classList.remove("active");
-        }
-
-        searchButtons.forEach(button => {
-            button.addEventListener("click", openSearch);
-        });
-
-        if (closeButton) {
-            closeButton.addEventListener("click", closeSearch);
-        }
-
-        overlay.addEventListener("click", event => {
-            if (event.target === overlay) {
-                closeSearch();
-            }
-        });
-
-        if (input) {
-            input.addEventListener("keydown", event => {
-                if (event.key === "Enter") {
-                    const query = input.value.trim();
-
-                    if (!query) return;
-
-                    window.location.href =
-                        `/news/?search=${encodeURIComponent(query)}`;
-                }
-            });
-        }
-
-        document.addEventListener("keydown", event => {
-            if (
-                event.key === "/" &&
-                document.activeElement.tagName !== "INPUT" &&
-                document.activeElement.tagName !== "TEXTAREA"
-            ) {
-                event.preventDefault();
-                openSearch();
-            }
-
-            if (event.key === "Escape") {
-                closeSearch();
-            }
-        });
-    }
-
-
-    /* =====================================================
-       Smooth Internal Links
-       ===================================================== */
-
-    function initLinks() {
-        document.addEventListener("click", event => {
-            const link = event.target.closest("a");
-
-            if (!link) return;
-
-            const href = link.getAttribute("href");
-
-            if (!href || href.startsWith("#")) return;
-
-            if (
-                href.startsWith("http") &&
-                !href.includes(window.location.hostname)
-            ) {
-                return;
-            }
-        });
-    }
-
-
-    /* =====================================================
-       Active Navigation
-       ===================================================== */
-
-    function setActiveNavigation() {
-        const path = window.location.pathname;
-
-        document.querySelectorAll(
-            "nav a, .desktop-nav a, .mobile-bottom-nav a"
-        ).forEach(link => {
-            const href = link.getAttribute("href");
-
-            if (!href) return;
-
-            if (
-                href !== "/" &&
-                path.startsWith(href.replace("index.html", ""))
-            ) {
-                link.classList.add("active");
-            }
-
-            if (
-                href === "/" &&
-                path === "/"
-            ) {
-                link.classList.add("active");
-            }
-        });
-    }
-
-
-    /* =====================================================
-       Start
-       ===================================================== */
-
-    document.addEventListener("DOMContentLoaded", () => {
-        initMobileMenu();
-        initSearch();
-        initLinks();
-        setActiveNavigation();
-    });
-
-})();
+        <div class="team">
+          <span>${prediction.home}</span>
+          <span class="team-score">—</span>
+        </div>
+
+        <div class="team">
+          <span>${prediction.away}</span>
+          <span class="team-score">—</span>
+        </div>
+
+      </div>
+
+      <div class="prediction-main">
+
+        <div class="prediction-selection">
+
+          <div>
+            <div class="market-name">
+              ${prediction.market}
+            </div>
+
+            <div class="selection">
+              ${prediction.selection}
+            </div>
+          </div>
+
+          <div class="confidence ${confidenceClass}">
+            ${prediction.probability}%
+          </div>
+
+        </div>
+
+      </div>
+
+    </article>
+  `;
+}
+
+
+function createTopPick(prediction, index) {
+
+  return `
+    <article class="top-pick">
+
+      <div class="pick-rank">
+        TOP PICK #${index + 1}
+      </div>
+
+      <div class="pick-match">
+        ${prediction.home}
+        <span style="color:#657180;">vs</span>
+        ${prediction.away}
+      </div>
+
+      <div class="pick-market">
+        ${prediction.market} · ${prediction.selection}
+      </div>
+
+      <div class="pick-confidence">
+
+        <span>Model probability</span>
+
+        <span class="pick-percentage">
+          ${prediction.probability}%
+        </span>
+
+      </div>
+
+    </article>
+  `;
+}
+
+
+function renderTodayPredictions() {
+
+  const container =
+    document.getElementById("todayPredictions");
+
+  if (!container) {
+    return;
+  }
+
+  container.innerHTML =
+    demoPredictions
+      .slice(0, 6)
+      .map(createPredictionCard)
+      .join("");
+
+  const counter =
+    document.getElementById("predictionCount");
+
+  if (counter) {
+    counter.textContent = demoPredictions.length;
+  }
+}
+
+
+function renderTopPicks() {
+
+  const container =
+    document.getElementById("topPicks");
+
+  if (!container) {
+    return;
+  }
+
+  const picks =
+    [...demoPredictions]
+      .sort((a, b) => b.probability - a.probability)
+      .slice(0, 3);
+
+  container.innerHTML =
+    picks
+      .map((prediction) => {
+
+        const index =
+          picks.indexOf(prediction);
+
+        return createTopPick(prediction, index);
+
+      })
+      .join("");
+}
+
+
+function setupMobileMenu() {
+
+  const button =
+    document.getElementById("mobileMenu");
+
+  const nav =
+    document.getElementById("mobileNav");
+
+  if (!button || !nav) {
+    return;
+  }
+
+  button.addEventListener("click", () => {
+
+    nav.classList.toggle("open");
+
+    button.textContent =
+      nav.classList.contains("open")
+        ? "✕"
+        : "☰";
+
+  });
+
+}
+
+
+function initPaceFetch() {
+
+  renderTodayPredictions();
+
+  renderTopPicks();
+
+  setupMobileMenu();
+
+}
+
+
+document.addEventListener(
+  "DOMContentLoaded",
+  initPaceFetch
+);
