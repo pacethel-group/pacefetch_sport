@@ -1739,5 +1739,250 @@
     loadPredictions();
 </script>
 
+<!-- PaceFetch Daily Prediction Notification -->
+<div id="notification-popup" class="notification-popup">
+    <div class="notification-popup-box">
+        <button
+            type="button"
+            class="notification-close"
+            id="notification-close"
+            aria-label="Close"
+        >
+            ×
+        </button>
+
+        <div class="notification-icon">🔔</div>
+
+        <h3>Allow PaceFetch To Send You Notification on Daily Predictions</h3>
+
+        <p>
+            Get notified when today's football predictions are ready.
+        </p>
+
+        <div class="notification-actions">
+            <button
+                type="button"
+                id="notification-allow"
+                class="notification-allow"
+            >
+                Allow Notifications
+            </button>
+
+            <button
+                type="button"
+                id="notification-later"
+                class="notification-later"
+            >
+                Maybe Later
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+    .notification-popup {
+        position: fixed;
+        inset: 0;
+        z-index: 99999;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 12px;
+        background: rgba(0, 0, 0, 0.72);
+        backdrop-filter: blur(5px);
+    }
+
+    .notification-popup.show {
+        display: flex;
+    }
+
+    .notification-popup-box {
+        position: relative;
+        width: 100%;
+        max-width: 390px;
+        padding: 24px 18px 20px;
+        border: 1px solid rgba(255, 255, 255, 0.09);
+        border-radius: 18px;
+        background: #071c12;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+        text-align: center;
+    }
+
+    .notification-close {
+        position: absolute;
+        top: 8px;
+        right: 10px;
+        width: 32px;
+        height: 32px;
+        border: 0;
+        background: transparent;
+        color: #a9b8b0;
+        font-size: 25px;
+        cursor: pointer;
+    }
+
+    .notification-icon {
+        width: 52px;
+        height: 52px;
+        margin: 0 auto 13px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: rgba(50, 205, 111, 0.12);
+        font-size: 25px;
+    }
+
+    .notification-popup-box h3 {
+        margin: 0 0 10px;
+        color: #ffffff;
+        font-size: 18px;
+        line-height: 1.35;
+    }
+
+    .notification-popup-box p {
+        margin: 0 auto 19px;
+        max-width: 320px;
+        color: #9eaea5;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .notification-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+    }
+
+    .notification-allow,
+    .notification-later {
+        width: 100%;
+        min-height: 44px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .notification-allow {
+        border: 0;
+        background: #32cd70;
+        color: #03130b;
+    }
+
+    .notification-later {
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: transparent;
+        color: #aebbb4;
+    }
+
+    @media (max-width: 480px) {
+        .notification-popup {
+            padding: 8px;
+        }
+
+        .notification-popup-box {
+            border-radius: 16px;
+            padding: 23px 15px 17px;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const notificationPopup =
+            document.getElementById("notification-popup");
+
+        const notificationAllow =
+            document.getElementById("notification-allow");
+
+        const notificationLater =
+            document.getElementById("notification-later");
+
+        const notificationClose =
+            document.getElementById("notification-close");
+
+        if (!notificationPopup) {
+            return;
+        }
+
+        function closeNotificationPopup() {
+            notificationPopup.classList.remove("show");
+
+            sessionStorage.setItem(
+                "pacefetch_notification_popup_seen",
+                "1"
+            );
+        }
+
+        const alreadySeen = sessionStorage.getItem(
+            "pacefetch_notification_popup_seen"
+        );
+
+        /*
+         * Show after 30 seconds.
+         * It will not keep appearing repeatedly during
+         * the visitor's current browser session.
+         */
+        if (!alreadySeen) {
+            setTimeout(function () {
+                if (
+                    "Notification" in window &&
+                    Notification.permission === "default"
+                ) {
+                    notificationPopup.classList.add("show");
+                }
+            }, 30000);
+        }
+
+        notificationAllow.addEventListener("click", async function () {
+            try {
+                if (!("Notification" in window)) {
+                    alert(
+                        "Notifications are not supported by this browser."
+                    );
+
+                    closeNotificationPopup();
+                    return;
+                }
+
+                const permission =
+                    await Notification.requestPermission();
+
+                if (permission === "granted") {
+                    new Notification(
+                        "PaceFetch Daily Predictions",
+                        {
+                            body:
+                                "You will receive PaceFetch prediction notifications when available.",
+                            icon: "/assets/logo.svg"
+                        }
+                    );
+                }
+
+                closeNotificationPopup();
+
+            } catch (error) {
+                console.error(
+                    "PaceFetch notification permission error:",
+                    error
+                );
+
+                closeNotificationPopup();
+            }
+        });
+
+        notificationLater.addEventListener(
+            "click",
+            closeNotificationPopup
+        );
+
+        notificationClose.addEventListener(
+            "click",
+            closeNotificationPopup
+        );
+    });
+</script>
+    
 </body>
 </html>
