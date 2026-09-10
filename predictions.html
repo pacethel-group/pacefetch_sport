@@ -851,6 +851,952 @@
                 gap: 4px;
             }
 
-            .prediction-card {
+                        .prediction-card {
                 padding: 13px;
-                border
+                border-radius: 9px;
+            }
+
+            .team {
+                font-size: 13px;
+            }
+
+        }
+
+    </style>
+</head>
+
+<body>
+
+<header class="site-header">
+
+    <div class="header-inner">
+
+        <a
+            href="/index.html"
+            class="brand"
+        >
+            <span class="brand-pace">Pace</span><span class="brand-fetch">Fetch</span>
+        </a>
+
+        <nav class="desktop-nav">
+
+            <a href="/index.html">
+                Home
+            </a>
+
+            <a href="/predictions.html">
+                Predictions
+            </a>
+
+            <a href="/countries.html">
+                Countries
+            </a>
+
+            <a href="/history.html">
+                History
+            </a>
+
+            <a href="/methodology.html">
+                Methodology
+            </a>
+
+        </nav>
+
+        <div class="mobile-menu">
+            Predictions
+        </div>
+
+    </div>
+
+</header>
+
+<section class="hero">
+
+    <span class="hero-label">
+        Daily Football Predictions
+    </span>
+
+    <h1>
+        Today's Football
+        <span>Predictions</span>
+    </h1>
+
+    <p>
+        Data-driven football predictions ranked by probability
+        and confidence. Only qualifying predictions are published.
+    </p>
+
+</section>
+
+<section class="stats">
+
+    <div class="stat">
+        <strong id="totalPredictions">
+            —
+        </strong>
+
+        <span>
+            Today's Predictions
+        </span>
+    </div>
+
+    <div class="stat">
+        <strong id="strongPredictions">
+            —
+        </strong>
+
+        <span>
+            Strong Picks
+        </span>
+    </div>
+
+    <div class="stat">
+        <strong id="averageConfidence">
+            —
+        </strong>
+
+        <span>
+            Average Probability
+        </span>
+    </div>
+
+    <div class="stat">
+        <strong id="countriesCount">
+            —
+        </strong>
+
+        <span>
+            Countries
+        </span>
+    </div>
+
+</section>
+
+<main class="main-content">
+
+    <div class="section-heading">
+
+        <div>
+
+            <h2>
+                Prediction Board
+            </h2>
+
+            <p>
+                Ranked from strongest to weakest qualifying pick.
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="search-wrap">
+
+        <input
+            id="predictionSearch"
+            class="search-input"
+            type="search"
+            placeholder="Search teams, leagues, countries or markets..."
+            autocomplete="off"
+        >
+
+    </div>
+
+    <div class="filters">
+
+        <select
+            id="countryFilter"
+            class="filter-control"
+        >
+            <option value="">
+                All countries
+            </option>
+        </select>
+
+        <select
+            id="leagueFilter"
+            class="filter-control"
+        >
+            <option value="">
+                All leagues
+            </option>
+        </select>
+
+        <select
+            id="marketFilter"
+            class="filter-control"
+        >
+            <option value="">
+                All markets
+            </option>
+        </select>
+
+        <select
+            id="confidenceFilter"
+            class="filter-control"
+        >
+            <option value="">
+                All confidence
+            </option>
+
+            <option value="80">
+                80%+ Strong
+            </option>
+
+            <option value="70">
+                70%+ Good
+            </option>
+
+            <option value="50">
+                50%+ Moderate
+            </option>
+        </select>
+
+    </div>
+
+    <div class="date-row">
+
+        <span class="date-label">
+            Match date
+        </span>
+
+        <input
+            id="dateFilter"
+            class="date-input"
+            type="date"
+        >
+
+    </div>
+
+    <section
+        id="loadingState"
+        class="state-box"
+    >
+
+        <div class="state-icon">
+            ...
+        </div>
+
+        <h3>
+            Loading predictions
+        </h3>
+
+        <p>
+            Fetching today's available football predictions.
+        </p>
+
+    </section>
+
+    <section
+        id="errorState"
+        class="state-box hidden"
+    >
+
+        <div class="state-icon">
+            !
+        </div>
+
+        <h3>
+            Unable to load predictions
+        </h3>
+
+        <p>
+            The prediction service could not be reached right now.
+            Please try again.
+        </p>
+
+        <button
+            id="retryButton"
+            class="retry-button"
+            type="button"
+        >
+            Try Again
+        </button>
+
+    </section>
+
+    <section
+        id="emptyState"
+        class="state-box hidden"
+    >
+
+        <div class="state-icon">
+            —
+        </div>
+
+        <h3>
+            No qualifying predictions
+        </h3>
+
+        <p>
+            There are currently no predictions matching
+            your selected filters.
+        </p>
+
+    </section>
+
+    <section
+        id="predictionsGrid"
+        class="prediction-grid"
+    ></section>
+
+    <section class="ad-section">
+
+        <div class="ad-label">
+            Advertisement
+        </div>
+
+        <div
+            id="container-b1d62a3c1e7ab6d73b1cdec9ada14886"
+            class="ad-container"
+        ></div>
+
+        <script
+            async="async"
+            data-cfasync="false"
+            src="https://pl31140453.profitableratecpmnetwork.com/b1d62a3c1e7ab6d73b1cdec9ada14886/invoke.js"
+        ></script>
+
+    </section>
+
+    <section class="quick-links">
+
+        <a href="/index.html">
+            Home
+        </a>
+
+        <a href="/countries.html">
+            Countries
+        </a>
+
+        <a href="/history.html">
+            Prediction History
+        </a>
+
+        <a href="/methodology.html">
+            Methodology
+        </a>
+
+    </section>
+
+</main>
+
+<footer class="site-footer">
+
+    <div class="footer-brand">
+        <span class="brand-pace">Pace</span><span class="brand-fetch">Fetch</span>
+    </div>
+
+    <p>
+        Data-driven football predictions for today's matches.
+    </p>
+
+    <p class="disclaimer">
+        Predictions are statistical estimates, not guarantees
+        of results. Please make decisions responsibly.
+    </p>
+
+    <div class="footer-links">
+
+        <a href="/index.html">
+            Home
+        </a>
+
+        <a href="/predictions.html">
+            Predictions
+        </a>
+
+        <a href="/countries.html">
+            Countries
+        </a>
+
+        <a href="/history.html">
+            History
+        </a>
+
+        <a href="/methodology.html">
+            Methodology
+        </a>
+
+    </div>
+
+    <p class="copyright">
+        © <span id="currentYear"></span>
+        PaceFetch. All rights reserved.
+    </p>
+
+    <p class="designed">
+        Designed by <strong>Pacethel</strong>
+    </p>
+
+</footer>
+
+<script>
+
+(function () {
+
+    "use strict";
+
+    const state = {
+        predictions: [],
+        filtered: [],
+        countries: [],
+        leagues: []
+    };
+
+    const elements = {
+
+        search:
+            document.getElementById(
+                "predictionSearch"
+            ),
+
+        country:
+            document.getElementById(
+                "countryFilter"
+            ),
+
+        league:
+            document.getElementById(
+                "leagueFilter"
+            ),
+
+        market:
+            document.getElementById(
+                "marketFilter"
+            ),
+
+        confidence:
+            document.getElementById(
+                "confidenceFilter"
+            ),
+
+        date:
+            document.getElementById(
+                "dateFilter"
+            ),
+
+        grid:
+            document.getElementById(
+                "predictionsGrid"
+            ),
+
+        loading:
+            document.getElementById(
+                "loadingState"
+            ),
+
+        error:
+            document.getElementById(
+                "errorState"
+            ),
+
+        empty:
+            document.getElementById(
+                "emptyState"
+            ),
+
+        total:
+            document.getElementById(
+                "totalPredictions"
+            ),
+
+        strong:
+            document.getElementById(
+                "strongPredictions"
+            ),
+
+        average:
+            document.getElementById(
+                "averageConfidence"
+            ),
+
+        countriesCount:
+            document.getElementById(
+                "countriesCount"
+            ),
+
+        retry:
+            document.getElementById(
+                "retryButton"
+            ),
+
+        currentYear:
+            document.getElementById(
+                "currentYear"
+            )
+    };
+
+    if (elements.currentYear) {
+
+        elements.currentYear.textContent =
+            new Date().getFullYear();
+
+    }
+
+    function escapeHTML(value) {
+
+        return String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+    function normalizePrediction(item) {
+
+        if (
+            !item ||
+            typeof item !== "object"
+        ) {
+            return null;
+        }
+
+        const probability =
+            Number(item.probability);
+
+        if (!Number.isFinite(probability)) {
+            return null;
+        }
+
+        return {
+
+            fixtureId:
+                item.fixtureId ??
+                item.fixture_id ??
+                "",
+
+            homeTeam:
+                item.homeTeam ??
+                item.home_team ??
+                "Home",
+
+            awayTeam:
+                item.awayTeam ??
+                item.away_team ??
+                "Away",
+
+            kickoff:
+                item.kickoff ??
+                item.date ??
+                "",
+
+            league:
+                item.league ??
+                "Unknown League",
+
+            country:
+                item.country ??
+                "Unknown",
+
+            market:
+                item.market ??
+                "Prediction",
+
+            selection:
+                item.selection ??
+                "",
+
+            probability:
+                Math.max(
+                    0,
+                    Math.min(
+                        100,
+                        probability
+                    )
+                ),
+
+            confidence:
+                Number.isFinite(
+                    Number(item.confidence)
+                )
+                    ? Number(item.confidence)
+                    : probability,
+
+            rank:
+                item.rank ??
+                null,
+
+            source:
+                item.source ??
+                "API-Football",
+
+            modelVersion:
+                item.modelVersion ??
+                "PF-1.2"
+        };
+
+    }
+
+    function getConfidenceClass(
+        probability
+    ) {
+
+        if (probability >= 80) {
+            return "strong";
+        }
+
+        if (probability >= 70) {
+            return "good";
+        }
+
+        if (probability >= 50) {
+            return "moderate";
+        }
+
+        return "weak";
+
+    }
+
+    function getConfidenceLabel(
+        probability
+    ) {
+
+        if (probability >= 80) {
+            return "Strong";
+        }
+
+        if (probability >= 70) {
+            return "Good";
+        }
+
+        if (probability >= 50) {
+            return "Moderate";
+        }
+
+        return "Weak";
+
+    }
+
+    function formatKickoff(value) {
+
+        if (!value) {
+            return "Kickoff unavailable";
+        }
+
+        const date =
+            new Date(value);
+
+        if (
+            Number.isNaN(
+                date.getTime()
+            )
+        ) {
+            return String(value);
+        }
+
+        return new Intl.DateTimeFormat(
+            "en-NG",
+            {
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true,
+                timeZone: "Africa/Lagos"
+            }
+        ).format(date);
+
+    }
+
+    function formatProbability(value) {
+
+        return `${Math.round(
+            Number(value) || 0
+        )}%`;
+
+    }
+
+    function populateFilters() {
+
+        const countries = [
+            ...new Set(
+                state.predictions
+                    .map(
+                        item =>
+                            item.country
+                    )
+                    .filter(Boolean)
+            )
+        ].sort(
+            (a, b) =>
+                a.localeCompare(b)
+        );
+
+        const leagues = [
+            ...new Set(
+                state.predictions
+                    .map(
+                        item =>
+                            item.league
+                    )
+                    .filter(Boolean)
+            )
+        ].sort(
+            (a, b) =>
+                a.localeCompare(b)
+        );
+
+        const markets = [
+            ...new Set(
+                state.predictions
+                    .map(
+                        item =>
+                            item.market
+                    )
+                    .filter(Boolean)
+            )
+        ].sort(
+            (a, b) =>
+                a.localeCompare(b)
+        );
+
+        state.countries =
+            countries;
+
+        state.leagues =
+            leagues;
+
+        elements.country.innerHTML =
+            '<option value="">All countries</option>' +
+            countries
+                .map(
+                    country =>
+                        `<option value="${escapeHTML(
+                            country
+                        )}">${escapeHTML(
+                            country
+                        )}</option>`
+                )
+                .join("");
+
+        elements.league.innerHTML =
+            '<option value="">All leagues</option>' +
+            leagues
+                .map(
+                    league =>
+                        `<option value="${escapeHTML(
+                            league
+                        )}">${escapeHTML(
+                            league
+                        )}</option>`
+                )
+                .join("");
+
+        elements.market.innerHTML =
+            '<option value="">All markets</option>' +
+            markets
+                .map(
+                    market =>
+                        `<option value="${escapeHTML(
+                            market
+                        )}">${escapeHTML(
+                            market
+                        )}</option>`
+                )
+                .join("");
+
+    }
+
+    function applyFilters() {
+
+        const search =
+            elements.search.value
+                .trim()
+                .toLowerCase();
+
+        const country =
+            elements.country.value;
+
+        const league =
+            elements.league.value;
+
+        const market =
+            elements.market.value;
+
+        const confidence =
+            elements.confidence.value;
+
+        const selectedDate =
+            elements.date.value;
+
+        state.filtered =
+            state.predictions.filter(
+                item => {
+
+                    const searchable = [
+
+                        item.homeTeam,
+                        item.awayTeam,
+                        item.league,
+                        item.country,
+                        item.market,
+                        item.selection
+
+                    ]
+                        .join(" ")
+                        .toLowerCase();
+
+                    if (
+                        search &&
+                        !searchable.includes(
+                            search
+                        )
+                    ) {
+                        return false;
+                    }
+
+                    if (
+                        country &&
+                        item.country !== country
+                    ) {
+                        return false;
+                    }
+
+                    if (
+                        league &&
+                        item.league !== league
+                    ) {
+                        return false;
+                    }
+
+                    if (
+                        market &&
+                        item.market !== market
+                    ) {
+                        return false;
+                    }
+
+                    if (confidence) {
+
+                        const minimum =
+                            Number(
+                                confidence
+                            );
+
+                        if (
+                            Number(
+                                item.probability
+                            ) < minimum
+                        ) {
+                            return false;
+                        }
+
+                    }
+
+                    if (selectedDate) {
+
+                        const predictionDate =
+                            new Date(
+                                item.kickoff
+                            );
+
+                        if (
+                            Number.isNaN(
+                                predictionDate.getTime()
+                            )
+                        ) {
+                            return false;
+                        }
+
+                        const nigeriaDate =
+                            new Intl.DateTimeFormat(
+                                "en-CA",
+                                {
+                                    timeZone:
+                                        "Africa/Lagos",
+                                    year: "numeric",
+                                    month: "2-digit",
+                                    day: "2-digit"
+                                }
+                            ).format(
+                                predictionDate
+                            );
+
+                        if (
+                            nigeriaDate !==
+                            selectedDate
+                        ) {
+                            return false;
+                        }
+
+                    }
+
+                    return true;
+
+                }
+            );
+
+        renderPredictions();
+
+    }
+
+    function renderPredictions() {
+
+        elements.loading.classList.add(
+            "hidden"
+        );
+
+        elements.error.classList.add(
+            "hidden"
+        );
+
+        if (
+            !state.filtered.length
+        ) {
+
+            elements.grid.innerHTML =
+                "";
+
+            elements.empty.classList.remove(
+                "hidden"
+            );
+
+            return;
+        }
+
+        elements.empty.classList.add(
+            "hidden"
+        );
+
+        elements.grid.innerHTML =
+            state.filtered
+                .map(
+                    (item, index) => {
+
+                        const probability =
+                            Number(
+                                item.probability
+                            );
+
+                        const confidenceClass =
+                            getConfidenceClass(
+                                probability
+                            );
+
+                        const confidenceLabel =
+                            getConfidenceLabel(
+                                probability
+                            );
+
+                        const fixtureUrl =
+                            item.fixtureId
+                                ? `/match.html?fixture=${encodeURIComponent(
+                                    item.fixtureId
+                                )}`
+                                : "#";
+
+                        return `
+
+                            <article
+                                class="prediction-card"
+                            >
+
+                                <div
+                                    class="prediction-top"
+                                >
+
+                              
