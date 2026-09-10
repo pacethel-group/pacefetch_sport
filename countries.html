@@ -1351,4 +1351,1070 @@
 
             <a href="/methodology.html">
                 Methodology
- 
+            </a>
+
+        </nav>
+
+
+        <button
+            class="mobile-toggle"
+            id="mobileToggle"
+            aria-label="Open navigation"
+            aria-expanded="false"
+        >
+
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </button>
+
+    </div>
+
+
+    <div
+        class="mobile-menu"
+        id="mobileMenu"
+    >
+
+        <a href="/">
+            Home
+        </a>
+
+        <a href="/predictions.html">
+            Predictions
+        </a>
+
+        <a href="/countries.html">
+            Countries
+        </a>
+
+        <a href="/history.html">
+            History
+        </a>
+
+        <a href="/methodology.html">
+            Methodology
+        </a>
+
+    </div>
+
+</header>
+
+
+<!-- ================================================================
+     Main
+================================================================= -->
+
+<main class="page">
+
+    <div class="container">
+
+
+        <div class="breadcrumb">
+
+            <a href="/">
+                Home
+            </a>
+
+            <span>
+                ›
+            </span>
+
+            <span>
+                Countries
+            </span>
+
+        </div>
+
+
+
+        <!-- ==========================================================
+             Hero
+        =========================================================== -->
+
+        <section class="hero">
+
+            <div class="eyebrow">
+                FOOTBALL DIRECTORY
+            </div>
+
+            <h1>
+                Countries & Leagues
+            </h1>
+
+            <p>
+                Explore the football countries represented in
+                today's PaceFetch prediction data. Select a country
+                to view its available predictions and markets.
+            </p>
+
+
+            <div class="hero-stats">
+
+                <div class="stat">
+
+                    <strong id="countryCount">
+                        —
+                    </strong>
+
+                    <span>
+                        Countries
+                    </span>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <strong id="leagueCount">
+                        —
+                    </strong>
+
+                    <span>
+                        Leagues
+                    </span>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <strong id="predictionCount">
+                        —
+                    </strong>
+
+                    <span>
+                        Predictions
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==========================================================
+             Controls
+        =========================================================== -->
+
+        <section>
+
+            <div class="controls">
+
+                <div class="search-box">
+
+                    <span class="search-icon">
+                        🔎
+                    </span>
+
+                    <input
+                        type="search"
+                        id="countrySearch"
+                        placeholder="Search country..."
+                        autocomplete="off"
+                    >
+
+                </div>
+
+
+                <select
+                    id="sortSelect"
+                    class="sort-select"
+                    aria-label="Sort countries"
+                >
+
+                    <option value="name">
+                        Sort: A–Z
+                    </option>
+
+                    <option value="count">
+                        Sort: Most Predictions
+                    </option>
+
+                </select>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==========================================================
+             Country Section
+        =========================================================== -->
+
+        <section>
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h2>
+                        Available Countries
+                    </h2>
+
+                    <p id="resultText">
+                        Loading countries...
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="loadingState"
+                class="state-card"
+            >
+
+                <div class="spinner"></div>
+
+                <h2>
+                    Loading countries...
+                </h2>
+
+                <p>
+                    Fetching today's available prediction data.
+                </p>
+
+            </div>
+
+
+            <div
+                id="countryGrid"
+                class="country-grid"
+                hidden
+            ></div>
+
+
+            <div
+                id="emptyState"
+                class="empty-state"
+                hidden
+            >
+
+                <strong>
+                    No countries found
+                </strong>
+
+                <p>
+                    Try another search or check back when today's
+                    prediction data is available.
+                </p>
+
+            </div>
+
+        </section>
+
+
+    </div>
+
+</main>
+
+
+
+<!-- ================================================================
+     Footer
+================================================================= -->
+
+<footer>
+
+    <div class="container">
+
+        <div>
+
+            ©
+            <span id="year"></span>
+            PaceFetch.
+            All rights reserved.
+
+        </div>
+
+
+        <div class="designed">
+
+            Designed by
+
+            <a href="/">
+                Pacethel
+            </a>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+
+<script>
+
+"use strict";
+
+
+/* --------------------------------------------------------------
+   State
+-------------------------------------------------------------- */
+
+const state = {
+
+    predictions:
+        [],
+
+    countries:
+        [],
+
+    leagues:
+        new Set()
+
+};
+
+
+
+/* --------------------------------------------------------------
+   DOM helper
+-------------------------------------------------------------- */
+
+const $ = id =>
+    document.getElementById(
+        id
+    );
+
+
+
+/* --------------------------------------------------------------
+   Escape HTML
+-------------------------------------------------------------- */
+
+function escapeHTML(
+    value
+) {
+
+    return String(
+        value ??
+        ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+
+/* --------------------------------------------------------------
+   Country flag
+-------------------------------------------------------------- */
+
+function getCountryFlag(
+    country
+) {
+
+    const flags = {
+
+        "Argentina":
+            "🇦🇷",
+
+        "Australia":
+            "🇦🇺",
+
+        "Austria":
+            "🇦🇹",
+
+        "Belgium":
+            "🇧🇪",
+
+        "Brazil":
+            "🇧🇷",
+
+        "Canada":
+            "🇨🇦",
+
+        "Chile":
+            "🇨🇱",
+
+        "China":
+            "🇨🇳",
+
+        "Colombia":
+            "🇨🇴",
+
+        "Croatia":
+            "🇭🇷",
+
+        "Czech Republic":
+            "🇨🇿",
+
+        "Denmark":
+            "🇩🇰",
+
+        "Ecuador":
+            "🇪🇨",
+
+        "England":
+            "🏴",
+
+        "France":
+            "🇫🇷",
+
+        "Germany":
+            "🇩🇪",
+
+        "Greece":
+            "🇬🇷",
+
+        "Hungary":
+            "🇭🇺",
+
+        "India":
+            "🇮🇳",
+
+        "Ireland":
+            "🇮🇪",
+
+        "Italy":
+            "🇮🇹",
+
+        "Japan":
+            "🇯🇵",
+
+        "Mexico":
+            "🇲🇽",
+
+        "Morocco":
+            "🇲🇦",
+
+        "Netherlands":
+            "🇳🇱",
+
+        "Nigeria":
+            "🇳🇬",
+
+        "Norway":
+            "🇳🇴",
+
+        "Paraguay":
+            "🇵🇾",
+
+        "Peru":
+            "🇵🇪",
+
+        "Poland":
+            "🇵🇱",
+
+        "Portugal":
+            "🇵🇹",
+
+        "Romania":
+            "🇷🇴",
+
+        "Scotland":
+            "🏴",
+
+        "Serbia":
+            "🇷🇸",
+
+        "Slovakia":
+            "🇸🇰",
+
+        "Slovenia":
+            "🇸🇮",
+
+        "South Africa":
+            "🇿🇦",
+
+        "South Korea":
+            "🇰🇷",
+
+        "Spain":
+            "🇪🇸",
+
+        "Sweden":
+            "🇸🇪",
+
+        "Switzerland":
+            "🇨🇭",
+
+        "Turkey":
+            "🇹🇷",
+
+        "Ukraine":
+            "🇺🇦",
+
+        "United States":
+            "🇺🇸",
+
+        "Uruguay":
+            "🇺🇾",
+
+        "Venezuela":
+            "🇻🇪"
+
+    };
+
+
+    return (
+        flags[country] ||
+        "⚽"
+    );
+
+}
+
+
+
+/* --------------------------------------------------------------
+   Load predictions
+-------------------------------------------------------------- */
+
+async function loadPredictions() {
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/predictions",
+                {
+                    method:
+                        "GET",
+
+                    headers: {
+                        "Accept":
+                            "application/json"
+                    }
+                }
+            );
+
+
+        let data;
+
+        try {
+
+            data =
+                await response.json();
+
+        } catch {
+
+            throw new Error(
+                "The prediction server returned an invalid response."
+            );
+
+        }
+
+
+        if (
+            !response.ok ||
+            data?.success === false
+        ) {
+
+            throw new Error(
+                data?.error ||
+                data?.message ||
+                `Request failed with HTTP ${response.status}.`
+            );
+
+        }
+
+
+        state.predictions =
+            Array.isArray(
+                data.predictions
+            )
+                ? data.predictions
+                : [];
+
+
+        buildCountries();
+
+
+        $("loadingState").hidden =
+            true;
+
+        $("countryGrid").hidden =
+            false;
+
+
+        renderCountries();
+
+    } catch (error) {
+
+        console.error(
+            "PaceFetch countries:",
+            error
+        );
+
+
+        $("loadingState").hidden =
+            true;
+
+        $("countryGrid").hidden =
+            true;
+
+        $("emptyState").hidden =
+            false;
+
+        $("emptyState").innerHTML = `
+
+            <strong>
+                Unable to load countries
+            </strong>
+
+            <p>
+                ${escapeHTML(
+                    error.message ||
+                    "Please try again later."
+                )}
+            </p>
+
+        `;
+
+    }
+
+}
+
+
+
+/* --------------------------------------------------------------
+   Build countries
+-------------------------------------------------------------- */
+
+function buildCountries() {
+
+    const map =
+        new Map();
+
+
+    state.leagues =
+        new Set();
+
+
+    state.predictions.forEach(
+        prediction => {
+
+            const country =
+                String(
+                    prediction.country ||
+                    "Unknown"
+                ).trim();
+
+
+            const league =
+                String(
+                    prediction.league ||
+                    "Unknown League"
+                ).trim();
+
+
+            if (
+                !map.has(
+                    country
+                )
+            ) {
+
+                map.set(
+                    country,
+                    {
+                        name:
+                            country,
+
+                        predictions:
+                            0,
+
+                        leagues:
+                            new Set()
+
+                    }
+                );
+
+            }
+
+
+            const item =
+                map.get(
+                    country
+                );
+
+
+            item.predictions +=
+                1;
+
+
+            item.leagues.add(
+                league
+            );
+
+
+            state.leagues.add(
+                league
+            );
+
+        }
+    );
+
+
+    state.countries =
+        Array.from(
+            map.values()
+        )
+        .map(
+            item => ({
+
+                name:
+                    item.name,
+
+                predictions:
+                    item.predictions,
+
+                leagues:
+                    item.leagues.size
+
+            })
+        );
+
+
+    $("countryCount").textContent =
+        state.countries.length;
+
+
+    $("leagueCount").textContent =
+        state.leagues.size;
+
+
+    $("predictionCount").textContent =
+        state.predictions.length;
+
+}
+
+
+
+/* --------------------------------------------------------------
+   Render countries
+-------------------------------------------------------------- */
+
+function renderCountries() {
+
+    const search =
+        $("countrySearch")
+            .value
+            .trim()
+            .toLowerCase();
+
+
+    const sort =
+        $("sortSelect").value;
+
+
+    let countries =
+        state.countries.filter(
+            country =>
+                country.name
+                    .toLowerCase()
+                    .includes(
+                        search
+                    )
+        );
+
+
+    if (
+        sort ===
+        "count"
+    ) {
+
+        countries.sort(
+            (
+                a,
+                b
+            ) =>
+                b.predictions -
+                a.predictions
+        );
+
+    } else {
+
+        countries.sort(
+            (
+                a,
+                b
+            ) =>
+                a.name.localeCompare(
+                    b.name
+                )
+        );
+
+    }
+
+
+    const grid =
+        $("countryGrid");
+
+
+    grid.innerHTML =
+        "";
+
+
+    if (
+        countries.length ===
+        0
+    ) {
+
+        grid.hidden =
+            true;
+
+        $("emptyState").hidden =
+            false;
+
+        $("emptyState").innerHTML = `
+
+            <strong>
+                No countries found
+            </strong>
+
+            <p>
+                No available country matches
+                "${escapeHTML(
+                    search
+                )}".
+            </p>
+
+        `;
+
+
+        $("resultText").textContent =
+            "0 countries";
+
+        return;
+
+    }
+
+
+    $("emptyState").hidden =
+        true;
+
+    grid.hidden =
+        false;
+
+
+    $("resultText").textContent =
+        `${countries.length} ${
+            countries.length === 1
+                ? "country"
+                : "countries"
+        } available`;
+
+
+    countries.forEach(
+        country => {
+
+            const card =
+                document.createElement(
+                    "a"
+                );
+
+
+            card.className =
+                "country-card";
+
+
+            card.href =
+                `/predictions.html?country=${encodeURIComponent(
+                    country.name
+                )}`;
+
+
+            card.setAttribute(
+                "aria-label",
+                `View ${country.name} predictions`
+            );
+
+
+            card.innerHTML = `
+
+                <div class="country-main">
+
+                    <div class="country-flag">
+
+                        ${getCountryFlag(
+                            country.name
+                        )}
+
+                    </div>
+
+
+                    <div class="country-info">
+
+                        <div class="country-name">
+
+                            ${escapeHTML(
+                                country.name
+                            )}
+
+                        </div>
+
+
+                        <div class="country-count">
+
+                            ${country.predictions}
+
+                            ${
+                                country.predictions === 1
+                                    ? "prediction"
+                                    : "predictions"
+                            }
+
+                            ·
+
+                            ${country.leagues}
+
+                            ${
+                                country.leagues === 1
+                                    ? "league"
+                                    : "leagues"
+                            }
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="country-arrow">
+                    →
+                </div>
+
+            `;
+
+
+            grid.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+
+/* --------------------------------------------------------------
+   Search
+-------------------------------------------------------------- */
+
+$("countrySearch")
+    .addEventListener(
+        "input",
+        renderCountries
+    );
+
+
+
+/* --------------------------------------------------------------
+   Sort
+-------------------------------------------------------------- */
+
+$("sortSelect")
+    .addEventListener(
+        "change",
+        renderCountries
+    );
+
+
+
+/* --------------------------------------------------------------
+   Mobile navigation
+-------------------------------------------------------------- */
+
+const mobileToggle =
+    $("mobileToggle");
+
+const mobileMenu =
+    $("mobileMenu");
+
+
+mobileToggle.addEventListener(
+    "click",
+    () => {
+
+        const isOpen =
+            mobileMenu.classList.toggle(
+                "open"
+            );
+
+
+        mobileToggle.setAttribute(
+            "aria-expanded",
+            String(
+                isOpen
+            )
+        );
+
+    }
+);
+
+
+mobileMenu
+    .querySelectorAll(
+        "a"
+    )
+    .forEach(
+        link => {
+
+            link.addEventListener(
+                "click",
+                () => {
+
+                    mobileMenu.classList.remove(
+                        "open"
+                    );
+
+                    mobileToggle.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+
+/* --------------------------------------------------------------
+   Footer year
+-------------------------------------------------------------- */
+
+$("year").textContent =
+    new Date().getFullYear();
+
+
+
+/* --------------------------------------------------------------
+   Start
+-------------------------------------------------------------- */
+
+loadPredictions();
+
+</script>
+
+</body>
+</html>
