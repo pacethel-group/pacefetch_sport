@@ -1207,4 +1207,916 @@
                         Last 7 Days
                     </option>
 
-                    <opti
+                    <option value="30">
+    Last 30 Days
+</option>
+
+<option value="90">
+    Last 90 Days
+</option>
+
+<option value="365">
+    Last 12 Months
+</option>
+
+<option value="all">
+    All Time
+</option>
+</select>
+
+<button class="filter-btn" id="applyFilter">
+    Apply Filter
+</button>
+
+<button class="clear-btn" id="clearFilter">
+    Clear
+</button>
+</div>
+
+<div class="history-summary">
+    <div class="summary-card">
+        <span class="summary-label">Total Predictions</span>
+        <strong id="totalPredictions">0</strong>
+    </div>
+
+    <div class="summary-card">
+        <span class="summary-label">Correct</span>
+        <strong id="correctPredictions">0</strong>
+    </div>
+
+    <div class="summary-card">
+        <span class="summary-label">Wrong</span>
+        <strong id="wrongPredictions">0</strong>
+    </div>
+
+    <div class="summary-card">
+        <span class="summary-label">Accuracy</span>
+        <strong id="accuracyRate">0%</strong>
+    </div>
+</div>
+
+<div class="table-wrapper">
+    <table class="history-table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Match</th>
+                <th>League</th>
+                <th>Prediction</th>
+                <th>Confidence</th>
+                <th>Result</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+
+        <tbody id="historyTableBody">
+            <tr>
+                <td colspan="7" class="loading">
+                    Loading prediction history...
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div id="emptyHistory" class="empty-history" style="display:none;">
+    <div class="empty-icon">📊</div>
+    <h3>No Prediction History</h3>
+    <p>
+        There are no prediction records available for the selected period.
+    </p>
+</div>
+
+<div class="pagination" id="pagination">
+    <button id="previousPage" class="page-btn">
+        ← Previous
+    </button>
+
+    <span id="pageInfo">Page 1</span>
+
+    <button id="nextPage" class="page-btn">
+        Next →
+    </button>
+</div>
+
+</main>
+
+<footer class="site-footer">
+    <div class="footer-content">
+
+        <div class="footer-brand">
+            <strong>PaceFetch</strong>
+            <span>
+                Fetch your predictions, football news and latest sports updates.
+            </span>
+        </div>
+
+        <div class="footer-links">
+            <a href="/index.html">Home</a>
+            <a href="/predictions.html">Predictions</a>
+            <a href="/history.html">History</a>
+            <a href="/methodology.html">Methodology</a>
+            <a href="/countries.html">Countries</a>
+        </div>
+
+        <div class="footer-copy">
+            © <span id="footerYear"></span> PaceFetch. All rights reserved.
+        </div>
+
+        <div class="designed-by">
+            Designed by <strong>Pacethel</strong>
+        </div>
+
+    </div>
+</footer>
+
+<script>
+/* =========================================================
+   PACEFETCH PREDICTION HISTORY
+   ========================================================= */
+
+const API_URL = "/api/predictions";
+
+let allHistory = [];
+let filteredHistory = [];
+
+let currentPage = 1;
+const itemsPerPage = 20;
+
+
+/* =========================================================
+   DOM ELEMENTS
+   ========================================================= */
+
+const historyTableBody =
+    document.getElementById("historyTableBody");
+
+const emptyHistory =
+    document.getElementById("emptyHistory");
+
+const totalPredictions =
+    document.getElementById("totalPredictions");
+
+const correctPredictions =
+    document.getElementById("correctPredictions");
+
+const wrongPredictions =
+    document.getElementById("wrongPredictions");
+
+const accuracyRate =
+    document.getElementById("accuracyRate");
+
+const previousPage =
+    document.getElementById("previousPage");
+
+const nextPage =
+    document.getElementById("nextPage");
+
+const pageInfo =
+    document.getElementById("pageInfo");
+
+const applyFilter =
+    document.getElementById("applyFilter");
+
+const clearFilter =
+    document.getElementById("clearFilter");
+
+const footerYear =
+    document.getElementById("footerYear");
+
+
+/* =========================================================
+   FOOTER YEAR
+   ========================================================= */
+
+if (footerYear) {
+    footerYear.textContent = new Date().getFullYear();
+}
+
+
+/* =========================================================
+   LOAD HISTORY
+   ========================================================= */
+
+async function loadHistory() {
+
+    historyTableBody.innerHTML = `
+        <tr>
+            <td colspan="7" class="loading">
+                Loading prediction history...
+            </td>
+        </tr>
+    `;
+
+    try {
+
+        const response = await fetch(API_URL, {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(
+                "Unable to load prediction history."
+            );
+        }
+
+        const data = await response.json();
+
+        /*
+         * Support several possible API response formats.
+         */
+
+        if (Array.isArray(data)) {
+            allHistory = data;
+        }
+
+        else if (Array.isArray(data.predictions)) {
+            allHistory = data.predictions;
+        }
+
+        else if (Array.isArray(data.history)) {
+            allHistory = data.history;
+        }
+
+        else if (Array.isArray(data.data)) {
+            allHistory = data.data;
+        }
+
+        else {
+            allHistory = [];
+        }
+
+        filteredHistory = [...allHistory];
+
+        currentPage = 1;
+
+        updateSummary();
+
+        renderHistory();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "PaceFetch history error:",
+            error
+        );
+
+        historyTableBody.innerHTML = `
+            <tr>
+                <td colspan="7" class="error-message">
+                    Unable to load prediction history.
+                    Please try again later.
+                </td>
+            </tr>
+        `;
+
+        updateSummary();
+    }
+}
+
+
+/* =========================================================
+   FILTER HISTORY
+   ========================================================= */
+
+function filterHistory() {
+
+    const rangeElement =
+        document.getElementById("dateRange");
+
+    if (!rangeElement) {
+        filteredHistory = [...allHistory];
+        renderHistory();
+        return;
+    }
+
+    const range = rangeElement.value;
+
+    if (range === "all") {
+        filteredHistory = [...allHistory];
+    }
+
+    else {
+
+        const days = Number(range);
+
+        const now = new Date();
+
+        const startDate = new Date(now);
+
+        startDate.setDate(
+            startDate.getDate() - days
+        );
+
+        filteredHistory = allHistory.filter(item => {
+
+            const itemDate =
+                getPredictionDate(item);
+
+            if (!itemDate) {
+                return false;
+            }
+
+            return itemDate >= startDate;
+        });
+    }
+
+    currentPage = 1;
+
+    updateSummary();
+
+    renderHistory();
+}
+
+
+/* =========================================================
+   CLEAR FILTER
+   ========================================================= */
+
+function resetFilter() {
+
+    const rangeElement =
+        document.getElementById("dateRange");
+
+    if (rangeElement) {
+        rangeElement.value = "7";
+    }
+
+    filteredHistory = [...allHistory];
+
+    currentPage = 1;
+
+    updateSummary();
+
+    renderHistory();
+}
+
+
+/* =========================================================
+   GET DATE
+   ========================================================= */
+
+function getPredictionDate(item) {
+
+    const possibleDates = [
+        item.date,
+        item.createdAt,
+        item.created_at,
+        item.publishedAt,
+        item.published_at,
+        item.matchDate,
+        item.match_date
+    ];
+
+    for (const value of possibleDates) {
+
+        if (!value) {
+            continue;
+        }
+
+        const date =
+            new Date(value);
+
+        if (!isNaN(date.getTime())) {
+            return date;
+        }
+    }
+
+    return null;
+}
+
+
+/* =========================================================
+   FORMAT DATE
+   ========================================================= */
+
+function formatDate(item) {
+
+    const date =
+        getPredictionDate(item);
+
+    if (!date) {
+        return "—";
+    }
+
+    return date.toLocaleDateString(
+        "en-GB",
+        {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        }
+    );
+}
+
+
+/* =========================================================
+   GET MATCH NAME
+   ========================================================= */
+
+function getMatchName(item) {
+
+    if (item.match) {
+        return item.match;
+    }
+
+    if (item.fixture) {
+        return item.fixture;
+    }
+
+    const home =
+        item.homeTeam ||
+        item.home_team ||
+        item.home ||
+        "";
+
+    const away =
+        item.awayTeam ||
+        item.away_team ||
+        item.away ||
+        "";
+
+    if (home && away) {
+        return `${home} vs ${away}`;
+    }
+
+    return "Unknown Match";
+}
+
+
+/* =========================================================
+   GET LEAGUE
+   ========================================================= */
+
+function getLeague(item) {
+
+    return (
+        item.league ||
+        item.competition ||
+        item.tournament ||
+        "—"
+    );
+}
+
+
+/* =========================================================
+   GET PREDICTION
+   ========================================================= */
+
+function getPrediction(item) {
+
+    return (
+        item.prediction ||
+        item.market ||
+        item.pick ||
+        item.outcome ||
+        "—"
+    );
+}
+
+
+/* =========================================================
+   GET CONFIDENCE
+   ========================================================= */
+
+function getConfidence(item) {
+
+    let value =
+        item.confidence ??
+        item.probability ??
+        item.percentage ??
+        item.confidencePercentage;
+
+    if (
+        typeof value === "string" &&
+        value.includes("%")
+    ) {
+        value = value.replace("%", "");
+    }
+
+    value = Number(value);
+
+    if (isNaN(value)) {
+        return null;
+    }
+
+    if (value <= 1) {
+        value *= 100;
+    }
+
+    return Math.round(value);
+}
+
+
+/* =========================================================
+   CONFIDENCE CLASS
+   ========================================================= */
+
+function getConfidenceClass(value) {
+
+    if (value === null) {
+        return "confidence-low";
+    }
+
+    if (value >= 80) {
+        return "confidence-strong";
+    }
+
+    if (value >= 70) {
+        return "confidence-good";
+    }
+
+    if (value >= 50) {
+        return "confidence-medium";
+    }
+
+    return "confidence-low";
+}
+
+
+/* =========================================================
+   RESULT
+   ========================================================= */
+
+function getResult(item) {
+
+    return (
+        item.result ||
+        item.actualResult ||
+        item.actual_result ||
+        item.score ||
+        "Pending"
+    );
+}
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+function getStatus(item) {
+
+    const rawStatus =
+        String(
+            item.status ||
+            item.resultStatus ||
+            ""
+        ).toLowerCase();
+
+    if (
+        rawStatus === "correct" ||
+        rawStatus === "won" ||
+        rawStatus === "win" ||
+        rawStatus === "success"
+    ) {
+        return "correct";
+    }
+
+    if (
+        rawStatus === "wrong" ||
+        rawStatus === "lost" ||
+        rawStatus === "loss" ||
+        rawStatus === "failed"
+    ) {
+        return "wrong";
+    }
+
+    const result =
+        String(getResult(item)).toLowerCase();
+
+    if (
+        result === "correct" ||
+        result === "won" ||
+        result === "win"
+    ) {
+        return "correct";
+    }
+
+    if (
+        result === "wrong" ||
+        result === "lost" ||
+        result === "loss"
+    ) {
+        return "wrong";
+    }
+
+    return "pending";
+}
+
+
+/* =========================================================
+   STATUS LABEL
+   ========================================================= */
+
+function getStatusLabel(status) {
+
+    if (status === "correct") {
+        return "Correct";
+    }
+
+    if (status === "wrong") {
+        return "Wrong";
+    }
+
+    return "Pending";
+}
+
+
+/* =========================================================
+   UPDATE SUMMARY
+   ========================================================= */
+
+function updateSummary() {
+
+    const total =
+        filteredHistory.length;
+
+    let correct = 0;
+    let wrong = 0;
+
+    filteredHistory.forEach(item => {
+
+        const status =
+            getStatus(item);
+
+        if (status === "correct") {
+            correct++;
+        }
+
+        if (status === "wrong") {
+            wrong++;
+        }
+    });
+
+    const completed =
+        correct + wrong;
+
+    const accuracy =
+        completed > 0
+            ? Math.round(
+                (correct / completed) * 100
+            )
+            : 0;
+
+    totalPredictions.textContent =
+        total;
+
+    correctPredictions.textContent =
+        correct;
+
+    wrongPredictions.textContent =
+        wrong;
+
+    accuracyRate.textContent =
+        `${accuracy}%`;
+}
+
+
+/* =========================================================
+   RENDER HISTORY
+   ========================================================= */
+
+function renderHistory() {
+
+    if (!filteredHistory.length) {
+
+        historyTableBody.innerHTML = "";
+
+        emptyHistory.style.display =
+            "block";
+
+        updatePagination();
+
+        return;
+    }
+
+    emptyHistory.style.display =
+        "none";
+
+    const start =
+        (currentPage - 1) *
+        itemsPerPage;
+
+    const end =
+        start + itemsPerPage;
+
+    const pageItems =
+        filteredHistory.slice(
+            start,
+            end
+        );
+
+    historyTableBody.innerHTML =
+        pageItems.map(item => {
+
+            const confidence =
+                getConfidence(item);
+
+            const confidenceText =
+                confidence === null
+                    ? "—"
+                    : `${confidence}%`;
+
+            const confidenceClass =
+                getConfidenceClass(
+                    confidence
+                );
+
+            const status =
+                getStatus(item);
+
+            return `
+                <tr>
+
+                    <td>
+                        ${escapeHtml(
+                            formatDate(item)
+                        )}
+                    </td>
+
+                    <td class="match-name">
+                        ${escapeHtml(
+                            getMatchName(item)
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            getLeague(item)
+                        )}
+                    </td>
+
+                    <td class="prediction-value">
+                        ${escapeHtml(
+                            getPrediction(item)
+                        )}
+                    </td>
+
+                    <td>
+                        <span class="confidence ${confidenceClass}">
+                            ${confidenceText}
+                        </span>
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            String(
+                                getResult(item)
+                            )
+                        )}
+                    </td>
+
+                    <td>
+                        <span class="status ${status}">
+                            ${getStatusLabel(status)}
+                        </span>
+                    </td>
+
+                </tr>
+            `;
+
+        }).join("");
+
+    updatePagination();
+}
+
+
+/* =========================================================
+   PAGINATION
+   ========================================================= */
+
+function updatePagination() {
+
+    const totalPages =
+        Math.max(
+            1,
+            Math.ceil(
+                filteredHistory.length /
+                itemsPerPage
+            )
+        );
+
+    pageInfo.textContent =
+        `Page ${currentPage} of ${totalPages}`;
+
+    previousPage.disabled =
+        currentPage <= 1;
+
+    nextPage.disabled =
+        currentPage >= totalPages;
+}
+
+
+/* =========================================================
+   PREVIOUS PAGE
+   ========================================================= */
+
+previousPage.addEventListener(
+    "click",
+    function () {
+
+        if (currentPage > 1) {
+
+            currentPage--;
+
+            renderHistory();
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        }
+    }
+);
+
+
+/* =========================================================
+   NEXT PAGE
+   ========================================================= */
+
+nextPage.addEventListener(
+    "click",
+    function () {
+
+        const totalPages =
+            Math.ceil(
+                filteredHistory.length /
+                itemsPerPage
+            );
+
+        if (currentPage < totalPages) {
+
+            currentPage++;
+
+            renderHistory();
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        }
+    }
+);
+
+
+/* =========================================================
+   FILTER BUTTONS
+   ========================================================= */
+
+if (applyFilter) {
+
+    applyFilter.addEventListener(
+        "click",
+        filterHistory
+    );
+}
+
+if (clearFilter) {
+
+    clearFilter.addEventListener(
+        "click",
+        resetFilter
+    );
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+   ========================================================= */
+
+function escapeHtml(value) {
+
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+
+/* =========================================================
+   INITIAL LOAD
+   ========================================================= */
+
+loadHistory();
+
+
+/* =========================================================
+   AUTO REFRESH
+   ========================================================= */
+
+setInterval(
+    loadHistory,
+    5 * 60 * 1000
+);
+
+</script>
+
+</body>
+        </html>
