@@ -1417,7 +1417,1853 @@
             }
 
             .pf-copyright,
-            .pf-designed {
-                font-size: 8px;
-            }
+.pf-designed {
+    font-size: 8px;
+}
+}
+
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="site-header">
+
+        <div class="pf-container pf-header-inner">
+
+            <a
+                href="/index.html"
+                class="pf-brand"
+                aria-label="PaceFetch Home"
+            >
+                PaceFetch
+            </a>
+
+            <button
+                class="pf-menu-toggle"
+                id="mobileMenuToggle"
+                type="button"
+                aria-label="Open navigation"
+                aria-expanded="false"
+            >
+                <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                >
+                    <path d="M4 6h16"></path>
+                    <path d="M4 12h16"></path>
+                    <path d="M4 18h16"></path>
+                </svg>
+            </button>
+
+            <nav
+                class="site-nav"
+                id="siteNav"
+            >
+                <a
+                    href="/index.html"
+                    class="active"
+                >
+                    Home
+                </a>
+
+                <a href="/predictions.html">
+                    Predictions
+                </a>
+
+                <a href="/countries.html">
+                    Countries
+                </a>
+
+                <a href="/history.html">
+                    History
+                </a>
+
+                <a href="/methodology.html">
+                    Methodology
+                </a>
+            </nav>
+
+        </div>
+
+    </header>
+
+
+    <!-- HERO -->
+    <main>
+
+        <section class="pf-hero">
+
+            <div class="pf-container pf-hero-inner">
+
+                <div class="pf-live-badge">
+
+                    <span class="pf-live-dot"></span>
+
+                    LIVE DATA
+
+                </div>
+
+
+                <h1>
+                    Football Predictions
+                    <br>
+                    Backed by Data
+                </h1>
+
+
+                <p>
+                    Explore football predictions generated from available
+                    match data, provider forecasts and statistical analysis.
+                </p>
+
+
+                <div class="pf-hero-actions">
+
+                    <a
+                        href="/predictions.html"
+                        class="pf-btn pf-btn-primary"
+                    >
+                        View Today's Predictions
+
+                        <svg
+                            width="17"
+                            height="17"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                        >
+                            <path d="M5 12h14"></path>
+                            <path d="m13 6 6 6-6 6"></path>
+                        </svg>
+
+                    </a>
+
+
+                    <a
+                        href="/methodology.html"
+                        class="pf-btn pf-btn-secondary"
+                    >
+                        How It Works
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- STATS -->
+        <section class="pf-stats-section">
+
+            <div class="pf-container">
+
+                <div class="pf-stats-grid">
+
+                    <div class="pf-stat-card">
+
+                        <span class="pf-stat-label">
+                            Upcoming Fixtures
+                        </span>
+
+                        <strong
+                            class="pf-stat-value"
+                            id="upcomingCount"
+                        >
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="pf-stat-card">
+
+                        <span class="pf-stat-label">
+                            Qualifying Predictions
+                        </span>
+
+                        <strong
+                            class="pf-stat-value"
+                            id="predictionCount"
+                        >
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="pf-stat-card">
+
+                        <span class="pf-stat-label">
+                            Highest Probability
+                        </span>
+
+                        <strong
+                            class="pf-stat-value"
+                            id="highestProbability"
+                        >
+                            —
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- TODAY'S PREDICTIONS -->
+        <section class="pf-section">
+
+            <div class="pf-container">
+
+                <div class="pf-section-heading">
+
+                    <div>
+
+                        <span class="pf-section-kicker">
+                            TODAY
+                        </span>
+
+                        <h2>
+                            Today's Predictions
+                        </h2>
+
+                        <p>
+                            The strongest qualifying predictions available
+                            for today's fixtures.
+                        </p>
+
+                    </div>
+
+
+                    <a
+                        href="/predictions.html"
+                        class="pf-view-all"
+                    >
+                        View All
+
+                        <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                        >
+                            <path d="M5 12h14"></path>
+                            <path d="m13 6 6 6-6 6"></path>
+                        </svg>
+
+                    </a>
+
+                </div>
+
+
+                <!-- SEARCH -->
+                <div class="pf-search-wrap">
+
+                    <svg
+                        class="pf-search-icon"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                    >
+                        <circle
+                            cx="11"
+                            cy="11"
+                            r="7"
+                        ></circle>
+
+                        <path d="m20 20-4-4"></path>
+                    </svg>
+
+
+                    <input
+                        type="search"
+                        id="predictionSearch"
+                        class="pf-search-input"
+                        placeholder="Search teams, leagues or countries..."
+                        autocomplete="off"
+                    >
+
+                </div>
+
+
+                <!-- FILTERS -->
+                <div class="pf-filters">
+
+                    <div class="pf-filter">
+
+                        <label for="countryFilter">
+                            Country
+                        </label>
+
+                        <div class="pf-select-wrap">
+
+                            <select id="countryFilter">
+
+                                <option value="">
+                                    All countries
+                                </option>
+
+                            </select>
+
+                            <svg
+                                class="pf-select-icon"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                            >
+                                <path d="m6 9 6 6 6-6"></path>
+                            </svg>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="pf-filter">
+
+                        <label for="leagueFilter">
+                            League
+                        </label>
+
+                        <div class="pf-select-wrap">
+
+                            <select id="leagueFilter">
+
+                                <option value="">
+                                    All leagues
+                                </option>
+
+                            </select>
+
+                            <svg
+                                class="pf-select-icon"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                            >
+                                <path d="m6 9 6 6 6-6"></path>
+                            </svg>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="pf-filter">
+
+                        <label for="marketFilter">
+                            Market
+                        </label>
+
+                        <div class="pf-select-wrap">
+
+                            <select id="marketFilter">
+
+                                <option value="">
+                                    All markets
+                                </option>
+
+                            </select>
+
+                            <svg
+                                class="pf-select-icon"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                            >
+                                <path d="m6 9 6 6 6-6"></path>
+                            </svg>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="pf-filter">
+
+                        <label for="confidenceFilter">
+                            Confidence
+                        </label>
+
+                        <div class="pf-select-wrap">
+
+                            <select id="confidenceFilter">
+
+                                <option value="">
+                                    All confidence
+                                </option>
+
+                                <option value="80">
+                                    80%+
+                                </option>
+
+                                <option value="70">
+                                    70%+
+                                </option>
+
+                                <option value="50">
+                                    50%+
+                                </option>
+
+                            </select>
+
+                            <svg
+                                class="pf-select-icon"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                            >
+                                <path d="m6 9 6 6 6-6"></path>
+                            </svg>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- LOADING -->
+                <div
+                    class="pf-loading"
+                    id="loadingState"
+                >
+
+                    <span class="pf-spinner"></span>
+
+                    <span>
+                        Loading today's predictions...
+                    </span>
+
+                </div>
+
+
+                <!-- ERROR -->
+                <div
+                    class="pf-error"
+                    id="errorState"
+                    hidden
+                >
+
+                    <strong>
+                        Unable to load predictions
+                    </strong>
+
+                    <p id="errorMessage">
+                        Please try again later.
+                    </p>
+
+                    <button
+                        type="button"
+                        class="pf-btn pf-btn-secondary"
+                        id="retryButton"
+                    >
+                        Try Again
+                    </button>
+
+                </div>
+
+
+                <!-- EMPTY -->
+                <div
+                    class="pf-empty"
+                    id="emptyState"
+                    hidden
+                >
+
+                    <strong>
+                        No qualifying predictions today
+                    </strong>
+
+                    <p>
+                        There are currently no predictions meeting
+                        PaceFetch's publishing criteria.
+                    </p>
+
+                </div>
+
+
+                <!-- PREDICTION GRID -->
+                <div
+                    class="pf-predictions-grid"
+                    id="predictionsGrid"
+                ></div>
+
+            </div>
+
+        </section>
+
+
+        <!-- TOP PICKS -->
+        <section class="pf-section pf-top-picks-section">
+
+            <div class="pf-container">
+
+                <div class="pf-section-heading">
+
+                    <div>
+
+                        <span class="pf-section-kicker">
+                            STRONGEST
+                        </span>
+
+                        <h2>
+                            Top Picks
+                        </h2>
+
+                        <p>
+                            The highest-probability predictions currently
+                            available.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="pf-top-picks"
+                    id="topPicks"
+                ></div>
+
+            </div>
+
+        </section>
+
+
+        <!-- QUICK LINKS -->
+        <section class="pf-section pf-quick-links-section">
+
+            <div class="pf-container">
+
+                <div class="pf-section-heading">
+
+                    <div>
+
+                        <span class="pf-section-kicker">
+                            EXPLORE
+                        </span>
+
+                        <h2>
+                            Explore PaceFetch
+                        </h2>
+
+                        <p>
+                            Browse predictions, countries, results and
+                            the methodology behind our model.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="pf-quick-links">
+
+                    <a
+                        href="/predictions.html"
+                        class="pf-quick-link"
+                    >
+
+                        <span>
+
+                            <strong>
+                                Predictions
+                            </strong>
+
+                            <small>
+                                Browse today's predictions
+                            </small>
+
+                        </span>
+
+                        <svg
+                            width="18"
+                            height="18"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                        >
+                            <path d="m9 18 6-6-6-6"></path>
+                        </svg>
+
+                    </a>
+
+
+                    <a
+                        href="/countries.html"
+                        class="pf-quick-link"
+                    >
+
+                        <span>
+
+                            <strong>
+                                Countries
+                            </strong>
+
+                            <small>
+                                Explore leagues by country
+                            </small>
+
+                        </span>
+
+                        <svg
+                            width="18"
+                            height="18"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                        >
+                            <path d="m9 18 6-6-6-6"></path>
+                        </svg>
+
+                    </a>
+
+
+                    <a
+                        href="/history.html"
+                        class="pf-quick-link"
+                    >
+
+                        <span>
+
+                            <strong>
+                                Prediction History
+                            </strong>
+
+                            <small>
+                                Review previous predictions
+                            </small>
+
+                        </span>
+
+                        <svg
+                            width="18"
+                            height="18"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                        >
+                            <path d="m9 18 6-6-6-6"></path>
+                        </svg>
+
+                    </a>
+
+
+                    <a
+                        href="/methodology.html"
+                        class="pf-quick-link"
+                    >
+
+                        <span>
+
+                            <strong>
+                                Methodology
+                            </strong>
+
+                            <small>
+                                Learn how predictions are generated
+                            </small>
+
+                        </span>
+
+                        <svg
+                            width="18"
+                            height="18"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                        >
+                            <path d="m9 18 6-6-6-6"></path>
+                        </svg>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+
+        <div class="pf-footer-inner">
+
+            <p class="pf-footer-brand">
+                PaceFetch
+            </p>
+
+            <p class="pf-footer-tagline">
+                PaceFetch Football predictions backed by data.
+            </p>
+
+            <nav class="pf-footer-links">
+
+                <a href="/predictions.html">
+                    Predictions
+                </a>
+
+                <a href="/countries.html">
+                    Countries
+                </a>
+
+                <a href="/history.html">
+                    History
+                </a>
+
+                <a href="/methodology.html">
+                    Methodology
+                </a>
+
+            </nav>
+
+            <div class="pf-footer-divider"></div>
+
+            <p class="pf-disclaimer">
+                PaceFetch predictions are model-generated probabilities
+                based on available football data. They are not guarantees
+                of match outcomes and should not be treated as financial
+                or betting advice.
+            </p>
+
+            <p class="pf-copyright">
+                © 2026 PaceFetch. All rights reserved.
+            </p>
+
+            <span class="pf-designed">
+                Designed by Pacethel
+            </span>
+
+        </div>
+
+    </footer>
+
+
+    <!-- JAVASCRIPT -->
+    <script>
+
+        const state = {
+            predictions: [],
+            filteredPredictions: [],
+            date: null
+        };
+
+
+        const elements = {
+
+            loading:
+                document.getElementById(
+                    "loadingState"
+                ),
+
+            error:
+                document.getElementById(
+                    "errorState"
+                ),
+
+            errorMessage:
+                document.getElementById(
+                    "errorMessage"
+                ),
+
+            empty:
+                document.getElementById(
+                    "emptyState"
+                ),
+
+            grid:
+                document.getElementById(
+                    "predictionsGrid"
+                ),
+
+            topPicks:
+                document.getElementById(
+                    "topPicks"
+                ),
+
+            search:
+                document.getElementById(
+                    "predictionSearch"
+                ),
+
+            countryFilter:
+                document.getElementById(
+                    "countryFilter"
+                ),
+
+            leagueFilter:
+                document.getElementById(
+                    "leagueFilter"
+                ),
+
+            marketFilter:
+                document.getElementById(
+                    "marketFilter"
+                ),
+
+            confidenceFilter:
+                document.getElementById(
+                    "confidenceFilter"
+                ),
+
+            upcomingCount:
+                document.getElementById(
+                    "upcomingCount"
+                ),
+
+            predictionCount:
+                document.getElementById(
+                    "predictionCount"
+                ),
+
+            highestProbability:
+                document.getElementById(
+                    "highestProbability"
+                ),
+
+            retryButton:
+                document.getElementById(
+                    "retryButton"
+                ),
+
+            mobileMenuToggle:
+                document.getElementById(
+                    "mobileMenuToggle"
+                ),
+
+            siteNav:
+                document.getElementById(
+                    "siteNav"
+                )
+
+        };
+
+
+        function escapeHTML(value) {
+
+            return String(value ?? "")
+                .replace(
+                    /&/g,
+                    "&amp;"
+                )
+                .replace(
+                    /</g,
+                    "&lt;"
+                )
+                .replace(
+                    />/g,
+                    "&gt;"
+                )
+                .replace(
+                    /"/g,
+                    "&quot;"
+                )
+                .replace(
+                    /'/g,
+                    "&#039;"
+                );
+
         }
+
+
+        function formatProbability(value) {
+
+            const number =
+                Number(value);
+
+            if (
+                !Number.isFinite(number)
+            ) {
+                return "—";
+            }
+
+            return `${Math.round(number)}%`;
+
+        }
+
+
+        function getConfidenceClass(
+            probability
+        ) {
+
+            const value =
+                Number(probability);
+
+            if (value >= 80) {
+                return "strong";
+            }
+
+            if (value >= 70) {
+                return "good";
+            }
+
+            if (value >= 50) {
+                return "moderate";
+            }
+
+            return "weak";
+
+        }
+
+
+        function getConfidenceLabel(
+            probability
+        ) {
+
+            const value =
+                Number(probability);
+
+            if (value >= 80) {
+                return "Strong";
+            }
+
+            if (value >= 70) {
+                return "Good";
+            }
+
+            if (value >= 50) {
+                return "Moderate";
+            }
+
+            return "Weak";
+
+        }
+
+
+        function showLoading() {
+
+            elements.loading.hidden =
+                false;
+
+            elements.error.hidden =
+                true;
+
+            elements.empty.hidden =
+                true;
+
+        }
+
+
+        function showError(
+            message
+        ) {
+
+            elements.loading.hidden =
+                true;
+
+            elements.error.hidden =
+                false;
+
+            elements.empty.hidden =
+                true;
+
+            elements.grid.innerHTML =
+                "";
+
+            elements.topPicks.innerHTML =
+                "";
+
+            elements.errorMessage.textContent =
+                message ||
+                "Unable to load predictions.";
+
+        }
+
+
+        function hideStates() {
+
+            elements.loading.hidden =
+                true;
+
+            elements.error.hidden =
+                true;
+
+        }
+
+
+        function getPredictionSearchText(
+            prediction
+        ) {
+
+            return [
+
+                prediction.homeTeam,
+                prediction.awayTeam,
+                prediction.league,
+                prediction.country,
+                prediction.market,
+                prediction.selection
+
+            ]
+                .filter(Boolean)
+                .join(" ")
+                .toLowerCase();
+
+        }
+
+
+        function populateSelect(
+            select,
+            values,
+            label
+        ) {
+
+            if (!select) {
+                return;
+            }
+
+            const currentValue =
+                select.value;
+
+            const uniqueValues = [
+
+                ...new Set(
+
+                    values
+                        .filter(Boolean)
+                        .map(
+                            value =>
+                                String(
+                                    value
+                                ).trim()
+                        )
+                        .filter(Boolean)
+
+                )
+
+            ].sort(
+                (a, b) =>
+                    a.localeCompare(b)
+            );
+
+
+            select.innerHTML =
+                "";
+
+
+            const defaultOption =
+                document.createElement(
+                    "option"
+                );
+
+            defaultOption.value =
+                "";
+
+            defaultOption.textContent =
+                label;
+
+            select.appendChild(
+                defaultOption
+            );
+
+
+            uniqueValues.forEach(
+                value => {
+
+                    const option =
+                        document.createElement(
+                            "option"
+                        );
+
+                    option.value =
+                        value;
+
+                    option.textContent =
+                        value;
+
+                    select.appendChild(
+                        option
+                    );
+
+                }
+            );
+
+
+            if (
+                uniqueValues.includes(
+                    currentValue
+                )
+            ) {
+
+                select.value =
+                    currentValue;
+
+            }
+
+        }
+
+
+        function buildFilters() {
+
+            populateSelect(
+
+                elements.countryFilter,
+
+                state.predictions.map(
+                    prediction =>
+                        prediction.country
+                ),
+
+                "All countries"
+
+            );
+
+
+            populateSelect(
+
+                elements.leagueFilter,
+
+                state.predictions.map(
+                    prediction =>
+                        prediction.league
+                ),
+
+                "All leagues"
+
+            );
+
+
+            populateSelect(
+
+                elements.marketFilter,
+
+                state.predictions.map(
+                    prediction =>
+                        prediction.market
+                ),
+
+                "All markets"
+
+            );
+
+        }
+
+
+        function applyFilters() {
+
+            const country =
+                elements.countryFilter.value;
+
+            const league =
+                elements.leagueFilter.value;
+
+            const market =
+                elements.marketFilter.value;
+
+            const confidence =
+                Number(
+                    elements.confidenceFilter.value ||
+                    0
+                );
+
+            const search =
+                elements.search.value
+                    .trim()
+                    .toLowerCase();
+
+
+            state.filteredPredictions =
+                state.predictions.filter(
+                    prediction => {
+
+                        if (
+                            country &&
+                            prediction.country !==
+                                country
+                        ) {
+                            return false;
+                        }
+
+
+                        if (
+                            league &&
+                            prediction.league !==
+                                league
+                        ) {
+                            return false;
+                        }
+
+
+                        if (
+                            market &&
+                            prediction.market !==
+                                market
+                        ) {
+                            return false;
+                        }
+
+
+                        if (
+                            confidence &&
+                            Number(
+                                prediction.probability
+                            ) < confidence
+                        ) {
+                            return false;
+                        }
+
+
+                        if (
+                            search &&
+                            !getPredictionSearchText(
+                                prediction
+                            ).includes(
+                                search
+                            )
+                        ) {
+                            return false;
+                        }
+
+
+                        return true;
+
+                    }
+                );
+
+
+            renderPredictions(
+                state.filteredPredictions
+            );
+
+            renderTopPicks(
+                state.filteredPredictions
+            );
+
+        }
+
+
+        function renderPredictions(
+            predictions
+        ) {
+
+            elements.grid.innerHTML =
+                "";
+
+
+            if (
+                !predictions.length
+            ) {
+
+                elements.empty.hidden =
+                    false;
+
+                return;
+
+            }
+
+
+            elements.empty.hidden =
+                true;
+
+
+            predictions.forEach(
+                prediction => {
+
+                    const probability =
+                        Number(
+                            prediction.probability
+                        ) || 0;
+
+                    const confidenceClass =
+                        getConfidenceClass(
+                            probability
+                        );
+
+                    const confidenceLabel =
+                        getConfidenceLabel(
+                            probability
+                        );
+
+                    const fixtureId =
+                        encodeURIComponent(
+                            prediction.fixtureId ||
+                            ""
+                        );
+
+
+                    const card =
+                        document.createElement(
+                            "article"
+                        );
+
+                    card.className =
+                        "pf-prediction-card";
+
+
+                    card.innerHTML = `
+
+                        <div class="pf-card-top">
+
+                            <span class="pf-league">
+                                ${escapeHTML(
+                                    prediction.league ||
+                                    "Football"
+                                )}
+                            </span>
+
+                            <span class="pf-confidence ${confidenceClass}">
+                                ${confidenceLabel}
+                            </span>
+
+                        </div>
+
+
+                        <div class="pf-mini-date">
+                            ${escapeHTML(
+                                prediction.kickoff ||
+                                ""
+                            )}
+                        </div>
+
+
+                        <div class="pf-teams">
+
+                            <div class="pf-team">
+
+                                <strong>
+                                    ${escapeHTML(
+                                        prediction.homeTeam
+                                    )}
+                                </strong>
+
+                            </div>
+
+
+                            <span class="pf-vs">
+                                VS
+                            </span>
+
+
+                            <div class="pf-team">
+
+                                <strong>
+                                    ${escapeHTML(
+                                        prediction.awayTeam
+                                    )}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="pf-prediction-result">
+
+                            <span class="pf-market">
+                                ${escapeHTML(
+                                    prediction.market
+                                )}
+                            </span>
+
+                            <strong class="pf-selection">
+                                ${escapeHTML(
+                                    prediction.selection
+                                )}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="pf-probability">
+
+                            <div class="pf-probability-head">
+
+                                <span>
+                                    Probability
+                                </span>
+
+                                <strong>
+                                    ${formatProbability(
+                                        probability
+                                    )}
+                                </strong>
+
+                            </div>
+
+
+                            <div class="pf-progress">
+
+                                <span
+                                    class="${confidenceClass}"
+                                    style="width:${Math.min(
+                                        100,
+                                        Math.max(
+                                            0,
+                                            probability
+                                        )
+                                    )}%"
+                                ></span>
+
+                            </div>
+
+                        </div>
+
+
+                        <a
+                            href="/match.html?fixture=${fixtureId}"
+                            class="pf-card-link"
+                        >
+                            View Match
+
+                            <svg
+                                width="15"
+                                height="15"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                            >
+                                <path d="M5 12h14"></path>
+                                <path d="m13 6 6 6-6 6"></path>
+                            </svg>
+
+                        </a>
+
+                    `;
+
+
+                    elements.grid.appendChild(
+                        card
+                    );
+
+                }
+            );
+
+        }
+
+
+        function renderTopPicks(
+            predictions
+        ) {
+
+            elements.topPicks.innerHTML =
+                "";
+
+
+            const picks =
+                [...predictions]
+                    .sort(
+                        (a, b) =>
+                            Number(
+                                b.probability ||
+                                0
+                            ) -
+                            Number(
+                                a.probability ||
+                                0
+                            )
+                    )
+                    .slice(
+                        0,
+                        5
+                    );
+
+
+            if (!picks.length) {
+                return;
+            }
+
+
+            picks.forEach(
+                (prediction, index) => {
+
+                    const probability =
+                        Number(
+                            prediction.probability
+                        ) || 0;
+
+                    const confidenceClass =
+                        getConfidenceClass(
+                            probability
+                        );
+
+
+                    const item =
+                        document.createElement(
+                            "a"
+                        );
+
+                    item.className =
+                        "pf-top-pick";
+
+
+                    item.href =
+                        `/match.html?fixture=${encodeURIComponent(
+                            prediction.fixtureId ||
+                            ""
+                        )}`;
+
+
+                    item.innerHTML = `
+
+                        <span class="pf-pick-rank">
+                            ${index + 1}
+                        </span>
+
+
+                        <span class="pf-pick-match">
+
+                            <strong>
+                                ${escapeHTML(
+                                    prediction.homeTeam
+                                )}
+                                vs
+                                ${escapeHTML(
+                                    prediction.awayTeam
+                                )}
+                            </strong>
+
+                            <small>
+                                ${escapeHTML(
+                                    prediction.market
+                                )}
+                                ·
+                                ${escapeHTML(
+                                    prediction.selection
+                                )}
+                            </small>
+
+                        </span>
+
+
+                        <span
+                            class="pf-pick-probability ${confidenceClass}"
+                        >
+                            ${formatProbability(
+                                probability
+                            )}
+                        </span>
+
+                    `;
+
+
+                    elements.topPicks.appendChild(
+                        item
+                    );
+
+                }
+            );
+
+        }
+
+
+        function updateStats(
+            data
+        ) {
+
+            const summary =
+                data &&
+                data.summary
+                    ? data.summary
+                    : {};
+
+
+            elements.upcomingCount.textContent =
+                summary.upcomingFixtures ??
+                "—";
+
+
+            elements.predictionCount.textContent =
+                summary.published ??
+                (
+                    Array.isArray(
+                        data?.predictions
+                    )
+                        ? data.predictions.length
+                        : "—"
+                );
+
+
+            const probabilities =
+                state.predictions
+                    .map(
+                        prediction =>
+                            Number(
+                                prediction.probability
+                            )
+                    )
+                    .filter(
+                        value =>
+                            Number.isFinite(
+                                value
+                            )
+                    );
+
+
+            const highest =
+                probabilities.length
+                    ? Math.max(
+                        ...probabilities
+                    )
+                    : null;
+
+
+            elements.highestProbability.textContent =
+                highest !== null
+                    ? formatProbability(
+                        highest
+                    )
+                    : "—";
+
+        }
+
+
+        async function loadPredictions() {
+
+            showLoading();
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/api/predictions",
+                        {
+                            method: "GET",
+
+                            headers: {
+                                "Accept":
+                                    "application/json"
+                            },
+
+                            cache:
+                                "no-store"
+                        }
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        `Request failed with status ${response.status}`
+                    );
+
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                if (
+                    !data ||
+                    data.success !== true
+                ) {
+
+                    throw new Error(
+                        data?.message ||
+                        "Prediction service returned an invalid response."
+                    );
+
+                }
+
+
+                state.predictions =
+                    Array.isArray(
+                        data.predictions
+                    )
+                        ? data.predictions
+                        : [];
+
+
+                state.date =
+                    data.date ||
+                    null;
+
+
+                updateStats(
+                    data
+                );
+
+                buildFilters();
+
+                hideStates();
+
+                applyFilters();
+
+
+            } catch (error) {
+
+                console.error(
+                    "PaceFetch predictions error:",
+                    error
+                );
+
+
+                showError(
+                    error.message ||
+                    "Unable to load today's predictions."
+                );
+
+            }
+
+        }
+
+
+        elements.countryFilter.addEventListener(
+            "change",
+            applyFilters
+        );
+
+
+        elements.leagueFilter.addEventListener(
+            "change",
+            applyFilters
+        );
+
+
+        elements.marketFilter.addEventListener(
+            "change",
+            applyFilters
+        );
+
+
+        elements.confidenceFilter.addEventListener(
+            "change",
+            applyFilters
+        );
+
+
+        elements.search.addEventListener(
+            "input",
+            applyFilters
+        );
+
+
+        elements.retryButton.addEventListener(
+            "click",
+            loadPredictions
+        );
+
+
+        elements.mobileMenuToggle.addEventListener(
+            "click",
+            () => {
+
+                const isOpen =
+                    elements.siteNav.classList.toggle(
+                        "open"
+                    );
+
+
+                elements.mobileMenuToggle
+                    .setAttribute(
+                        "aria-expanded",
+                        String(
+                            isOpen
+                        )
+                    );
+
+            }
+        );
+
+
+        document
+            .querySelectorAll(
+                ".site-nav a"
+            )
+            .forEach(
+                link => {
+
+                    link.addEventListener(
+                        "click",
+                        () => {
+
+                            elements.siteNav
+                                .classList.remove(
+                                    "open"
+                                );
+
+
+                            elements.mobileMenuToggle
+                                .setAttribute(
+                                    "aria-expanded",
+                                    "false"
+                                );
+
+                        }
+                    );
+
+                }
+            );
+
+
+        loadPredictions();
+
+    </script>
+
+</body>
+</html>
