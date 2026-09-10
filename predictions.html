@@ -1798,5 +1798,499 @@
                                 <div
                                     class="prediction-top"
                                 >
+                                    <div class="prediction-market">
+                                        ${escapeHTML(prediction.market || "Prediction")}
+                                    </div>
 
+                                    <div class="confidence-badge ${getConfidenceClass(prediction.probability)}">
+                                        ${Number(prediction.probability || 0).toFixed(1)}%
+                                    </div>
+                                </div>
+
+                                <div class="prediction-teams">
+                                    <div class="team-block">
+                                        <div class="team-name">
+                                            ${escapeHTML(prediction.homeTeam || "Home Team")}
+                                        </div>
+                                        <div class="team-label">HOME</div>
+                                    </div>
+
+                                    <div class="vs-block">
+                                        <span>VS</span>
+                                    </div>
+
+                                    <div class="team-block team-away">
+                                        <div class="team-name">
+                                            ${escapeHTML(prediction.awayTeam || "Away Team")}
+                                        </div>
+                                        <div class="team-label">AWAY</div>
+                                    </div>
+                                </div>
+
+                                <div class="prediction-selection">
+                                    <span class="selection-label">Pick</span>
+                                    <strong>
+                                        ${escapeHTML(prediction.selection || "—")}
+                                    </strong>
+                                </div>
+
+                                <div class="prediction-meta">
+                                    <div>
+                                        <span>League</span>
+                                        <strong>${escapeHTML(prediction.league || "—")}</strong>
+                                    </div>
+
+                                    <div>
+                                        <span>Kickoff</span>
+                                        <strong>${formatKickoff(prediction.kickoff)}</strong>
+                                    </div>
+                                </div>
+
+                                <div class="prediction-footer">
+                                    <span class="confidence-text ${getConfidenceClass(prediction.probability)}">
+                                        ${getConfidenceLabel(prediction.probability)}
+                                    </span>
+
+                                    <a
+                                        class="match-link"
+                                        href="/match.html?fixture=${encodeURIComponent(prediction.fixtureId)}"
+                                    >
+                                        View Match
+                                    </a>
+                                </div>
+                            </article>
+                        `;
+                    }).join("");
+
+                    predictionCount.textContent = filtered.length;
+                    visibleCount.textContent = filtered.length;
+
+                    if (topPicksContainer) {
+                        const topPicks = [...filtered]
+                            .sort((a, b) => {
+                                const probabilityA = Number(a.probability) || 0;
+                                const probabilityB = Number(b.probability) || 0;
+                                return probabilityB - probabilityA;
+                            })
+                            .slice(0, 3);
+
+                        if (!topPicks.length) {
+                            topPicksContainer.innerHTML = `
+                                <div class="empty-state compact-empty">
+                                    <div class="empty-icon">⚽</div>
+                                    <h3>No top picks available</h3>
+                                    <p>There are no qualifying predictions matching your filters.</p>
+                                </div>
+                            `;
+                        } else {
+                            topPicksContainer.innerHTML = topPicks.map((prediction, index) => `
+                                <article class="top-pick-card">
+                                    <div class="top-pick-number">
+                                        ${index + 1}
+                                    </div>
+
+                                    <div class="top-pick-content">
+                                        <div class="top-pick-teams">
+                                            ${escapeHTML(prediction.homeTeam || "Home")}
+                                            <span>vs</span>
+                                            ${escapeHTML(prediction.awayTeam || "Away")}
+                                        </div>
+
+                                        <div class="top-pick-selection">
+                                            ${escapeHTML(prediction.selection || "—")}
+                                        </div>
+                                    </div>
+
+                                    <div class="top-pick-probability ${getConfidenceClass(prediction.probability)}">
+                                        ${Number(prediction.probability || 0).toFixed(1)}%
+                                    </div>
+                                </article>
+                            `).join("");
+                        }
+                    }
+
+                    updateStats(filtered);
+                }
+
+                function updateStats(predictions) {
+                    if (todayCount) {
+                        todayCount.textContent = predictions.length;
+                    }
+
+                    if (strongCount) {
+                        strongCount.textContent = predictions.filter(
+                            prediction => Number(prediction.probability) >= 80
+                        ).length;
+                    }
+
+                    if (goodCount) {
+                        goodCount.textContent = predictions.filter(
+                            prediction => {
+                                const probability = Number(prediction.probability) || 0;
+                                return probability >= 70 && probability < 80;
+                            }
+                        ).length;
+                    }
+
+                    if (moderateCount) {
+                        moderateCount.textContent = predictions.filter(
+                            prediction => {
+                                const probability = Number(prediction.probability) || 0;
+                                return probability >= 50 && probability < 70;
+                            }
+                        ).length;
+                    }
+                }
+
+                function getConfidenceClass(probability) {
+                    const value = Number(probability) || 0;
+
+                    if (value >= 80) {
+                        return "confidence-strong";
+                    }
+
+                    if (value >= 70) {
+                        return "confidence-good";
+                    }
+
+                    if (value >= 50) {
+                        return "confidence-moderate";
+                    }
+
+                    return "confidence-weak";
+                }
+
+                function getConfidenceLabel(probability) {
+                    const value = Number(probability) || 0;
+
+                    if (value >= 80) {
+                        return "Strong Pick";
+                    }
+
+                    if (value >= 70) {
+                        return "Good Pick";
+                    }
+
+                    if (value >= 50) {
+                        return "Moderate";
+                    }
+
+                    return "Low Confidence";
+                }
+
+                function formatKickoff(value) {
+                    if (!value) {
+                        return "—";
+                    }
+
+                    const date = new Date(value);
+
+                    if (Number.isNaN(date.getTime())) {
+                        return escapeHTML(String(value));
+                    }
+
+                    return date.toLocaleString("en-NG", {
+                        timeZone: "Africa/Lagos",
+                        day: "2-digit",
+                        month: "short",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: false
+                    });
+                }
+
+                function escapeHTML(value) {
+                    return String(value ?? "")
+                        .replace(/&/g, "&amp;")
+                        .replace(/</g, "&lt;")
+                        .replace(/>/g, "&gt;")
+                        .replace(/"/g, "&quot;")
+                        .replace(/'/g, "&#039;");
+                }
+
+                function populateFilters(predictions) {
+                    const countries = [...new Set(
+                        predictions
+                            .map(item => item.country)
+                            .filter(Boolean)
+                    )].sort();
+
+                    const leagues = [...new Set(
+                        predictions
+                            .map(item => item.league)
+                            .filter(Boolean)
+                    )].sort();
+
+                    const markets = [...new Set(
+                        predictions
+                            .map(item => item.market)
+                            .filter(Boolean)
+                    )].sort();
+
+                    if (countryFilter) {
+                        countryFilter.innerHTML = `
+                            <option value="">All Countries</option>
+                            ${countries.map(country => `
+                                <option value="${escapeHTML(country)}">
+                                    ${escapeHTML(country)}
+                                </option>
+                            `).join("")}
+                        `;
+                    }
+
+                    if (leagueFilter) {
+                        leagueFilter.innerHTML = `
+                            <option value="">All Leagues</option>
+                            ${leagues.map(league => `
+                                <option value="${escapeHTML(league)}">
+                                    ${escapeHTML(league)}
+                                </option>
+                            `).join("")}
+                        `;
+                    }
+
+                    if (marketFilter) {
+                        marketFilter.innerHTML = `
+                            <option value="">All Markets</option>
+                            ${markets.map(market => `
+                                <option value="${escapeHTML(market)}">
+                                    ${escapeHTML(market)}
+                                </option>
+                            `).join("")}
+                        `;
+                    }
+                }
+
+                function applyFilters() {
+                    const searchTerm = searchInput
+                        ? searchInput.value.trim().toLowerCase()
+                        : "";
+
+                    const country = countryFilter
+                        ? countryFilter.value
+                        : "";
+
+                    const league = leagueFilter
+                        ? leagueFilter.value
+                        : "";
+
+                    const market = marketFilter
+                        ? marketFilter.value
+                        : "";
+
+                    const confidence = confidenceFilter
+                        ? confidenceFilter.value
+                        : "";
+
+                    const filtered = allPredictions.filter(prediction => {
+                        const home = String(prediction.homeTeam || "").toLowerCase();
+                        const away = String(prediction.awayTeam || "").toLowerCase();
+                        const predictionLeague = String(prediction.league || "");
+                        const predictionCountry = String(prediction.country || "");
+                        const predictionMarket = String(prediction.market || "");
+                        const probability = Number(prediction.probability) || 0;
+
+                        const matchesSearch =
+                            !searchTerm ||
+                            home.includes(searchTerm) ||
+                            away.includes(searchTerm) ||
+                            predictionLeague.toLowerCase().includes(searchTerm) ||
+                            predictionCountry.toLowerCase().includes(searchTerm) ||
+                            predictionMarket.toLowerCase().includes(searchTerm) ||
+                            String(prediction.selection || "")
+                                .toLowerCase()
+                                .includes(searchTerm);
+
+                        const matchesCountry =
+                            !country || predictionCountry === country;
+
+                        const matchesLeague =
+                            !league || predictionLeague === league;
+
+                        const matchesMarket =
+                            !market || predictionMarket === market;
+
+                        let matchesConfidence = true;
+
+                        if (confidence === "80") {
+                            matchesConfidence = probability >= 80;
+                        } else if (confidence === "70") {
+                            matchesConfidence = probability >= 70;
+                        } else if (confidence === "50") {
+                            matchesConfidence = probability >= 50;
+                        }
+
+                        return (
+                            matchesSearch &&
+                            matchesCountry &&
+                            matchesLeague &&
+                            matchesMarket &&
+                            matchesConfidence
+                        );
+                    });
+
+                    renderPredictions(filtered);
+                }
+
+                function showLoading() {
+                    if (loadingState) {
+                        loadingState.style.display = "block";
+                    }
+
+                    if (errorState) {
+                        errorState.style.display = "none";
+                    }
+
+                    if (emptyState) {
+                        emptyState.style.display = "none";
+                    }
+
+                    if (predictionsContainer) {
+                        predictionsContainer.innerHTML = "";
+                    }
+                }
+
+                function showError(message) {
+                    if (loadingState) {
+                        loadingState.style.display = "none";
+                    }
+
+                    if (errorState) {
+                        errorState.style.display = "block";
+                    }
+
+                    if (emptyState) {
+                        emptyState.style.display = "none";
+                    }
+
+                    if (predictionsContainer) {
+                        predictionsContainer.innerHTML = "";
+                    }
+
+                    if (errorMessage) {
+                        errorMessage.textContent =
+                            message ||
+                            "Unable to load predictions right now.";
+                    }
+                }
+
+                function showEmpty() {
+                    if (loadingState) {
+                        loadingState.style.display = "none";
+                    }
+
+                    if (errorState) {
+                        errorState.style.display = "none";
+                    }
+
+                    if (emptyState) {
+                        emptyState.style.display = "block";
+                    }
+
+                    if (predictionsContainer) {
+                        predictionsContainer.innerHTML = "";
+                    }
+
+                    if (predictionCount) {
+                        predictionCount.textContent = "0";
+                    }
+
+                    if (visibleCount) {
+                        visibleCount.textContent = "0";
+                    }
+                }
+
+                async function loadPredictions() {
+                    showLoading();
+
+                    try {
+                        const response = await fetch("/api/predictions", {
+                            method: "GET",
+                            headers: {
+                                "Accept": "application/json"
+                            },
+                            cache: "no-store"
+                        });
+
+                        if (!response.ok) {
+                            throw new Error(
+                                `Prediction API returned ${response.status}`
+                            );
+                        }
+
+                        const data = await response.json();
+
+                        if (!data || data.success !== true) {
+                            throw new Error(
+                                data && data.message
+                                    ? data.message
+                                    : "Prediction API did not return valid data."
+                            );
+                        }
+
+                        const predictions = Array.isArray(data.predictions)
+                            ? data.predictions
+                            : [];
+
+                        allPredictions = predictions
+                            .filter(item => item && item.fixtureId)
+                            .map(item => ({
+                                ...item,
+                                probability: Number(item.probability) || 0
+                            }));
+
+                        if (!allPredictions.length) {
+                            showEmpty();
+                            updateStats([]);
+                            return;
+                        }
+
+                        populateFilters(allPredictions);
+                        applyURLFilters();
+                        applyFilters();
+
+                    } catch (error) {
+                        console.error("PaceFetch prediction error:", error);
+
+                        showError(
+                            "We couldn't load today's predictions. Please try again."
+                        );
+                    }
+                }
+
+                function applyURLFilters() {
+                    const params = new URLSearchParams(window.location.search);
+
+                    const country = params.get("country");
+                    const league = params.get("league");
+                    const market = params.get("market");
+
+                    if (country && countryFilter) {
+                        countryFilter.value = country;
+                    }
+
+                    if (league && leagueFilter) {
+                        leagueFilter.value = league;
+                    }
+
+                    if (market && marketFilter) {
+                        marketFilter.value = market;
+                    }
+                }
+
+                if (searchInput) {
+                    searchInput.addEventListener("input", applyFilters);
+                }
+
+                if (countryFilter) {
+                    countryFilter.addEventListener("change", applyFilters);
+                }
+
+                if (leagueFilter) {
+                    leagueFilter.addEventListener("change", applyFilters);
+                }
+
+                if (marketFilter) {
+                    marketFilter.addEventListener("change", applyFilters);
+               
                               
