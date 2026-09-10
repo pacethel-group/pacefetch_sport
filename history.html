@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Prediction History | PaceFetch
+    </title>
+
+    <meta
+        name="description"
+        content="Track PaceFetch football prediction results, accuracy, market performance and historical prediction records."
+    >
+
+    <meta
+        name="robots"
+        content="index, follow"
+    >
+
+    <link
+        rel="canonical"
+        href="https://pacefetch.com/history.html"
+    >
+
+    <meta
+        property="og:type"
+        content="website"
+    >
+
+    <meta
+        property="og:title"
+        content="Prediction History | PaceFetch"
+    >
+
+    <meta
+        property="og:description"
+        content="Review historical PaceFetch football predictions and prediction accuracy."
+    >
+
+    <meta
+        property="og:url"
+        content="https://pacefetch.com/history.html"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/css/style.css"
+    >
+
+
+    <style>
+
+        /* ----------------------------------------------------------
+           History Page
+        ---------------------------------------------------------- */
+
+        .history-hero {
+
+            padding:
+                40px 0 30px;
+
+        }
+
+
+        .eyebrow {
+
+            display:
+                inline-block;
+
+            color:
+                var(--green);
+
+            font-size:
+                12px;
+
+            font-weight:
+                800;
+
+            letter-spacing:
+                1.5px;
+
+            margin-bottom:
+                10px;
+
+        }
+
+
+        .history-hero h1 {
+
+            margin:
+                0 0 12px;
+
+            font-size:
+                clamp(
+                    30px,
+                    5vw,
+                    48px
+                );
+
+        }
+
+
+        .history-hero p {
+
+            max-width:
+                720px;
+
+            color:
+                var(--muted);
+
+            line-height:
+                1.7;
+
+            margin:
+                0;
+
+        }
+
+
+        /* ----------------------------------------------------------
+           Summary
+        ---------------------------------------------------------- */
+
+        .history-summary {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(
+                    4,
+                    minmax(
+                        0,
+                        1fr
+                    )
+                );
+
+            gap:
+                14px;
+
+            margin:
+                20px 0 30px;
+
+        }
+
+
+        .history-stat {
+
+            border:
+                1px solid var(--border);
+
+            background:
+                var(--card);
+
+            border-radius:
+                16px;
+
+            padding:
+                20px;
+
+        }
+
+
+        .history-stat span {
+
+            display:
+                block;
+
+            color:
+                var(--muted);
+
+            font-size:
+                12px;
+
+            margin-bottom:
+                8px;
+
+        }
+
+
+        .history-stat strong {
+
+            display:
+                block;
+
+            font-size:
+                28px;
+
+            line-height:
+                1.1;
+
+        }
+
+
+        .history-stat small {
+
+            display:
+                block;
+
+            color:
+                var(--muted);
+
+            margin-top:
+                7px;
+
+            font-size:
+                12px;
+
+        }
+
+
+        /* ----------------------------------------------------------
+           Filters
+        ---------------------------------------------------------- */
+
+        .history-controls {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(
+                    4,
+                    minmax(
+                        0,
+                        1fr
+                    )
+                );
+
+            gap:
+                12px;
+
+            margin-bottom:
+                24px;
+
+        }
+
+
+        .history-control {
+
+            width:
+                100%;
+
+            box-sizing:
+                border-box;
+
+            border:
+                1px solid var(--border);
+
+            background:
+                var(--card);
+
+            color:
+                var(--text);
+
+            border-radius:
+                12px;
+
+            padding:
+                13px 14px;
+
+            outline:
+                none;
+
+        }
+
+
+        .history-control:focus {
+
+            border-color:
+                var(--green);
+
+        }
+
+
+        /* ----------------------------------------------------------
+           Sections
+        ---------------------------------------------------------- */
+
+        .history-section {
+
+            margin:
+                30px 0;
+
+        }
+
+
+        .section-title {
+
+            display:
+                flex;
+
+            align-items:
+                flex-end;
+
+            justify-content:
+                space-between;
+
+            gap:
+                15px;
+
+            margin-bottom:
+                14px;
+
+        }
+
+
+        .section-title h2 {
+
+            margin:
+                0;
+
+            font-size:
+                22px;
+
+        }
+
+
+        .section-title p {
+
+            margin:
+                5px 0 0;
+
+            color:
+                var(--muted);
+
+            font-size:
+                13px;
+
+        }
+
+
+        /* ----------------------------------------------------------
+           Market performance
+        ---------------------------------------------------------- */
+
+        .market-grid {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(
+                    3,
+                    minmax(
+                        0,
+                        1fr
+                    )
+                );
+
+            gap:
+                14px;
+
+        }
+
+
+        .market-card {
+
+            border:
+                1px solid var(--border);
+
+            background:
+                var(--card);
+
+            border-radius:
+                16px;
+
+            padding:
+                18px;
+
+        }
+
+
+        .market-card-header {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            gap:
+                10px;
+
+            margin-bottom:
+                16px;
+
+        }
+
+
+        .market-card-header strong {
+
+            font-size:
+                15px;
+
+        }
+
+
+        .market-accuracy {
+
+            font-size:
+                20px;
+
+            font-weight:
+                800;
+
+        }
+
+
+        .progress {
+
+            width:
+                100%;
+
+            height:
+                7px;
+
+            border-radius:
+                999px;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.08
+                );
+
+            overflow:
+                hidden;
+
+            margin:
+                12px 0;
+
+        }
+
+
+        .progress-bar {
+
+            height:
+                100%;
+
+            width:
+                0%;
+
+            background:
+                var(--green);
+
+            border-radius:
+                inherit;
+
+            transition:
+                width
+                .4s
+                ease;
+
+        }
+
+
+        .market-meta {
+
+            display:
+                flex;
+
+            justify-content:
+                space-between;
+
+            color:
+                var(--muted);
+
+            font-size:
+                12px;
+
+        }
+
+
+        /* ----------------------------------------------------------
+           History table
+        ---------------------------------------------------------- */
+
+        .table-wrapper {
+
+            width:
+                100%;
+
+            overflow-x:
+                auto;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                16px;
+
+            background:
+                var(--card);
+
+        }
+
+
+        .history-table {
+
+            width:
+                100%;
+
+            min-width:
+                760px;
+
+            border-collapse:
+                collapse;
+
+        }
+
+
+        .history-table th {
+
+            text-align:
+                left;
+
+            padding:
+                15px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                11px;
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                .6px;
+
+            border-bottom:
+                1px solid var(--border);
+
+            white-space:
+                nowrap;
+
+        }
+
+
+        .history-table td {
+
+            padding:
+                15px;
+
+            border-bottom:
+                1px solid var(--border);
+
+            font-size:
+                13px;
+
+            vertical-align:
+                middle;
+
+        }
+
+
+        .history-table tr:last-child td {
+
+            border-bottom:
+                0;
+
+        }
+
+
+        .fixture-teams {
+
+            font-weight:
+                700;
+
+            line-height:
+                1.45;
+
+        }
+
+
+        .fixture-league {
+
+            color:
+                var(--muted);
+
+            font-size:
+                11px;
+
+            margin-top:
+                4px;
+
+        }
+
+
+        .market-label {
+
+            display:
+                inline-block;
+
+            padding:
+                5px 8px;
+
+            border-radius:
+                7px;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.06
+                );
+
+            white-space:
+                nowrap;
+
+        }
+
+
+        .result-badge {
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            min-width:
+                62px;
+
+            padding:
+                6px 9px;
+
+            border-radius:
+                999px;
+
+            font-size:
+                11px;
+
+            font-weight:
+                800;
+
+        }
+
+
+        .result-win {
+
+            background:
+                rgba(
+                    34,
+                    197,
+                    94,
+                    .15
+                );
+
+            color:
+                #4ade80;
+
+        }
+
+
+        .result-loss {
+
+            background:
+                rgba(
+                    239,
+                    68,
+                    68,
+                    .15
+                );
+
+            color:
+                #f87171;
+
+        }
+
+
+        .result-pending {
+
+            background:
+                rgba(
+                    234,
+                    179,
+                    8,
+                    .14
+                );
+
+            color:
+                #facc15;
+
+        }
+
+
+        .result-void {
+
+            background:
+                rgba(
+                    148,
+                    163,
+                    184,
+                    .14
+                );
+
+            color:
+                #cbd5e1;
+
+        }
+
+
+        /* ----------------------------------------------------------
+           States
+        ---------------------------------------------------------- */
+
+        .state-card {
+
+            border:
+                1px solid var(--border);
+
+            background:
+                var(--card);
+
+            border-radius:
+                16px;
+
+            padding:
+                45px 20px;
+
+            text-align:
+                center;
+
+        }
+
+
+        .state-card h2 {
+
+            margin:
+                12px 0 7px;
+
+            font-size:
+                18px;
+
+        }
+
+
+        .state-card p {
+
+            margin:
+                0;
+
+            color:
+                var(--muted);
+
+            font-size:
+                13px;
+
+            line-height:
+                1.6;
+
+        }
+
+
+        .spinner {
+
+            width:
+                30px;
+
+            height:
+                30px;
+
+            margin:
+                0 auto;
+
+            border:
+                3px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .12
+                );
+
+            border-top-color:
+                var(--green);
+
+            border-radius:
+                50%;
+
+            animation:
+                spin
+                .8s
+                linear
+                infinite;
+
+        }
+
+
+        @keyframes spin {
+
+            to {
+
+                transform:
+                    rotate(
+                        360deg
+                    );
+
+            }
+
+        }
+
+
+        /* ----------------------------------------------------------
+           Mobile
+        ---------------------------------------------------------- */
+
+        @media (
+            max-width: 800px
+        ) {
+
+            .history-summary {
+
+                grid-template-columns:
+                    repeat(
+                        2,
+                        minmax(
+                            0,
+                            1fr
+                        )
+                    );
+
+            }
+
+
+            .history-controls {
+
+                grid-template-columns:
+                    repeat(
+                        2,
+                        minmax(
+                            0,
+                            1fr
+                        )
+                    );
+
+            }
+
+
+            .market-grid {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+        }
+
+
+        @media (
+            max-width: 560px
+        ) {
+
+            .history-hero {
+
+                padding-top:
+                    28px;
+
+            }
+
+
+            .history-summary {
+
+                grid-template-columns:
+                    1fr 1fr;
+
+                gap:
+                    9px;
+
+            }
+
+
+            .history-stat {
+
+                padding:
+                    15px;
+
+            }
+
+
+            .history-stat strong {
+
+                font-size:
+                    23px;
+
+            }
+
+
+            .history-controls {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+
+            .section-title {
+
+                align-items:
+                    flex-start;
+
+                flex-direction:
+                    column;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================================================================
+     Header
+================================================================= -->
+
+<header class="site-header">
+
+    <div class="container header-inner">
+
+
+        <a
+            href="/"
+            class="brand"
+            aria-label="PaceFetch home"
+        >
+
+            <img
+                src="/assets/logo.svg"
+                alt="PaceFetch"
+                class="brand-logo"
+            >
+
+            <span>
+                PaceFetch
+            </span>
+
+        </a>
+
+
+        <nav class="desktop-nav">
+
+            <a href="/">
+                Home
+            </a>
+
+            <a href="/predictions.html">
+                Predictions
+            </a>
+
+            <a href="/countries.html">
+                Countries
+            </a>
+
+            <a
+                href="/history.html"
+                class="active"
+            >
+                History
+            </a>
+
+            <a href="/methodology.html">
+                Methodology
+            </a>
+
+        </nav>
+
+
+        <button
+            class="mobile-toggle"
+            id="mobileToggle"
+            aria-label="Open navigation"
+            aria-expanded="false"
+            type="button"
+        >
+
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </button>
+
+    </div>
+
+
+    <div
+        class="mobile-menu"
+        id="mobileMenu"
+    >
+
+        <a href="/">
+            Home
+        </a>
+
+        <a href="/predictions.html">
+            Predictions
+        </a>
+
+        <a href="/countries.html">
+            Countries
+        </a>
+
+        <a
+            href="/history.html"
+            class="active"
+        >
+            History
+        </a>
+
+        <a href="/methodology.html">
+            Methodology
+        </a>
+
+    </div>
+
+</header>
+
+
+
+<!-- ================================================================
+     Main
+================================================================= -->
+
+<main class="page">
+
+    <div class="container">
+
+
+        <div class="breadcrumb">
+
+            <a href="/">
+                Home
+            </a>
+
+            <span>
+                ›
+            </span>
+
+            <span>
+                Prediction History
+            </span>
+
+        </div>
+
+
+
+        <!-- ==========================================================
+             Hero
+        =========================================================== -->
+
+        <section class="history-hero">
+
+            <div class="eyebrow">
+                TRANSPARENT TRACK RECORD
+            </div>
+
+            <h1>
+                Prediction History
+            </h1>
+
+            <p>
+                Review PaceFetch predictions after matches are
+                completed. Wins, losses and pending predictions
+                are recorded so performance can be evaluated
+                transparently over time.
+            </p>
+
+        </section>
+
+
+
+        <!-- ==========================================================
+             Summary
+        =========================================================== -->
+
+        <section class="history-summary">
+
+            <div class="history-stat">
+
+                <span>
+                    Total Predictions
+                </span>
+
+                <strong id="totalPredictions">
+                    —
+                </strong>
+
+                <small>
+                    Recorded predictions
+                </small>
+
+            </div>
+
+
+            <div class="history-stat">
+
+                <span>
+                    Wins
+                </span>
+
+                <strong id="totalWins">
+                    —
+                </strong>
+
+                <small>
+                    Correct predictions
+                </small>
+
+            </div>
+
+
+            <div class="history-stat">
+
+                <span>
+                    Losses
+                </span>
+
+                <strong id="totalLosses">
+                    —
+                </strong>
+
+                <small>
+                    Incorrect predictions
+                </small>
+
+            </div>
+
+
+            <div class="history-stat">
+
+                <span>
+                    Accuracy
+                </span>
+
+                <strong id="overallAccuracy">
+                    —
+                </strong>
+
+                <small>
+                    Settled predictions
+                </small>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==========================================================
+             Filters
+        =========================================================== -->
+
+        <section class="history-section">
+
+            <div class="section-title">
+
+                <div>
+
+                    <h2>
+                        Filter History
+                    </h2>
+
+                    <p>
+                        Narrow the historical prediction records.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="history-controls">
+
+                <select
+                    id="periodFilter"
+                    class="history-control"
+                >
+
+                    <option value="all">
+                        All Time
+                    </option>
+
+                    <option value="7">
+                        Last 7 Days
+                    </option>
+
+                    <opti
