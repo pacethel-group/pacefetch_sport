@@ -2292,5 +2292,38 @@
 
                 if (marketFilter) {
                     marketFilter.addEventListener("change", applyFilters);
-               
-                              
+                }
+
+                if (confidenceFilter) {
+                    confidenceFilter.addEventListener("change", applyFilters);
+                }
+
+                if (retryButton) {
+                    retryButton.addEventListener("click", loadPredictions);
+                }
+
+                if (mobileMenuButton && mobileMenu) {
+                    mobileMenuButton.addEventListener("click", () => {
+                        mobileMenu.classList.toggle("open");
+                        mobileMenuButton.classList.toggle("active");
+                    });
+                }
+
+                document.querySelectorAll(".mobile-menu a").forEach(link => {
+                    link.addEventListener("click", () => {
+                        if (mobileMenu) {
+                            mobileMenu.classList.remove("open");
+                        }
+
+                        if (mobileMenuButton) {
+                            mobileMenuButton.classList.remove("active");
+                        }
+                    });
+                });
+
+                loadPredictions();
+            });
+        </script>
+
+    </body>
+</html>
