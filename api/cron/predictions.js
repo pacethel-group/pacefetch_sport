@@ -1,53 +1,146 @@
-// ============================================================
-// PaceFetch - Daily Prediction Cron
-// ============================================================
+// api/cron/predictions.js
 
-import {
+
+const {
     generateDailyPredictions
-} from "../prediction-engine.js";
+} = require("../prediction-engine");
 
 
-// ============================================================
-// ENVIRONMENT
-// ============================================================
-
-const API_FOOTBALL_KEY =
-    process.env.API_FOOTBALL_KEY;
-
-const CRON_SECRET =
-    process.env.CRON_SECRET || "";
-
-
-// ============================================================
-// API CONFIGURATION
-// ============================================================
-
-const API_FOOTBALL_BASE =
+const API_URL =
     "https://v3.football.api-sports.io";
 
 
-// ============================================================
-// FETCH HELPER
-// ============================================================
+/*
+|--------------------------------------------------------------------------
+| Helpers
+|--------------------------------------------------------------------------
+*/
 
-async function fetchJson(url, options = {}) {
 
-    const response = await fetch(
-        url,
+function sendJSON(
+    res,
+    status,
+    payload
+) {
+
+    return res
+        .status(status)
+        .json(payload);
+
+}
+
+
+function getNigeriaDate() {
+
+    return new Intl.DateTimeFormat(
+        "en-CA",
         {
-            ...options,
+            timeZone:
+                "Africa/Lagos",
 
-            headers: {
-                Accept: "application/json",
+            year:
+                "numeric",
 
-                ...(options.headers || {})
-            }
+            month:
+                "2-digit",
+
+            day:
+                "2-digit"
         }
+    ).format(
+        new Date()
     );
 
+}
 
-    const text =
-        await response.text();
+
+function parsePercentage(
+    value
+) {
+
+    if (
+        typeof value ===
+        "string"
+    ) {
+
+        value =
+            value
+                .replace(
+                    "%",
+                    ""
+                )
+                .trim();
+
+    }
+
+
+    const number =
+        Number(value);
+
+
+    if (
+        !Number.isFinite(
+            number
+        )
+    ) {
+
+        return null;
+
+    }
+
+
+    if (
+        number < 0 ||
+        number > 100
+    ) {
+
+        return null;
+
+    }
+
+
+    return number;
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| API-Football request
+|--------------------------------------------------------------------------
+*/
+
+
+async function apiFootball(
+    path
+) {
+
+    const key =
+        process.env.API_FOOTBALL_KEY;
+
+
+    if (!key) {
+
+        throw new Error(
+            "API_FOOTBALL_KEY is not configured."
+        );
+
+    }
+
+
+    const response =
+        await fetch(
+            `${API_URL}${path}`,
+            {
+                method:
+                    "GET",
+
+                headers: {
+                    "x-apisports-key":
+                        key
+                }
+            }
+        );
 
 
     let data;
@@ -55,14 +148,14 @@ async function fetchJson(url, options = {}) {
     try {
 
         data =
-            text
-                ? JSON.parse(text)
-                : null;
+            await response.json();
 
-    } catch {
+    } catch (
+        error
+    ) {
 
         throw new Error(
-            `Invalid JSON response. HTTP ${response.status}`
+            `API-Football returned invalid JSON. HTTP ${response.status}.`
         );
 
     }
@@ -71,8 +164,24 @@ async function fetchJson(url, options = {}) {
     if (!response.ok) {
 
         throw new Error(
-            data?.message ||
-            `Provider returned HTTP ${response.status}`
+            `API-Football HTTP ${response.status}`
+        );
+
+    }
+
+
+    if (
+        data &&
+        data.errors &&
+        Object.keys(
+            data.errors
+        ).length
+    ) {
+
+        throw new Error(
+            JSON.stringify(
+                data.errors
+            )
         );
 
     }
@@ -83,292 +192,70 @@ async function fetchJson(url, options = {}) {
 }
 
 
-// ============================================================
-// API-FOOTBALL
-// ============================================================
+/*
+|--------------------------------------------------------------------------
+| Normalize fixture
+|--------------------------------------------------------------------------
+*/
 
-async function apiFootball(
-    endpoint,
-    params = {}
-) {
-
-    if (!API_FOOTBALL_KEY) {
-
-        throw new Error(
-            "API_FOOTBALL_KEY is missing."
-        );
-
-    }
-
-
-    const url =
-        new URL(
-            `${API_FOOTBALL_BASE}${endpoint}`
-        );
-
-
-    Object.entries(params)
-        .forEach(
-            ([key, value]) => {
-
-                if (
-                    value !== undefined &&
-                    value !== null &&
-                    value !== ""
-                ) {
-
-                    url.searchParams.set(
-                        key,
-                        String(value)
-                    );
-
-                }
-
-            }
-        );
-
-
-    return fetchJson(
-        url.toString(),
-        {
-            headers: {
-                "x-apisports-key":
-                    API_FOOTBALL_KEY
-            }
-        }
-    );
-
-}
-
-
-// ============================================================
-// NIGERIA DATE
-// ============================================================
-
-function getNigeriaDate() {
-
-    return new Intl.DateTimeFormat(
-        "en-CA",
-        {
-            timeZone: "Africa/Lagos",
-
-            year: "numeric",
-            month: "2-digit",
-            day: "2-digit"
-        }
-    ).format(
-        new Date()
-    );
-
-}
-
-
-// ============================================================
-// FIXTURE NORMALIZER
-// ============================================================
 
 function normalizeFixture(
-    fixture
+    item
 ) {
 
-    const fixtureData =
-        fixture.fixture || {};
+    const fixture =
+        item.fixture ||
+        {};
+
 
     const teams =
-        fixture.teams || {};
+        item.teams ||
+        {};
+
 
     const league =
-        fixture.league || {};
+        item.league ||
+        {};
 
 
     return {
+
+        id:
+            fixture.id,
 
         fixtureId:
-            fixtureData.id,
+            fixture.id,
 
-        date:
-            fixtureData.date,
+        homeTeam:
+            teams.home?.name ||
+            "Home",
 
-        timestamp:
-            fixtureData.timestamp,
+        awayTeam:
+            teams.away?.name ||
+            "Away",
+
+        kickoff:
+            fixture.date ||
+            null,
 
         status:
-            fixtureData.status?.short ||
+            fixture.status?.short ||
             "NS",
 
+        league:
+            league.name ||
+            "Unknown League",
 
-        homeTeam: {
+        country:
+            league.country ||
+            "Unknown",
 
-            id:
-                teams.home?.id,
-
-            name:
-                teams.home?.name ||
-                "Unknown",
-
-            logo:
-                teams.home?.logo ||
-                null
-
-        },
-
-
-        awayTeam: {
-
-            id:
-                teams.away?.id,
-
-            name:
-                teams.away?.name ||
-                "Unknown",
-
-            logo:
-                teams.away?.logo ||
-                null
-
-        },
-
-
-        league: {
-
-            id:
-                league.id,
-
-            name:
-                league.name ||
-                "Unknown",
-
-            country:
-                league.country ||
-                "",
-
-            season:
-                league.season
-
-        }
-
-    };
-
-}
-
-
-// ============================================================
-// GET TODAY'S FIXTURES
-// ============================================================
-
-async function getFixtures(
-    date
-) {
-
-    const data =
-        await apiFootball(
-            "/fixtures",
-            {
-                date
-            }
-        );
-
-
-    const fixtures =
-        Array.isArray(
-            data?.response
-        )
-            ? data.response
-            : [];
-
-
-    return fixtures
-        .filter(
-            fixture => {
-
-                const status =
-                    fixture
-                        ?.fixture
-                        ?.status
-                        ?.short;
-
-                return [
-                    "NS",
-                    "TBD"
-                ].includes(
-                    status
-                );
-
-            }
-        )
-        .map(
-            normalizeFixture
-        )
-        .filter(
-            fixture =>
-                fixture.fixtureId &&
-                fixture.homeTeam.id &&
-                fixture.awayTeam.id
-        );
-
-}
-
-
-// ============================================================
-// GET PROVIDER PREDICTION
-// ============================================================
-
-async function getProviderPrediction(
-    fixtureId
-) {
-
-    const data =
-        await apiFootball(
-            "/predictions",
-            {
-                fixture:
-                    fixtureId
-            }
-        );
-
-
-    const prediction =
-        data
-            ?.response
-            ?.[0]
-            ?.predictions;
-
-
-    if (!prediction) {
-
-        return null;
-
-    }
-
-
-    return {
-
-        home:
-            prediction.percent?.home ||
+        leagueId:
+            league.id ||
             null,
 
-        draw:
-            prediction.percent?.draw ||
-            null,
-
-        away:
-            prediction.percent?.away ||
-            null,
-
-        winner:
-            prediction.winner ||
-            null,
-
-        advice:
-            prediction.advice ||
-            null,
-
-        underOver:
-            prediction.under_over ||
-            null,
-
-        goals:
-            prediction.goals ||
+        season:
+            league.season ||
             null
 
     };
@@ -376,454 +263,459 @@ async function getProviderPrediction(
 }
 
 
-// ============================================================
-// GET TEAM STATISTICS
-// ============================================================
+/*
+|--------------------------------------------------------------------------
+| Check whether fixture is upcoming
+|--------------------------------------------------------------------------
+*/
 
-async function getTeamStatistics(
-    teamId,
-    leagueId,
-    season
+
+function isUpcoming(
+    fixture
 ) {
 
     if (
-        !teamId ||
-        !leagueId ||
-        !season
+        !fixture ||
+        !fixture.kickoff
+    ) {
+
+        return false;
+
+    }
+
+
+    const finishedStatuses = [
+
+        "FT",
+
+        "AET",
+
+        "PEN",
+
+        "CANC",
+
+        "PST",
+
+        "ABD",
+
+        "AWD",
+
+        "WO"
+
+    ];
+
+
+    const status =
+        String(
+            fixture.status ||
+            ""
+        ).toUpperCase();
+
+
+    if (
+        finishedStatuses.includes(
+            status
+        )
+    ) {
+
+        return false;
+
+    }
+
+
+    const kickoff =
+        new Date(
+            fixture.kickoff
+        ).getTime();
+
+
+    if (
+        !Number.isFinite(
+            kickoff
+        )
+    ) {
+
+        return false;
+
+    }
+
+
+    return (
+        kickoff >
+        Date.now()
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Normalize provider prediction
+|--------------------------------------------------------------------------
+*/
+
+
+function normalizePrediction(
+    data
+) {
+
+    const response =
+        Array.isArray(
+            data.response
+        )
+            ? data.response[0]
+            : data.response;
+
+
+    if (!response) {
+
+        return null;
+
+    }
+
+
+    const predictions =
+        response.predictions ||
+        {};
+
+
+    const percent =
+        predictions.percent ||
+        {};
+
+
+    const home =
+        parsePercentage(
+            percent.home
+        );
+
+
+    const draw =
+        parsePercentage(
+            percent.draw
+        );
+
+
+    const away =
+        parsePercentage(
+            percent.away
+        );
+
+
+    if (
+        home === null ||
+        draw === null ||
+        away === null
     ) {
 
         return null;
 
     }
 
+
+    return {
+
+        home,
+
+        draw,
+
+        away
+
+    };
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Get provider prediction
+|--------------------------------------------------------------------------
+*/
+
+
+async function getPrediction(
+    fixtureId
+) {
 
     const data =
         await apiFootball(
-            "/teams/statistics",
-            {
-                team:
-                    teamId,
+            `/predictions?fixture=${fixtureId}`
+        );
 
-                league:
-                    leagueId,
 
-                season
+    return normalizePrediction(
+        data
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Create history records
+|--------------------------------------------------------------------------
+*/
+
+
+function createHistoryRecords(
+    predictions
+) {
+
+    if (
+        !Array.isArray(
+            predictions
+        )
+    ) {
+
+        return [];
+
+    }
+
+
+    return predictions
+        .map(
+            prediction => {
+
+                if (
+                    !prediction ||
+                    !prediction.fixtureId
+                ) {
+
+                    return null;
+
+                }
+
+
+                const historyId =
+                    [
+                        prediction.fixtureId,
+
+                        prediction.market,
+
+                        prediction.selection,
+
+                        prediction.modelVersion
+                    ]
+                    .join(
+                        "-"
+                    );
+
+
+                return {
+
+                    historyId,
+
+                    fixtureId:
+                        prediction.fixtureId,
+
+                    homeTeam:
+                        prediction.homeTeam,
+
+                    awayTeam:
+                        prediction.awayTeam,
+
+                    kickoff:
+                        prediction.kickoff,
+
+                    league:
+                        prediction.league,
+
+                    country:
+                        prediction.country,
+
+                    market:
+                        prediction.market,
+
+                    selection:
+                        prediction.selection,
+
+                    probability:
+                        prediction.probability,
+
+                    confidence:
+                        prediction.confidence,
+
+                    source:
+                        prediction.source ||
+                        "API-Football",
+
+                    modelVersion:
+                        prediction.modelVersion ||
+                        null,
+
+                    dataQuality:
+                        prediction.dataQuality,
+
+                    providerAgreement:
+                        prediction.providerAgreement,
+
+                    sampleQuality:
+                        prediction.sampleQuality,
+
+                    rank:
+                        prediction.rank,
+
+                    result:
+                        "pending",
+
+                    actualResult:
+                        null,
+
+                    finalScore:
+                        null,
+
+                    createdAt:
+                        new Date().toISOString(),
+
+                    evaluatedAt:
+                        null
+
+                };
+
             }
+        )
+        .filter(
+            Boolean
         );
-
-
-    return data?.response || null;
 
 }
 
 
-// ============================================================
-// EXTRACT GOAL AVERAGES
-// ============================================================
+/*
+|--------------------------------------------------------------------------
+| Save history
+|--------------------------------------------------------------------------
+*/
 
-function extractGoals(
-    statistics
+
+async function saveHistory(
+    records
 ) {
-
-    if (!statistics) {
-
-        return null;
-
-    }
-
-
-    const goals =
-        statistics.goals || {};
-
-
-    const forGoals =
-        goals.for || {};
-
-    const againstGoals =
-        goals.against || {};
-
-
-    const homeFor =
-        Number(
-            forGoals.total?.home
-        );
-
-    const awayFor =
-        Number(
-            forGoals.total?.away
-        );
-
-    const homeAgainst =
-        Number(
-            againstGoals.total?.home
-        );
-
-    const awayAgainst =
-        Number(
-            againstGoals.total?.away
-        );
-
-
-    const homePlayed =
-        Number(
-            statistics.fixtures
-                ?.played
-                ?.home
-        );
-
-    const awayPlayed =
-        Number(
-            statistics.fixtures
-                ?.played
-                ?.away
-        );
-
-
-    return {
-
-        homeGoalsFor:
-            Number.isFinite(
-                homeFor
-            ) &&
-            homePlayed > 0
-                ? homeFor / homePlayed
-                : null,
-
-        homeGoalsAgainst:
-            Number.isFinite(
-                homeAgainst
-            ) &&
-            homePlayed > 0
-                ? homeAgainst / homePlayed
-                : null,
-
-        awayGoalsFor:
-            Number.isFinite(
-                awayFor
-            ) &&
-            awayPlayed > 0
-                ? awayFor / awayPlayed
-                : null,
-
-        awayGoalsAgainst:
-            Number.isFinite(
-                awayAgainst
-            ) &&
-            awayPlayed > 0
-                ? awayAgainst / awayPlayed
-                : null
-
-    };
-
-}
-
-
-// ============================================================
-// GET REAL TEAM DATA
-// ============================================================
-
-async function getTeamData(
-    fixture
-) {
-
-    const leagueId =
-        fixture.league.id;
-
-    const season =
-        fixture.league.season;
-
 
     if (
-        !leagueId ||
-        !season
+        !Array.isArray(
+            records
+        ) ||
+        !records.length
     ) {
-
-        return null;
-
-    }
-
-
-    const [
-        homeStats,
-        awayStats
-    ] = await Promise.all([
-
-        getTeamStatistics(
-            fixture.homeTeam.id,
-            leagueId,
-            season
-        ),
-
-        getTeamStatistics(
-            fixture.awayTeam.id,
-            leagueId,
-            season
-        )
-
-    ]);
-
-
-    const homeGoals =
-        extractGoals(
-            homeStats
-        );
-
-    const awayGoals =
-        extractGoals(
-            awayStats
-        );
-
-
-    if (
-        !homeGoals ||
-        !awayGoals
-    ) {
-
-        return null;
-
-    }
-
-
-    const valid =
-        Number.isFinite(
-            homeGoals.homeGoalsFor
-        ) &&
-        Number.isFinite(
-            homeGoals.homeGoalsAgainst
-        ) &&
-        Number.isFinite(
-            awayGoals.awayGoalsFor
-        ) &&
-        Number.isFinite(
-            awayGoals.awayGoalsAgainst
-        );
-
-
-    if (!valid) {
-
-        return null;
-
-    }
-
-
-    return {
-
-        available: true,
-
-        homeGoalsFor:
-            homeGoals.homeGoalsFor,
-
-        homeGoalsAgainst:
-            homeGoals.homeGoalsAgainst,
-
-        awayGoalsFor:
-            awayGoals.awayGoalsFor,
-
-        awayGoalsAgainst:
-            awayGoals.awayGoalsAgainst
-
-    };
-
-}
-
-
-// ============================================================
-// ENRICH FIXTURE
-// ============================================================
-
-async function enrichFixture(
-    fixture
-) {
-
-    const [
-        providerPrediction,
-        teamStats
-    ] = await Promise.all([
-
-        getProviderPrediction(
-            fixture.fixtureId
-        ),
-
-        getTeamData(
-            fixture
-        )
-
-    ]);
-
-
-    return {
-
-        ...fixture,
-
-        providerPrediction,
-
-        teamStats
-
-    };
-
-}
-
-
-// ============================================================
-// BUILD PREDICTIONS
-// ============================================================
-
-async function buildPredictions(
-    date
-) {
-
-    console.log(
-        `[PaceFetch] Starting daily generation for ${date}`
-    );
-
-
-    const fixtures =
-        await getFixtures(
-            date
-        );
-
-
-    console.log(
-        `[PaceFetch] Found ${fixtures.length} upcoming fixtures`
-    );
-
-
-    if (!fixtures.length) {
 
         return {
 
-            date,
+            success:
+                true,
 
-            fixtures: 0,
-
-            enriched: 0,
-
-            predictions: []
+            saved:
+                0
 
         };
 
     }
 
 
-    const enriched = [];
+    const secret =
+        process.env.CRON_SECRET;
 
 
-    // --------------------------------------------------------
-    // Process sequentially to avoid hammering provider limits.
-    // --------------------------------------------------------
+    if (!secret) {
 
-    for (
-        const fixture of fixtures
-    ) {
-
-        try {
-
-            console.log(
-                `[PaceFetch] Processing fixture ${fixture.fixtureId}: ${fixture.homeTeam.name} vs ${fixture.awayTeam.name}`
-            );
-
-
-            const result =
-                await enrichFixture(
-                    fixture
-                );
-
-
-            enriched.push(
-                result
-            );
-
-        } catch (error) {
-
-            console.error(
-                `[PaceFetch] Fixture ${fixture.fixtureId} failed:`,
-                error.message
-            );
-
-        }
+        throw new Error(
+            "CRON_SECRET is not configured."
+        );
 
     }
 
 
-    // --------------------------------------------------------
-    // Only real-statistics fixtures
-    // --------------------------------------------------------
+    const historyURL =
+        process.env.VERCEL_URL
+            ? `https://${process.env.VERCEL_URL}/api/history`
+            : null;
 
-    const usableFixtures =
-        enriched.filter(
-            fixture =>
-                fixture.teamStats?.available
+
+    if (!historyURL) {
+
+        throw new Error(
+            "VERCEL_URL is not available."
+        );
+
+    }
+
+
+    const response =
+        await fetch(
+            historyURL,
+            {
+                method:
+                    "POST",
+
+                headers: {
+
+                    "Content-Type":
+                        "application/json",
+
+                    "Authorization":
+                        `Bearer ${secret}`
+
+                },
+
+                body:
+                    JSON.stringify({
+                        predictions:
+                            records
+                    })
+
+            }
         );
 
 
-    console.log(
-        `[PaceFetch] ${usableFixtures.length} fixtures have usable statistics`
-    );
+    let data;
 
+    try {
 
-    // --------------------------------------------------------
-    // Generate predictions
-    // --------------------------------------------------------
+        data =
+            await response.json();
 
-    const predictions =
-        generateDailyPredictions(
-            usableFixtures,
-            50
+    } catch (
+        error
+    ) {
+
+        throw new Error(
+            `History API returned invalid JSON. HTTP ${response.status}.`
         );
 
-
-    // --------------------------------------------------------
-    // Maximum 50
-    // --------------------------------------------------------
-
-    const published =
-        Array.isArray(predictions)
-            ? predictions.slice(
-                0,
-                50
-            )
-            : [];
+    }
 
 
-    console.log(
-        `[PaceFetch] Generated ${published.length} predictions`
-    );
+    if (!response.ok) {
+
+        throw new Error(
+            data?.error ||
+            `History API HTTP ${response.status}`
+        );
+
+    }
 
 
-    return {
-
-        date,
-
-        fixtures:
-            fixtures.length,
-
-        enriched:
-            enriched.length,
-
-        usable:
-            usableFixtures.length,
-
-        predictions:
-            published
-
-    };
+    return data;
 
 }
 
 
-// ============================================================
-// CRON AUTHENTICATION
-// ============================================================
+/*
+|--------------------------------------------------------------------------
+| Cron authorization
+|--------------------------------------------------------------------------
+*/
 
-function isAuthorized(
+
+function isAuthorizedCron(
     req
 ) {
 
-    // If no CRON_SECRET is configured,
-    // reject the request rather than
-    // exposing the generation endpoint.
+    const secret =
+        process.env.CRON_SECRET;
 
-    if (!CRON_SECRET) {
+
+    if (!secret) {
 
         return false;
 
@@ -835,192 +727,404 @@ function isAuthorized(
         "";
 
 
-    return (
+    if (
         authorization ===
-        `Bearer ${CRON_SECRET}`
-    );
+        `Bearer ${secret}`
+    ) {
+
+        return true;
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Vercel Cron automatically sends:
+    | Authorization: Bearer <CRON_SECRET>
+    |
+    | We intentionally require the secret here.
+    |--------------------------------------------------------------------------
+    */
+
+
+    return false;
 
 }
 
 
-// ============================================================
-// CORS
-// ============================================================
-
-function setHeaders(
-    res
-) {
-
-    res.setHeader(
-        "Cache-Control",
-        "no-store"
-    );
-
-}
+/*
+|--------------------------------------------------------------------------
+| Cron handler
+|--------------------------------------------------------------------------
+*/
 
 
-// ============================================================
-// CRON HANDLER
-// ============================================================
-
-export default async function handler(
+module.exports =
+async function handler(
     req,
     res
 ) {
 
-    setHeaders(
-        res
+    /*
+    |--------------------------------------------------------------------------
+    | CORS
+    |--------------------------------------------------------------------------
+    */
+
+    res.setHeader(
+        "Access-Control-Allow-Origin",
+        "*"
     );
 
 
-    // --------------------------------------------------------
-    // GET ONLY
-    // --------------------------------------------------------
+    res.setHeader(
+        "Access-Control-Allow-Methods",
+        "GET"
+    );
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Method
+    |--------------------------------------------------------------------------
+    */
 
     if (
         req.method !== "GET"
     ) {
 
-        return res
-            .status(405)
-            .json({
+        return sendJSON(
+            res,
+            405,
+            {
 
-                success: false,
+                success:
+                    false,
 
                 error:
                     "Method not allowed."
 
-            });
-
-    }
-
-
-    // --------------------------------------------------------
-    // CRON AUTH
-    // --------------------------------------------------------
-
-    if (
-        !isAuthorized(req)
-    ) {
-
-        return res
-            .status(401)
-            .json({
-
-                success: false,
-
-                error:
-                    "Unauthorized cron request."
-
-            });
-
-    }
-
-
-    // --------------------------------------------------------
-    // API KEY
-    // --------------------------------------------------------
-
-    if (!API_FOOTBALL_KEY) {
-
-        console.error(
-            "[PaceFetch] API_FOOTBALL_KEY missing."
+            }
         );
 
+    }
 
-        return res
-            .status(500)
-            .json({
 
-                success: false,
+    /*
+    |--------------------------------------------------------------------------
+    | Authorization
+    |--------------------------------------------------------------------------
+    */
+
+    if (
+        !isAuthorizedCron(
+            req
+        )
+    ) {
+
+        return sendJSON(
+            res,
+            401,
+            {
+
+                success:
+                    false,
 
                 error:
-                    "API_FOOTBALL_KEY is not configured."
+                    "Unauthorized."
 
-            });
+            }
+        );
 
     }
 
 
     try {
 
+        /*
+        |--------------------------------------------------------------------------
+        | Nigeria date
+        |--------------------------------------------------------------------------
+        */
+
         const date =
             getNigeriaDate();
 
 
-        const result =
-            await buildPredictions(
-                date
+        /*
+        |--------------------------------------------------------------------------
+        | Get today's fixtures
+        |--------------------------------------------------------------------------
+        */
+
+        const fixtureData =
+            await apiFootball(
+                `/fixtures?date=${date}`
             );
 
 
-        console.log(
-            "[PaceFetch] Daily generation completed.",
+        const fixtures =
+            (
+                fixtureData.response ||
+                []
+            )
+            .map(
+                normalizeFixture
+            )
+            .filter(
+                fixture =>
+                    fixture.id
+            );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Only upcoming fixtures
+        |--------------------------------------------------------------------------
+        */
+
+        const upcoming =
+            fixtures.filter(
+                isUpcoming
+            );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Free API plan protection
+        |
+        | One fixtures request + maximum
+        | 20 prediction requests.
+        |--------------------------------------------------------------------------
+        */
+
+        const selected =
+            upcoming.slice(
+                0,
+                20
+            );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Fetch provider predictions
+        |--------------------------------------------------------------------------
+        */
+
+        const engineFixtures =
+            [];
+
+
+        let providerFailures =
+            0;
+
+
+        for (
+            const fixture
+            of selected
+        ) {
+
+            try {
+
+                const prediction =
+                    await getPrediction(
+                        fixture.fixtureId
+                    );
+
+
+                if (
+                    !prediction
+                ) {
+
+                    providerFailures++;
+
+                    continue;
+
+                }
+
+
+                engineFixtures.push({
+
+                    ...fixture,
+
+                    providerPrediction:
+                        prediction
+
+                });
+
+            } catch (
+                error
+            ) {
+
+                providerFailures++;
+
+
+                console.error(
+                    `Cron prediction failed for fixture ${fixture.fixtureId}:`,
+                    error.message
+                );
+
+            }
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Generate PaceFetch predictions
+        |--------------------------------------------------------------------------
+        */
+
+        const result =
+            generateDailyPredictions(
+                engineFixtures,
+                50
+            );
+
+
+        const predictions =
+            Array.isArray(
+                result.predictions
+            )
+                ? result.predictions
+                : [];
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Convert to history records
+        |--------------------------------------------------------------------------
+        */
+
+        const historyRecords =
+            createHistoryRecords(
+                predictions
+            );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Save before kickoff
+        |--------------------------------------------------------------------------
+        */
+
+        let historyResult =
+            null;
+
+
+        if (
+            historyRecords.length
+        ) {
+
+            historyResult =
+                await saveHistory(
+                    historyRecords
+                );
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Final response
+        |--------------------------------------------------------------------------
+        */
+
+        return sendJSON(
+            res,
+            200,
             {
+
+                success:
+                    true,
+
+                source:
+                    "PaceFetch Daily Cron",
+
                 date,
-                fixtures:
-                    result.fixtures,
-                enriched:
-                    result.enriched,
-                usable:
-                    result.usable,
-                predictions:
-                    result.predictions.length
+
+                generatedAt:
+                    new Date().toISOString(),
+
+                summary: {
+
+                    totalFixtures:
+                        fixtures.length,
+
+                    upcomingFixtures:
+                        upcoming.length,
+
+                    fixturesProcessed:
+                        selected.length,
+
+                    providerSuccesses:
+                        engineFixtures.length,
+
+                    providerFailures,
+
+                    generated:
+                        result.generated,
+
+                    usable:
+                        result.usable,
+
+                    rejected:
+                        result.rejected,
+
+                    published:
+                        result.published,
+
+                    historyRecords:
+                        historyRecords.length,
+
+                    historySaved:
+                        historyResult
+                            ? true
+                            : false
+
+                },
+
+                predictions,
+
+                message:
+                    predictions.length > 0
+                        ? "PaceFetch daily predictions generated and saved successfully."
+                        : "No qualifying predictions are available today. No predictions were manufactured."
+
             }
         );
 
-
-        return res
-            .status(200)
-            .json({
-
-                success: true,
-
-                message:
-                    "Daily predictions generated successfully.",
-
-                date,
-
-                fixtures:
-                    result.fixtures,
-
-                enriched:
-                    result.enriched,
-
-                usable:
-                    result.usable,
-
-                published:
-                    result.predictions.length,
-
-                maximumPublished:
-                    50,
-
-                predictions:
-                    result.predictions
-
-            });
-
-    } catch (error) {
+    } catch (
+        error
+    ) {
 
         console.error(
-            "[PaceFetch] CRON ERROR:",
+            "PaceFetch daily cron error:",
             error
         );
 
 
-        return res
-            .status(500)
-            .json({
+        return sendJSON(
+            res,
+            500,
+            {
 
-                success: false,
+                success:
+                    false,
+
+                date:
+                    getNigeriaDate(),
 
                 error:
-                    error?.message ||
-                    "Daily prediction generation failed."
+                    error.message ||
+                    "Daily prediction cron failed.",
 
-            });
+                message:
+                    "PaceFetch could not complete the daily prediction process."
+
+            }
+        );
 
     }
 
-}
+};
