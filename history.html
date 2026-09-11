@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>PaceFetch — Prediction History</title><meta name="robots" content="index,follow">
+<meta name="description" content="PaceFetch football predictions backed by available football data, probabilities and transparent prediction history.">
+<link rel="stylesheet" href="/css/style.css">
+</head><body>
+<header class="site-header"><div class="header-inner">
+<a class="brand" href="/index.html" aria-label="PaceFetch home"><span class="brand-pace">Pace</span><span class="brand-fetch">Fetch</span></a>
+<nav class="desktop-nav">
+<a href="/index.html" class="">Home</a>
+<a href="/predictions.html" class="">Predictions</a>
+<a href="/countries.html" class="">Countries</a>
+<a href="/history.html" class="active">History</a>
+<a href="/methodology.html" class="">Methodology</a>
+<a href="/terms.html" class="">Terms</a>
+</nav>
+<button id="menuButton" class="menu-button" type="button" aria-label="Open navigation" aria-expanded="false">☰</button>
+<nav id="mobileNav" class="mobile-nav">
+<a href="/index.html">Home</a><a href="/predictions.html">Predictions</a><a href="/countries.html">Countries</a><a href="/history.html">History</a><a href="/methodology.html">Methodology</a><a href="/terms.html">Terms</a>
+</nav></div></header><main class="page">
+<section class="hero center"><h1>Prediction History</h1><p>Historical prediction snapshots and settled outcomes. A match is marked only after a final result is available.</p></section>
+<section class="section"><div class="section-heading center"><h2>Recent Performance</h2></div><div class="stats"><div class="stat-card"><div class="stat-label">Wins</div><div id="wins" class="stat-value">—</div></div><div class="stat-card"><div class="stat-label">Losses</div><div id="losses" class="stat-value">—</div></div><div class="stat-card"><div class="stat-label">Hit Rate</div><div id="rate" class="stat-value">—</div></div></div>
+<div id="historyList" class="history-list"><div class="state-box">Loading history…</div></div></section>
+</main>
+<footer class="site-footer"><div class="footer-inner">
+<div class="footer-tagline">PaceFetch Football predictions backed by data.</div>
+<nav class="footer-links"><a href="/predictions.html">Predictions</a><a href="/countries.html">Countries</a><a href="/history.html">History</a><a href="/methodology.html">Methodology</a></nav>
+<div class="copyright">© 2026 PaceFetch. All rights reserved.</div>
+<div class="designed">Designed by <span class="pacethel">Pacethel</span></div>
+</div></footer><script src="/js/app.js" defer></script><script>
+(async()=>{
+const $=id=>document.getElementById(id),esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+try{const r=await fetch('/api/history'),j=await r.json();if(!r.ok||!j.success)throw Error(j.error||`HTTP ${r.status}`);const rows=j.history||[];const w=rows.filter(x=>x.result==='WIN').length,l=rows.filter(x=>x.result==='LOSS').length;$('wins').textContent=w;$('losses').textContent=l;$('rate').textContent=(w+l?((w/(w+l))*100).toFixed(1):'0.0')+'%';$('historyList').innerHTML=rows.length?rows.map(x=>`<div class="history-item"><div><strong>${esc(x.homeTeam)} vs ${esc(x.awayTeam)}</strong><div style="color:#77867d;font-size:10px;margin-top:4px">${esc(x.market)} • ${esc(x.selection)} • ${esc(x.date)}</div></div><strong class="${x.result==='WIN'?'win':x.result==='LOSS'?'loss':'pending'}">${esc(x.result)}</strong></div>`).join(''):'<div class="state-box">No settled history yet.</div>'}catch(e){$('historyList').innerHTML=`<div class="state-box"><div class="state-title">History unavailable</div><div class="state-text">${esc(e.message)}</div></div>`}
+})();
+</script></body></html>
