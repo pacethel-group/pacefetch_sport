@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>PaceFetch — Today's Football Predictions</title><meta name="robots" content="index,follow">
+<meta name="description" content="PaceFetch football predictions backed by available football data, probabilities and transparent prediction history.">
+<link rel="stylesheet" href="/css/style.css">
+</head><body>
+<header class="site-header"><div class="header-inner">
+<a class="brand" href="/index.html" aria-label="PaceFetch home"><span class="brand-pace">Pace</span><span class="brand-fetch">Fetch</span></a>
+<nav class="desktop-nav">
+<a href="/index.html" class="">Home</a>
+<a href="/predictions.html" class="active">Predictions</a>
+<a href="/countries.html" class="">Countries</a>
+<a href="/history.html" class="">History</a>
+<a href="/methodology.html" class="">Methodology</a>
+<a href="/terms.html" class="">Terms</a>
+</nav>
+<button id="menuButton" class="menu-button" type="button" aria-label="Open navigation" aria-expanded="false">☰</button>
+<nav id="mobileNav" class="mobile-nav">
+<a href="/index.html">Home</a><a href="/predictions.html">Predictions</a><a href="/countries.html">Countries</a><a href="/history.html">History</a><a href="/methodology.html">Methodology</a><a href="/terms.html">Terms</a>
+</nav></div></header><main class="page">
+<section class="hero center"><h1>Today's Football Predictions</h1><p>Browse today's predictions with kickoff time, league, market and probability. PaceFetch does not manufacture picks to fill a list.</p></section>
+<section class="stats"><div class="stat-card"><div class="stat-label">Predictions</div><div id="statTotal" class="stat-value">—</div></div><div class="stat-card"><div class="stat-label">80%+ Picks</div><div id="statStrong" class="stat-value">—</div></div><div class="stat-card"><div class="stat-label">Leagues</div><div id="statLeagues" class="stat-value">—</div></div></section>
+<section class="section"><div class="section-heading"><div><h2>Prediction Board</h2><p id="dateLabel">Loading date…</p></div><span id="resultCount" class="view-all">0 results</span></div>
+<input id="searchInput" class="search-input" type="search" placeholder="Search team, league or country" aria-label="Search predictions">
+<div class="filters"><select id="countryFilter" class="filter-select"><option value="">All countries</option></select><select id="leagueFilter" class="filter-select"><option value="">All leagues</option></select><select id="marketFilter" class="filter-select"><option value="">All markets</option></select><select id="confidenceFilter" class="filter-select"><option value="">All confidence</option><option value="80">80%+ Strong</option><option value="70">70%+ Good</option><option value="50">50%+ Moderate</option></select></div>
+<div id="loadingState" class="state-box"><div class="spinner"></div><div class="state-text">Loading today's football predictions…</div></div>
+<div id="errorState" class="state-box hidden"><div class="state-title">Predictions unavailable</div><div id="errorMessage" class="state-text"></div><button id="retryButton" class="retry-button">Try Again</button></div>
+<div id="emptyState" class="state-box hidden"><div class="state-title">No qualifying predictions today</div><div class="state-text">No available prediction currently meets the 50% display threshold.</div></div>
+<div id="predictionList" class="prediction-list"></div></section>
+<div class="disclaimer"><strong>Important:</strong> PaceFetch predictions are model-generated probabilities based on available football data. They are not guarantees of match outcomes and should not be treated as financial or betting advice.</div>
+</main>
+<footer class="site-footer"><div class="footer-inner">
+<div class="footer-tagline">PaceFetch Football predictions backed by data.</div>
+<nav class="footer-links"><a href="/predictions.html">Predictions</a><a href="/countries.html">Countries</a><a href="/history.html">History</a><a href="/methodology.html">Methodology</a></nav>
+<div class="copyright">© 2026 PaceFetch. All rights reserved.</div>
+<div class="designed">Designed by <span class="pacethel">Pacethel</span></div>
+</div></footer><script src="/js/app.js" defer></script><script>
+(async()=>{
+const $=id=>document.getElementById(id),esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+const date=new Date().toISOString().slice(0,10);let all=[];
+const prob=p=>Number(p?.probability??p?.confidence??0);
+const kickoff=p=>{const r=p?.kickoff||p?.starting_at||p?.kickoffTime||p?.time||'';const d=new Date(r);return r?(isNaN(d)?String(r).slice(0,5):d.toLocaleTimeString('en-GB',{timeZone:'UTC',hour:'2-digit',minute:'2-digit'})):'--:--'};
+const card=(p,i)=>{const v=prob(p),c=v>=80?'strong':v>=70?'good':v>=50?'moderate':'weak';return `<article class="prediction-card"><div class="prediction-top"><span class="prediction-market">${esc(p.market||'Prediction')}</span><span class="confidence ${c}">${v.toFixed(1)}%</span></div><div class="match-name">${esc(p.homeTeam||'Home')} vs ${esc(p.awayTeam||'Away')}</div><div class="league-line"><span>${esc(p.country||'')}</span><span>•</span><span>${esc(p.league||'')}</span><span class="date-badge">📅 ${esc(p.date||date)}</span><span class="time-badge">⏰ ${esc(kickoff(p))} GMT</span></div><div class="prediction-result"><span class="selection">${esc(p.selection||'')}</span><span class="probability">${v.toFixed(1)}%</span></div><a class="prediction-link" href="/history.html">View History →</a></article>`};
+function filters(){const q=$('searchInput').value.toLowerCase().trim(),c=$('countryFilter').value,l=$('leagueFilter').value,m=$('marketFilter').value,cf=$('confidenceFilter').value;let f=all.filter(p=>(!q||[p.homeTeam,p.awayTeam,p.league,p.country,p.market,p.selection].join(' ').toLowerCase().includes(q))&&(!c||p.country===c)&&(!l||p.league===l)&&(!m||p.market===m)&&(!cf||prob(p)>=Number(cf)));$('resultCount').textContent=`${f.length} results`;$('emptyState').classList.toggle('hidden',!!f.length);$('predictionList').innerHTML=f.map(card).join('')}
+function populate(){for(const [id,key] of [['countryFilter','country'],['leagueFilter','league'],['marketFilter','market']]){const vals=[...new Set(all.map(p=>p[key]).filter(Boolean))].sort();$(id).innerHTML='<option value="">All '+key+'s</option>'+vals.map(v=>`<option>${esc(v)}</option>`).join('')}}
+async function init(){try{const r=await fetch(`/api/predictions?date=${date}`,{headers:{Accept:'application/json'}});const j=await r.json();if(!r.ok||!j.success)throw new Error(j.error||`HTTP ${r.status}`);all=(j.predictions||[]).filter(p=>prob(p)>=50);$('dateLabel').textContent=`${date} • GMT`;$('statTotal').textContent=all.length;$('statStrong').textContent=all.filter(p=>prob(p)>=80).length;$('statLeagues').textContent=new Set(all.map(p=>p.league).filter(Boolean)).size;populate();filters();$('loadingState').classList.add('hidden')}catch(e){$('loadingState').classList.add('hidden');$('errorState').classList.remove('hidden');$('errorMessage').textContent=e.message}}
+['searchInput','countryFilter','leagueFilter','marketFilter','confidenceFilter'].forEach(id=>$(id).addEventListener('input',filters));$('retryButton').onclick=init;init();
+})();
+</script></body></html>
