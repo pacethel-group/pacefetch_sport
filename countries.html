@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>PaceFetch — Countries & Leagues</title><meta name="robots" content="index,follow">
+<meta name="description" content="PaceFetch football predictions backed by available football data, probabilities and transparent prediction history.">
+<link rel="stylesheet" href="/css/style.css">
+</head><body>
+<header class="site-header"><div class="header-inner">
+<a class="brand" href="/index.html" aria-label="PaceFetch home"><span class="brand-pace">Pace</span><span class="brand-fetch">Fetch</span></a>
+<nav class="desktop-nav">
+<a href="/index.html" class="">Home</a>
+<a href="/predictions.html" class="">Predictions</a>
+<a href="/countries.html" class="active">Countries</a>
+<a href="/history.html" class="">History</a>
+<a href="/methodology.html" class="">Methodology</a>
+<a href="/terms.html" class="">Terms</a>
+</nav>
+<button id="menuButton" class="menu-button" type="button" aria-label="Open navigation" aria-expanded="false">☰</button>
+<nav id="mobileNav" class="mobile-nav">
+<a href="/index.html">Home</a><a href="/predictions.html">Predictions</a><a href="/countries.html">Countries</a><a href="/history.html">History</a><a href="/methodology.html">Methodology</a><a href="/terms.html">Terms</a>
+</nav></div></header><main class="page">
+<section class="hero center"><h1>Countries & Leagues</h1><p>Browse the countries and leagues represented in today's available prediction feed.</p></section>
+<section class="section"><div class="filters"><select id="countryFilter" class="filter-select"><option value="">All countries</option></select><select id="leagueFilter" class="filter-select"><option value="">All leagues</option></select></div><div id="countryList" class="quick-links" style="margin-top:12px"></div></section>
+</main>
+<footer class="site-footer"><div class="footer-inner">
+<div class="footer-tagline">PaceFetch Football predictions backed by data.</div>
+<nav class="footer-links"><a href="/predictions.html">Predictions</a><a href="/countries.html">Countries</a><a href="/history.html">History</a><a href="/methodology.html">Methodology</a></nav>
+<div class="copyright">© 2026 PaceFetch. All rights reserved.</div>
+<div class="designed">Designed by <span class="pacethel">Pacethel</span></div>
+</div></footer><script src="/js/app.js" defer></script><script>
+(async()=>{
+const $=id=>document.getElementById(id),esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+try{const r=await fetch(`/api/predictions?date=${new Date().toISOString().slice(0,10)}`),j=await r.json();const ps=j.predictions||[];const countries=[...new Set(ps.map(p=>p.country).filter(Boolean))].sort();const leagues=[...new Set(ps.map(p=>p.league).filter(Boolean))].sort();$('countryFilter').innerHTML='<option value="">All countries</option>'+countries.map(x=>`<option>${esc(x)}</option>`).join('');$('leagueFilter').innerHTML='<option value="">All leagues</option>'+leagues.map(x=>`<option>${esc(x)}</option>`).join('');const render=()=>{const c=$('countryFilter').value,l=$('leagueFilter').value,f=ps.filter(p=>(!c||p.country===c)&&(!l||p.league===l));$('countryList').innerHTML=f.length?[...new Set(f.map(p=>`${p.country||'Unknown'} — ${p.league||'Unknown'}`))].map(x=>`<div class="quick-link"><div class="quick-link-title">${esc(x)}</div><div class="quick-link-text">Available predictions: ${f.filter(p=>`${p.country||'Unknown'} — ${p.league||'Unknown'}`===x).length}</div></div>`).join(''):'<div class="state-box">No matching country/league.</div>'};$('countryFilter').onchange=render;$('leagueFilter').onchange=render;render()}catch{$('countryList').innerHTML='<div class="state-box">Unable to load countries.</div>'}
+})();
+</script></body></html>
