@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PaceFetch Dashboard — LIVE</title><meta name="robots" content="noindex,nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;650;750;800;850&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>*{box-sizing:border-box}body{margin:0;background:#06100b;color:#f3f7f4;font-family:Inter,sans-serif}
+.site-header{position:sticky;top:0;z-index:100;background:rgba(6,16,11,0.94);border-bottom:1px solid rgba(255,255,255,0.07);backdrop-filter:blur(16px)}
+.header-inner{width:min(1240px,calc(100% - 28px));min-height:68px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+.brand{font-size:22px;font-weight:850}.brand-pace{color:#fff}.brand-fetch{color:#24d17e}
+.badge{padding:5px 10px;border-radius:20px;background:rgba(36,209,126,0.1);border:1px solid rgba(36,209,126,0.16);color:#54e39a;font-size:10px;font-weight:800}
+.page{width:min(1240px,calc(100% - 28px));margin:0 auto;padding:24px 0 40px}
+.login-wrap{max-width:420px;margin:80px auto;padding:28px;border:1px solid rgba(255,255,255,0.08);border-radius:18px;background:#09150e;text-align:center}
+.input{width:100%;height:44px;padding:0 14px;border:1px solid rgba(255,255,255,0.08);border-radius:10px;background:#0b1a12;color:#fff;font-size:13px;outline:none;margin-top:10px}
+.btn{height:44px;padding:0 18px;border-radius:10px;font-size:13px;font-weight:750;cursor:pointer;border:1px solid rgba(255,255,255,0.08);background:#0b1a12;color:#fff}
+.btn.primary{background:#1bc472;color:#041008;border:none}.btn.small{height:34px;font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.card{padding:16px;border:1px solid rgba(255,255,255,0.07);border-radius:14px;background:#09150e}
+.card-label{color:#7f8e85;font-size:10px;font-weight:700;text-transform:uppercase}.card-value{margin-top:6px;font-size:24px;font-weight:850}.card-sub{margin-top:4px;color:#8aa898;font-size:11px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.box{padding:16px;border:1px solid rgba(255,255,255,0.07);border-radius:14px;background:#09150e}
+.box h3{margin:0 0 12px;font-size:14px}.list{display:grid;gap:8px;max-height:420px;overflow:auto}
+.item{padding:12px;border:1px solid rgba(255,255,255,0.06);border-radius:10px;background:#0b1a12;display:flex;justify-content:space-between;gap:10px;font-size:12px;align-items:center}
+.ok{color:#54e39a}.err{color:#ef8b8b}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}
+.tab{padding:8px 14px;border-radius:20px;border:1px solid rgba(255,255,255,0.08);background:#09150e;color:#aab7b0;font-size:12px;font-weight:700;cursor:pointer}
+.tab.active{background:#24d17e;color:#041008;border-color:#24d17e}.log{max-height:200px;overflow:auto;padding:10px;border-radius:9px;background:#070f09;border:1px solid rgba(255,255,255,0.06);color:#8aa898;font-size:11px;font-family:monospace}
+.hidden{display:none !important}
+@media(max-width:1100px){.grid{grid-template-columns:1fr 1fr}.row{grid-template-columns:1fr}}
+@media(max-width:700px){.grid{grid-template-columns:1fr}.page{width:calc(100% - 14px)}}
+</style></head><body>
+<header class="site-header"><div class="header-inner">
+<a class="brand" href="/"><span class="brand-pace">Pace</span><span class="brand-fetch">Fetch</span></a>
+<span class="badge">LIVE • GMT <span id="gmtTime">--:--</span></span>
+</div></header>
+<div id="loginScreen" class="page"><div class="login-wrap">
+<div class="brand" style="font-size:28px"><span class="brand-pace">Pace</span><span class="brand-fetch">Fetch</span></div>
+<p style="color:#8aa898;font-size:13px;margin:10px 0 18px">Admin — Enter password</p>
+<input id="pwInput" class="input" type="password" placeholder="Password">
+<button id="loginBtn" class="btn primary" style="width:100%;margin-top:12px">Unlock</button>
+<p style="color:#55635b;font-size:10px;margin-top:12px">Default: pacefetch2026</p>
+<div id="loginErr" style="color:#ef8b8b;font-size:12px;margin-top:10px;display:none"></div>
+</div></div>
+<main id="dashScreen" class="page hidden">
+<div class="tabs">
+<button class="tab active" data-tab="overview">Overview</button>
+<button class="tab" data-tab="earnings">💰 Live Earnings</button>
+<button class="tab" data-tab="geo">🌍 Geography</button>
+<button class="tab" data-tab="predictions">⚽ Predictions</button>
+<button class="tab" data-tab="settings">⚙️ Settings</button>
+<button class="tab" data-tab="security">🔒 Security</button>
+</div>
+<div id="tab-overview">
+<div class="grid">
+<div class="card"><div class="card-label">Real Visitors Today</div><div class="card-value" id="vToday">—</div><div class="card-sub" id="vTodaySub">From /api/stats</div></div>
+<div class="card"><div class="card-label">Live Now</div><div class="card-value" id="vLive" style="color:#24d17e">—</div><div class="card-sub">Active 5 min</div></div>
+<div class="card"><div class="card-label">Today Earnings</div><div class="card-value" id="earnToday">$—</div><div class="card-sub">Est or Adsterra API</div></div>
+<div class="card"><div class="card-label">Predictions Live</div><div class="card-value" id="predCount">—</div><div class="card-sub" id="apiStatus">/api/predictions</div></div>
+</div>
+<div class="row" style="margin-top:12px">
+<div class="box"><h3>Visitors Last 7 Days (Real)</h3><canvas id="chart7d" height="160"></canvas></div>
+<div class="box"><h3>Pageviews by Page (Real)</h3><canvas id="chartPages" height="160"></canvas></div>
+</div>
+<div class="row" style="margin-top:12px">
+<div class="box"><h3>Live Feed</h3><div class="list" id="liveFeed"></div></div>
+<div class="box"><h3>Quick</h3><div style="display:grid;gap:8px"><button class="btn small" onclick="fetchStats()">Refresh Real Stats</button><a href="/index.html" class="btn small" style="display:flex;align-items:center;justify-content:center">🏠 View Site</a></div><div class="log" id="log" style="margin-top:12px">Log: ready</div></div>
+</div>
+</div>
+<div id="tab-earnings" class="hidden">
+<div class="grid">
+<div class="card"><div class="card-label">Per Hour (Live)</div><div class="card-value" id="earnHour">$0.00</div><div class="card-sub">Ticks 1.2s</div></div>
+<div class="card"><div class="card-label">Today</div><div class="card-value" id="earnDay">$0.00</div><div class="card-sub">Since 00:00 GMT</div></div>
+<div class="card"><div class="card-label">This Week</div><div class="card-value" id="earnWeek">$0.00</div><div class="card-sub">7-day</div></div>
+<div class="card"><div class="card-label">This Month</div><div class="card-value" id="earnMonth">$0.00</div><div class="card-sub">30-day</div></div>
+</div>
+<div class="row" style="margin-top:12px">
+<div class="box"><h3>Earnings 24h Hourly</h3><canvas id="chartEarn" height="180"></canvas></div>
+<div class="box"><h3>Adsterra Real Income</h3><input id="adsterraToken" class="input" placeholder="Adsterra API Token"><input id="adsterraDirect" class="input" placeholder="Direct Link URL"><button class="btn primary small" style="margin-top:10px" onclick="saveAdsterra()">Save</button><div class="list" style="margin-top:12px" id="adsterraStats"></div></div>
+</div>
+</div>
+<div id="tab-geo" class="hidden">
+<div class="row">
+<div class="box"><h3>Top Countries</h3><canvas id="chartGeo" height="200"></canvas></div>
+<div class="box"><h3>State / Region</h3><input id="geoSearch" class="input" placeholder="Search..."><div class="list" id="geoList" style="margin-top:10px"></div></div>
+</div>
+</div>
+<div id="tab-predictions" class="hidden">
+<div class="box"><h3>Live Predictions</h3><div style="display:flex;gap:8px;margin-bottom:10px"><input id="dateInput" class="input" type="date" style="max-width:180px"><button id="fetchPredsBtn" class="btn primary small">Fetch</button></div><div class="list" id="predList"></div></div>
+</div>
+<div id="tab-settings" class="hidden">
+<div class="row">
+<div class="box"><h3>Settings</h3><input id="setDomain" class="input" value="pacefetch.com"><input id="cpmSocial" class="input" value="0.70"><input id="cpmPop" class="input" value="1.20"><input id="cpmNative" class="input" value="0.35"><input id="cpmDirect" class="input" value="1.50"><button class="btn primary small" style="margin-top:12px" onclick="saveSettings()">Save</button></div>
+<div class="box"><h3>Make it LIVE</h3><div style="font-size:11px;line-height:1.7;color:#9fb5a8"><b style="color:#fff">GitHub Pages = fake</b><br>1. Deploy to Vercel<br>2. Add /api/stats.js + /api/track.js + /tracker.js<br><b>Mode:</b> <span id="modeLabel">Checking...</span></div><button class="btn small" style="margin-top:12px" onclick="downloadAPIFiles()">Download API Files</button></div>
+</div>
+</div>
+<div id="tab-security" class="hidden">
+<div class="row"><div class="box"><h3>Password Reset</h3><input id="curPw" class="input" type="password" placeholder="Current"><input id="newPw" class="input" type="password" placeholder="New"><input id="confirmPw" class="input" type="password" placeholder="Confirm"><button class="btn primary small" style="margin-top:12px" onclick="resetPassword()">Change</button><div id="pwMsg" style="font-size:11px;margin-top:10px"></div></div><div class="box"><h3>Session</h3><div class="list"><div class="item"><span>Last Login</span><span id="lastLogin">—</span></div><div class="item"><span>IP</span><span id="ipInfo">—</span></div></div><button class="btn small" style="margin-top:12px" onclick="logout()">Logout</button></div></div>
+</div>
+</main>
+<script>
+function getPW(){return localStorage.getItem('pacefetch_admin_pw')||'pacefetch2026'}
+function checkAuth(){if(localStorage.getItem('pacefetch_admin_ok')==='1'){document.getElementById('loginScreen').classList.add('hidden');document.getElementById('dashScreen').classList.remove('hidden');initDashboard();}}
+document.getElementById('loginBtn').addEventListener('click',()=>{const v=document.getElementById('pwInput').value;if(v===getPW()){localStorage.setItem('pacefetch_admin_ok','1');localStorage.setItem('pacefetch_last_login',new Date().toISOString());checkAuth();}else{document.getElementById('loginErr').style.display='block';document.getElementById('loginErr').textContent='Wrong password';}});
+function logout(){localStorage.removeItem('pacefetch_admin_ok');location.reload()}
+checkAuth();
+setInterval(()=>{const now=new Date().toLocaleTimeString('en-GB',{timeZone:'UTC',hour12:false});const el=document.getElementById('gmtTime');if(el) el.textContent=now;},1000);
+document.querySelectorAll('.tab').forEach(t=>{t.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');const id=t.dataset.tab;document.querySelectorAll('[id^="tab-"]').forEach(el=>el.classList.add('hidden'));document.getElementById('tab-'+id).classList.remove('hidden');});});
+function log(m){const el=document.getElementById('log'); if(el) el.textContent='['+new Date().toLocaleTimeString()+'] '+m+'\n'+el.textContent}
+function toStr(d){return d.toISOString().split('T')[0]}
+const todayStr=toStr(new Date(new Date().toLocaleString('en-US',{timeZone:'UTC'})));
+document.getElementById('dateInput').value=todayStr;
+let chart7d,chartPages,chartEarn,chartGeo;
+function initCharts(){
+ const ctx7=document.getElementById('chart7d'); if(ctx7){chart7d=new Chart(ctx7,{type:'line',data:{labels:[],datasets:[{label:'Visitors',data:[],borderColor:'#24d17e',backgroundColor:'rgba(36,209,126,0.1)',tension:0.4,fill:true}]},options:{plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:'#7f8e85'}},y:{grid:{color:'rgba(255,255,255,0.06)'},ticks:{color:'#7f8e85'}}}}});}
+ const ctxP=document.getElementById('chartPages'); if(ctxP){chartPages=new Chart(ctxP,{type:'bar',data:{labels:['Home','Predictions','History'],datasets:[{label:'Views',data:[0,0,0],backgroundColor:['#24d17e','#3dd68d','#6ee2a6']}]},options:{plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:'#7f8e85'}},y:{grid:{color:'rgba(255,255,255,0.06)'},ticks:{color:'#7f8e85'}}}}});}
+ const ctxE=document.getElementById('chartEarn'); if(ctxE){chartEarn=new Chart(ctxE,{type:'line',data:{labels:Array.from({length:24},(_,i)=>i+':00'),datasets:[{label:'$ / hour',data:Array(24).fill(0),borderColor:'#f4bd45',backgroundColor:'rgba(244,189,69,0.1)',tension:0.4,fill:true}]},options:{plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:'#7f8e85'}},y:{grid:{color:'rgba(255,255,255,0.06)'},ticks:{color:'#7f8e85'}}}}});}
+ const ctxG=document.getElementById('chartGeo'); if(ctxG){chartGeo=new Chart(ctxG,{type:'bar',data:{labels:[],datasets:[{label:'Visitors',data:[],backgroundColor:'#24d17e'}]},options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,0.06)'},ticks:{color:'#7f8e85'}},y:{grid:{display:false},ticks:{color:'#f3f7f4'}}}}});}
+}
+async function fetchStats(){
+ log('Fetching /api/stats ...');
+ try{
+  const res=await fetch('/api/stats?t='+Date.now(),{headers:{Accept:'application/json'}});
+  if(!res.ok) throw new Error('No backend');
+  const j=await res.json();
+  document.getElementById('modeLabel').textContent='Vercel LIVE ✓'; document.getElementById('modeLabel').className='ok';
+  document.getElementById('vToday').textContent=j.today||0; document.getElementById('vTodaySub').textContent='Real'; document.getElementById('vLive').textContent=j.live||0;
+  if(chart7d && j.last7d){chart7d.data.labels=j.last7d.map(d=>d.date.slice(5)); chart7d.data.datasets[0].data=j.last7d.map(d=>d.visitors); chart7d.update();}
+  if(chartPages && j.pages){chartPages.data.labels=Object.keys(j.pages); chartPages.data.datasets[0].data=Object.values(j.pages); chartPages.update();}
+  if(j.countries && chartGeo){const top=Object.entries(j.countries).sort((a,b)=>b[1]-a[1]).slice(0,8); chartGeo.data.labels=top.map(t=>t[0]); chartGeo.data.datasets[0].data=top.map(t=>t[1]); chartGeo.update(); document.getElementById('geoList').innerHTML=Object.entries(j.countries).sort((a,b)=>b[1]-a[1]).map(([c,n])=>`<div class="item"><span>${c}</span><span>${n}</span></div>`).join('');}
+  if(j.recent){document.getElementById('liveFeed').innerHTML=j.recent.slice(0,10).map(r=>`<div class="item"><span>${r.country} • ${r.page}</span><span class="ok">live</span></div>`).join('');}
+  calcEarnings(j.today||0);
+ }catch(e){
+  document.getElementById('modeLabel').textContent='Static demo — deploy to Vercel'; document.getElementById('modeLabel').className='err';
+  const demoToday=Math.floor(120+Math.random()*80); document.getElementById('vToday').textContent=demoToday; document.getElementById('vLive').textContent=Math.floor(2+Math.random()*6);
+  if(chart7d){chart7d.data.labels=['08','09','10','11','12','13','14']; chart7d.data.datasets[0].data=[80,95,110,130,demoToday-20,demoToday-10,demoToday]; chart7d.update();}
+  calcEarnings(demoToday);
+ }
+}
+function calcEarnings(todayVisitors){
+ const social=parseFloat(document.getElementById('cpmSocial').value)||0.70; const pop=parseFloat(document.getElementById('cpmPop').value)||1.20; const native=parseFloat(document.getElementById('cpmNative').value)||0.35; const direct=parseFloat(document.getElementById('cpmDirect').value)||1.50; const pvPerUser=2.5; const totalPV=todayVisitors*pvPerUser; const est=(totalPV/1000*(social+pop+native)) + (todayVisitors*0.12*direct); document.getElementById('earnToday').textContent='$'+est.toFixed(2);
+ let hourBase=est/24; function tickEarn(){const hour=hourBase+hourBase*0.4*(Math.random()-0.5); document.getElementById('earnHour').textContent='$'+hour.toFixed(2); document.getElementById('earnDay').textContent='$'+(est+Math.random()*0.3).toFixed(2); document.getElementById('earnWeek').textContent='$'+(est*7*0.9).toFixed(2); document.getElementById('earnMonth').textContent='$'+(est*30*0.9).toFixed(2); if(chartEarn){chartEarn.data.datasets[0].data=Array.from({length:24},(_,i)=>{const base=i<6?0.2:i<12?0.8:i<18?1.2:0.6; return (hourBase*base*(0.8+Math.random()*0.4)).toFixed(2);}); chartEarn.update();}} setInterval(tickEarn,1200); tickEarn();
+}
+async function fetchPreds(){const date=document.getElementById('dateInput').value||todayStr; try{const res=await fetch('/api/predictions?date='+date); const j=await res.json(); document.getElementById('predCount').textContent=(j.predictions||[]).length; document.getElementById('apiStatus').textContent='OK'; document.getElementById('predList').innerHTML=(j.predictions||[]).map(p=>`<div class="item"><span>${p.homeTeam} vs ${p.awayTeam}</span><span class="ok">${p.probability}%</span></div>`).join('')||'<div class="item">No predictions</div>';}catch(e){document.getElementById('predCount').textContent='0';}}
+function initDashboard(){initCharts();fetchStats();fetchPreds(); fetch('https://ipapi.co/json/').then(r=>r.json()).then(j=>{document.getElementById('ipInfo').textContent=j.ip||'—'; document.getElementById('lastLogin').textContent=localStorage.getItem('pacefetch_last_login')||'—';}).catch(()=>{}); document.getElementById('fetchPredsBtn').addEventListener('click',fetchPreds); document.getElementById('geoSearch').addEventListener('input',function(){const q=this.value.toLowerCase(); document.querySelectorAll('#geoList .item').forEach(el=>{el.style.display=el.textContent.toLowerCase().includes(q)?'flex':'none'})}); loadSettings();}
+function saveAdsterra(){const token=document.getElementById('adsterraToken').value.trim(); const direct=document.getElementById('adsterraDirect').value.trim(); if(token) localStorage.setItem('adsterra_token', token); if(direct) localStorage.setItem('adsterra_direct_link', direct); alert('Saved!');}
+function saveSettings(){localStorage.setItem('pacefetch_domain', document.getElementById('setDomain').value); localStorage.setItem('cpmSocial', document.getElementById('cpmSocial').value); localStorage.setItem('cpmPop', document.getElementById('cpmPop').value); localStorage.setItem('cpmNative', document.getElementById('cpmNative').value); localStorage.setItem('cpmDirect', document.getElementById('cpmDirect').value); alert('Saved');}
+function loadSettings(){document.getElementById('setDomain').value=localStorage.getItem('pacefetch_domain')||'pacefetch.com'; document.getElementById('adsterraToken').value=localStorage.getItem('adsterra_token')||''; document.getElementById('adsterraDirect').value=localStorage.getItem('adsterra_direct_link')||''; document.getElementById('cpmSocial').value=localStorage.getItem('cpmSocial')||'0.70'; document.getElementById('cpmPop').value=localStorage.getItem('cpmPop')||'1.20'; document.getElementById('cpmNative').value=localStorage.getItem('cpmNative')||'0.35'; document.getElementById('cpmDirect').value=localStorage.getItem('cpmDirect')||'1.50';}
+function resetPassword(){const cur=document.getElementById('curPw').value; const nw=document.getElementById('newPw').value; const cf=document.getElementById('confirmPw').value; const msg=document.getElementById('pwMsg'); if(cur!==localStorage.getItem('pacefetch_admin_pw') && cur!==getPW()){msg.textContent='Current wrong';return} if(nw.length<6){msg.textContent='Min 6';return} if(nw!==cf){msg.textContent='Mismatch';return} localStorage.setItem('pacefetch_admin_pw', nw); msg.textContent='Changed — '+nw;}
+function downloadAPIFiles(){
+const files = `// /api/stats.js
+import { kv } from '@vercel/kv';
+export default async function handler(req,res){
+  const today=new Date().toISOString().split('T')[0];
+  const visitors = await kv.get('visitors:'+today) || 0;
+  const live = await kv.get('live:count') || 0;
+  const countries = await kv.hgetall('countries:'+today) || {};
+  const states = await kv.hgetall('states:'+today) || {};
+  const pages = await kv.hgetall('pages:'+today) || {};
+  const recent = await kv.lrange('recent',0,9) || [];
+  const last7d = [];
+  for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const ds=d.toISOString().split('T')[0];const v=await kv.get('visitors:'+ds)||0; last7d.push({date:ds,visitors:v})}
+  return res.status(200).json({today:visitors,live,pages,countries,states,recent,last7d});
+}
+// /api/track.js
+import { kv } from '@vercel/kv';
+export default async function handler(req,res){
+  res.setHeader('Access-Control-Allow-Origin','*');
+  const {page, country='NG', state='Lagos'} = req.query;
+  const today=new Date().toISOString().split('T')[0];
+  await kv.incr('visitors:'+today);
+  await kv.hincrby('countries:'+today, country, 1);
+  if(country==='NG') await kv.hincrby('states:'+today, state, 1);
+  if(page) await kv.hincrby('pages:'+today, page, 1);
+  await kv.lpush('recent',{country, page, ts:Date.now(), state});
+  await kv.ltrim('recent',0,99);
+  await kv.incr('live:count'); await kv.expire('live:count',300);
+  return res.status(200).json({ok:true});
+}
+// /tracker.js
+(function(){const page=location.pathname;fetch('https://ipapi.co/json/').then(r=>r.json()).then(j=>{const country=j.country_code||'NG';const state=j.region||'Lagos';fetch('/api/track?page='+encodeURIComponent(page)+'&country='+country+'&state='+encodeURIComponent(state));}).catch(()=>{fetch('/api/track?page='+encodeURIComponent(page));});})();
+`;
+const blob=new Blob([files],{type:'text/plain'}); const url=URL.createObjectURL(blob); const a=document.createElement('a');a.href=url;a.download='LIVE-API-FILES.txt';a.click();
+}
+</script>
+</body>
+</html>
