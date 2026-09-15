@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PaceFetch Dashboard — LIVE</title>
+<meta name="robots" content="noindex,nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;650;750;800;850&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}body{margin:0;background:#06100b;color:#f3f7f4;font-family:Inter,ui-sans-serif,system-ui,sans-serif}
+a{color:inherit;text-decoration:none}
+.site-header{position:sticky;top:0;z-index:100;width:100%;background:rgba(6,16,11,0.94);border-bottom:1px solid rgba(255,255,255,0.07);backdrop-filter:blur(16px)}
+.header-inner{width:min(1180px,calc(100% - 28px));min-height:68px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+.brand{font-size:22px;font-weight:850;letter-spacing:-0.7px}.brand-pace{color:#fff}.brand-fetch{color:#24d17e}
+.badge{padding:5px 10px;border-radius:20px;background:rgba(36,209,126,0.12);border:1px solid rgba(36,209,126,0.2);color:#54e39a;font-size:10px;font-weight:800}
+.page{width:min(1180px,calc(100% - 28px));margin:0 auto;padding:18px 0 40px}
+.login-wrap{max-width:400px;margin:70px auto;padding:28px;border:1px solid rgba(255,255,255,0.08);border-radius:18px;background:#09150e;text-align:center}
+.input{width:100%;height:44px;padding:0 12px;border:1px solid rgba(255,255,255,0.08);border-radius:10px;background:#0b1a12;color:#fff;font-size:13px;outline:none;margin-top:10px}
+.btn{height:44px;padding:0 16px;border-radius:10px;font-size:13px;font-weight:750;cursor:pointer;border:1px solid rgba(255,255,255,0.08);background:#0b1a12;color:#fff}
+.btn.primary{background:#1bc472;color:#041008;border:none}.btn.small{height:36px;font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.card{padding:14px;border:1px solid rgba(255,255,255,0.07);border-radius:14px;background:#09150e}
+.card-label{color:#7f8e85;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}.card-value{margin-top:6px;font-size:22px;font-weight:850}.card-sub{margin-top:4px;color:#8aa898;font-size:11px;line-height:1.4}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0;overflow-x:auto}
+.tab{padding:9px 14px;border-radius:20px;border:1px solid rgba(255,255,255,0.09);background:#09150e;color:#aab7b0;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
+.tab.active{background:#24d17e;color:#041008;border-color:#24d17e}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.box{padding:14px;border:1px solid rgba(255,255,255,0.07);border-radius:14px;background:#09150e}
+.box h3{margin:0 0 10px;font-size:13px}
+.list{display:grid;gap:8px;max-height:420px;overflow:auto}
+.item{padding:11px;border:1px solid rgba(255,255,255,0.06);border-radius:10px;background:#0b1a12;display:flex;justify-content:space-between;gap:10px;font-size:12px;align-items:center}
+.ok{color:#54e39a}.err{color:#ef8b8b}
+.bar{height:8px;border-radius:10px;background:rgba(255,255,255,0.06);overflow:hidden;margin-top:6px}
+.bar-fill{height:100%;background:#24d17e;border-radius:10px}
+.log{max-height:160px;overflow:auto;padding:8px;border-radius:8px;background:#070f09;border:1px solid rgba(255,255,255,0.06);color:#8aa898;font-size:11px;font-family:ui-monospace,monospace;line-height:1.5}
+.hidden{display:none !important}
+@media(max-width:900px){.grid{grid-template-columns:1fr 1fr}.row{grid-template-columns:1fr}}
+@media(max-width:600px){.grid{grid-template-columns:1fr}.page{width:calc(100% - 12px)}}
+
+.pw-wrap{position:relative;display:flex;align-items:center;margin-top:10px}
+.pw-wrap .input{margin-top:0;padding-right:42px}
+.pw-toggle{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:32px;height:32px;border:none;background:rgba(255,255,255,0.06);border-radius:8px;color:#9fb5a8;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px}
+.pw-toggle:hover{background:rgba(255,255,255,0.1);color:#fff}
+
+</style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner">
+<a class="brand" href="/"><span class="brand-pace">Pace</span><span class="brand-fetch">Fetch</span></a>
+<span class="badge" id="liveBadge">LIVE • GMT <span id="gmtTime">--:--:--</span></span>
+</div></header>
+
+<div id="loginScreen" class="page">
+<div class="login-wrap">
+<div class="brand" style="font-size:28px;justify-content:center;display:flex"><span class="brand-pace">Pace</span><span class="brand-fetch">Fetch</span></div>
+<p style="color:#8aa898;font-size:13px;margin:10px 0 16px">Dashboard — Enter password</p>
+<div class="pw-wrap"><input id="pwInput" class="input" type="password" placeholder="Password (pacefetch2026)"><button type="button" class="pw-toggle" data-target="pwInput" aria-label="Show/hide password">👁️</button></div>
+<button id="loginBtn" class="btn primary" style="width:100%;margin-top:12px">Unlock Dashboard</button>
+<p style="color:#55635b;font-size:10px;margin-top:12px">Default: pacefetch2026 • Change in Security tab</p>
+<div id="loginErr" style="color:#ef8b8b;font-size:12px;margin-top:10px;display:none"></div>
+</div>
+</div>
+
+<main id="dashScreen" class="page hidden">
+<div class="tabs">
+<button class="tab active" data-tab="overview">Overview</button>
+<button class="tab" data-tab="earnings">💰 Earnings</button>
+<button class="tab" data-tab="geo">🌍 Geography</button>
+<button class="tab" data-tab="predictions">⚽ Predictions</button>
+<button class="tab" data-tab="settings">⚙️ Settings</button>
+<button class="tab" data-tab="security">🔒 Security</button>
+</div>
+
+<!-- OVERVIEW -->
+<div id="tab-overview">
+<div class="grid">
+<div class="card"><div class="card-label">Real Visitors Today</div><div class="card-value" id="vToday">0</div><div class="card-sub" id="vTodaySub">Live</div></div>
+<div class="card"><div class="card-label">Live Now</div><div class="card-value" id="vLive" style="color:#24d17e">0</div><div class="card-sub">Active 5 min</div></div>
+<div class="card"><div class="card-label">Today Earnings</div><div class="card-value" id="earnToday">$0.00</div><div class="card-sub" id="earnTodaySub">Estimated</div></div>
+<div class="card"><div class="card-label">Predictions Live</div><div class="card-value" id="predCount">0</div><div class="card-sub" id="apiStatus">/api/predictions</div></div>
+</div>
+<div class="row" style="margin-top:10px">
+<div class="box"><h3>Visitors Last 7 Days (No CDN Chart)</h3><div id="chart7d"></div></div>
+<div class="box"><h3>Pageviews by Page</h3><div id="chartPages"></div></div>
+</div>
+<div class="row" style="margin-top:10px">
+<div class="box"><h3>Live Feed (Real IP)</h3><div class="list" id="liveFeed"></div></div>
+<div class="box"><h3>Quick Actions</h3>
+<div style="display:grid;gap:8px">
+<button class="btn small" id="btnRefresh">Refresh Real Stats</button>
+<a href="/index.html" class="btn small" style="display:flex;align-items:center;justify-content:center">🏠 View Site</a>
+<a href="/predictions.html" class="btn small" style="display:flex;align-items:center;justify-content:center">📊 Predictions</a>
+</div><div class="log" id="log" style="margin-top:10px">Log: ready</div>
+<div style="margin-top:10px;font-size:11px;color:#8aa898">Mode: <span id="modeLabel">Checking...</span></div>
+</div>
+</div>
+</div>
+
+<!-- EARNINGS -->
+<div id="tab-earnings" class="hidden">
+<div class="grid">
+<div class="card"><div class="card-label">Per Hour (Live)</div><div class="card-value" id="earnHour">$0.00</div><div class="card-sub">Ticks every 1s</div></div>
+<div class="card"><div class="card-label">Today</div><div class="card-value" id="earnDay">$0.00</div><div class="card-sub">Since 00:00 GMT</div></div>
+<div class="card"><div class="card-label">This Week</div><div class="card-value" id="earnWeek">$0.00</div><div class="card-sub">7-day total</div></div>
+<div class="card"><div class="card-label">This Month</div><div class="card-value" id="earnMonth">$0.00</div><div class="card-sub">30-day forecast</div></div>
+</div>
+<div class="row" style="margin-top:10px">
+<div class="box"><h3>Earnings Last 24h (Hourly)</h3><div id="chartEarn"></div></div>
+<div class="box"><h3>Adsterra Setup</h3>
+<input id="adsterraDirect" class="input" placeholder="Direct Link URL">
+<input id="cpmSocial" class="input" value="0.70" placeholder="Social Bar CPM">
+<input id="cpmPop" class="input" value="1.20" placeholder="Popunder CPM">
+<input id="cpmNative" class="input" value="0.35" placeholder="Native CPM">
+<input id="cpmDirect" class="input" value="1.50" placeholder="Direct CPC">
+<button class="btn primary small" style="margin-top:10px" id="btnSaveAd">Save</button>
+<div style="margin-top:10px;font-size:11px;color:#8aa898">Earnings = Visitors × PV × CPM + CTR×CPC. Live tick.</div>
+</div>
+</div>
+</div>
+
+<!-- GEO -->
+<div id="tab-geo" class="hidden">
+<div class="row">
+<div class="box"><h3>Top Countries</h3><div id="chartGeo"></div></div>
+<div class="box"><h3>State / Region Breakdown</h3><input id="geoSearch" class="input" placeholder="Search country/state..."><div class="list" id="geoList" style="margin-top:10px"></div></div>
+</div>
+</div>
+
+<!-- PREDICTIONS -->
+<div id="tab-predictions" class="hidden">
+<div class="box"><h3>Live Predictions — /api/predictions</h3>
+<div style="display:flex;gap:8px;margin-bottom:10px"><input id="dateInput" class="input" type="date" style="max-width:180px"><button id="fetchPredsBtn" class="btn primary small">Fetch</button></div>
+<div class="list" id="predList"></div></div>
+</div>
+
+<!-- SETTINGS -->
+<div id="tab-settings" class="hidden">
+<div class="row">
+<div class="box"><h3>Settings (Saved locally)</h3>
+<input id="setDomain" class="input" value="pacefetch.com"><button class="btn primary small" style="margin-top:10px" id="btnSaveSet">Save Settings</button>
+<div style="margin-top:12px;font-size:11px;color:#9fb5a8;line-height:1.6">
+<b>How to make REAL:</b><br>
+1. Deploy on Vercel (not GitHub Pages)<br>
+2. Add /api/stats.js + /api/track.js (I gave you)<br>
+3. Add &lt;script src="/tracker.js"&gt;&lt;/script&gt; to index.html etc<br>
+4. Enable Vercel KV Storage<br>
+</div>
+</div>
+<div class="box"><h3>Debug</h3><div class="log" id="debugLog">No errors yet</div><button class="btn small" style="margin-top:8px" onclick="localStorage.clear();location.reload()">Clear All LocalStorage</button></div>
+</div>
+</div>
+
+<!-- SECURITY -->
+<div id="tab-security" class="hidden">
+<div class="row"><div class="box"><h3>Password Reset</h3>
+<div class="pw-wrap"><input id="curPw" class="input" type="password" placeholder="Current password"><button type="button" class="pw-toggle" data-target="curPw" aria-label="Show/hide password">👁️</button></div><div class="pw-wrap"><input id="newPw" class="input" type="password" placeholder="New password"><button type="button" class="pw-toggle" data-target="newPw" aria-label="Show/hide password">👁️</button></div><div class="pw-wrap"><input id="confirmPw" class="input" type="password" placeholder="Confirm"><button type="button" class="pw-toggle" data-target="confirmPw" aria-label="Show/hide password">👁️</button></div><button class="btn primary small" style="margin-top:10px" id="btnChangePw">Change Password</button><div id="pwMsg" style="font-size:11px;margin-top:10px"></div></div>
+<div class="box"><h3>Session Info</h3><div class="list"><div class="item"><span>Last Login</span><span id="lastLogin">—</span></div><div class="item"><span>IP</span><span id="ipInfo">—</span></div><div class="item"><span>Browser</span><span id="browserInfo">—</span></div></div><button class="btn small" style="margin-top:10px" id="btnLogout">Logout</button></div></div>
+</div>
+
+</main>
+
+<script>
+// SAFE - no external CDN, all vanilla
+(function(){
+
+  // 👁️ view/hide toggle
+  document.querySelectorAll('.pw-toggle').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const targetId = btn.getAttribute('data-target');
+      const input = document.getElementById(targetId);
+      if(!input) return;
+      const isPw = input.type === 'password';
+      input.type = isPw ? 'text' : 'password';
+      btn.textContent = isPw ? '🙈' : '👁️';
+      btn.setAttribute('aria-label', isPw ? 'Hide password' : 'Show password');
+    });
+  });
+
+  const $ = id => document.getElementById(id);
+  function getPW(){return localStorage.getItem('pacefetch_admin_pw')||'pacefetch2026';}
+  function log(m){try{const el=$('log'); if(el) el.textContent='['+new Date().toLocaleTimeString()+'] '+m+'\n'+el.textContent; const d=$('debugLog'); if(d) d.textContent='['+new Date().toLocaleTimeString()+'] '+m+'\n'+d.textContent;}catch(e){}}
+  function toStr(d){return d.toISOString().split('T')[0];}
+  const todayStr = toStr(new Date(new Date().toLocaleString('en-US',{timeZone:'UTC'})));
+  if($('dateInput')) $('dateInput').value = todayStr;
+
+  // GMT clock - always works
+  setInterval(()=>{try{const now=new Date().toLocaleTimeString('en-GB',{timeZone:'UTC',hour12:false}); const el=$('gmtTime'); if(el) el.textContent=now;}catch(e){}},1000);
+  // init time immediately
+  try{const now=new Date().toLocaleTimeString('en-GB',{timeZone:'UTC',hour12:false}); const el=$('gmtTime'); if(el) el.textContent=now;}catch(e){}
+
+  // AUTH
+  function checkAuth(){try{if(localStorage.getItem('pacefetch_admin_ok')==='1'){ $('loginScreen').classList.add('hidden'); $('dashScreen').classList.remove('hidden'); initDashboard();}}catch(e){}}
+  const loginBtn=$('loginBtn');
+  if(loginBtn){loginBtn.addEventListener('click',()=>{try{const v=$('pwInput').value||''; if(v===getPW()){localStorage.setItem('pacefetch_admin_ok','1'); localStorage.setItem('pacefetch_last_login',new Date().toISOString()); $('loginScreen').classList.add('hidden'); $('dashScreen').classList.remove('hidden'); initDashboard();}else{const err=$('loginErr'); err.style.display='block'; err.textContent='Wrong password. Try pacefetch2026 or clear localStorage';}}catch(e){}});}
+  const pwInput=$('pwInput'); if(pwInput){pwInput.addEventListener('keydown',e=>{if(e.key==='Enter') loginBtn.click();});}
+  checkAuth();
+
+  // TABS - vanilla, no deps
+  document.querySelectorAll('.tab').forEach(t=>{
+    t.addEventListener('click',()=>{
+      try{
+        document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+        t.classList.add('active');
+        const id=t.getAttribute('data-tab');
+        document.querySelectorAll('[id^="tab-"]').forEach(el=>el.classList.add('hidden'));
+        const target=$('tab-'+id);
+        if(target) target.classList.remove('hidden');
+      }catch(e){log('Tab error: '+e.message);}
+    });
+  });
+
+  function renderBarChart(containerId, labels, values){
+    try{
+      const cont=$(containerId); if(!cont) return;
+      const max=Math.max(...values,1);
+      let html='';
+      labels.forEach((lab,i)=>{
+        const val=values[i]||0;
+        const pct=Math.round((val/max)*100);
+        html+=`<div style="display:flex;justify-content:space-between;font-size:11px;margin-top:8px"><span>${lab}</span><span class="ok">${val}</span></div><div class="bar"><div class="bar-fill" style="width:${pct}%"></div></div>`;
+      });
+      cont.innerHTML=html;
+    }catch(e){log('Chart error '+containerId+': '+e.message);}
+  }
+
+  async function fetchStats(){
+    log('Fetching /api/stats...');
+    try{
+      const res=await fetch('/api/stats?t='+Date.now(),{headers:{Accept:'application/json'}});
+      if(!res.ok) throw new Error('No backend '+res.status);
+      const j=await res.json();
+      if($('modeLabel')) {$('modeLabel').textContent='Vercel LIVE ✓ — '+ (j.source||'KV'); $('modeLabel').className='ok';}
+      if($('vToday')) $('vToday').textContent=j.today||0;
+      if($('vLive')) $('vLive').textContent=j.live||0;
+      if($('vTodaySub')) $('vTodaySub').textContent='Real from KV';
+      if(j.last7d){ renderBarChart('chart7d', j.last7d.map(d=>d.date.slice(5)), j.last7d.map(d=>d.visitors)); }
+      if(j.pages){ const labs=Object.keys(j.pages); const vals=Object.values(j.pages); renderBarChart('chartPages', labs, vals); }
+      if(j.countries){ const top=Object.entries(j.countries).sort((a,b)=>b[1]-a[1]).slice(0,8); renderBarChart('chartGeo', top.map(t=>t[0]), top.map(t=>t[1])); const list=$('geoList'); if(list){ list.innerHTML=Object.entries(j.countries).sort((a,b)=>b[1]-a[1]).map(([c,n])=>`<div class="item"><span>${c}</span><span>${n}</span></div>`).join(''); if(j.states){ list.innerHTML+=Object.entries(j.states).sort((a,b)=>b[1]-a[1]).map(([s,n])=>`<div class="item"><span>NG - ${s}</span><span>${n}</span></div>`).join(''); } } }
+      if(j.recent && $('liveFeed')){ $('liveFeed').innerHTML=j.recent.slice(0,12).map(r=>`<div class="item"><span>${r.country||'NG'} • ${r.page||'/'} • ${new Date(r.ts).toLocaleTimeString()}</span><span class="ok">live</span></div>`).join(''); }
+      calcEarnings(j.today||0);
+      log('Real OK: '+j.today);
+    }catch(e){
+      if($('modeLabel')) {$('modeLabel').textContent='Demo mode — deploy /api/stats.js to Vercel for real'; $('modeLabel').className='err';}
+      log('No backend, using demo: '+e.message);
+      const demoToday=Math.floor(120+Math.random()*80);
+      if($('vToday')) $('vToday').textContent=demoToday;
+      if($('vLive')) $('vLive').textContent=Math.floor(2+Math.random()*6);
+      if($('vTodaySub')) $('vTodaySub').textContent='DEMO';
+      renderBarChart('chart7d', ['Sep 08','09','10','11','12','13','14'], [80,95,110,130,demoToday-20,demoToday-10,demoToday]);
+      renderBarChart('chartPages', ['Home','Predictions','History','Methodology'], [Math.floor(demoToday*0.5),Math.floor(demoToday*0.3),Math.floor(demoToday*0.15),Math.floor(demoToday*0.05)]);
+      renderBarChart('chartGeo', ['NG','GH','KE','ZA','UK','US'], [45,12,8,7,6,5]);
+      renderBarChart('chartEarn', Array.from({length:12},(_,i)=>i+':00'), Array.from({length:12},()=> (Math.random()*2).toFixed(2)));
+      if($('geoList')) $('geoList').innerHTML='<div class="item"><span>🇳🇬 NG - Lagos</span><span>42%</span></div><div class="item"><span>🇳🇬 NG - FCT Abuja</span><span>18%</span></div><div class="item"><span>🇳🇬 NG - Kano</span><span>10%</span></div><div class="item"><span>🇬🇭 GH - Accra</span><span>12%</span></div>';
+      if($('liveFeed')) $('liveFeed').innerHTML='<div class="item"><span>NG • /predictions.html • '+new Date().toLocaleTimeString()+'</span><span class="ok">live</span></div><div class="item"><span>GH • /index.html • '+new Date().toLocaleTimeString()+'</span><span class="ok">live</span></div>';
+      calcEarnings(demoToday);
+    }
+  }
+
+  let earnInterval=null;
+  function calcEarnings(todayVisitors){
+    try{
+      if(earnInterval) clearInterval(earnInterval);
+      const social=parseFloat($('cpmSocial')?.value)||0.70;
+      const pop=parseFloat($('cpmPop')?.value)||1.20;
+      const native=parseFloat($('cpmNative')?.value)||0.35;
+      const direct=parseFloat($('cpmDirect')?.value)||1.50;
+      const pvPerUser=2.5;
+      const totalPV=todayVisitors*pvPerUser;
+      const est=(totalPV/1000*(social+pop+native)) + (todayVisitors*0.12*direct);
+      if($('earnToday')) $('earnToday').textContent='$'+est.toFixed(2);
+      if($('earnTodaySub')) $('earnTodaySub').textContent='Est from '+todayVisitors+' visitors';
+      let hourBase=est/24;
+      function tick(){
+        const variance=hourBase*0.5*(Math.random()-0.5);
+        const hour=Math.max(0,hourBase+variance);
+        if($('earnHour')) $('earnHour').textContent='$'+hour.toFixed(2);
+        if($('earnDay')) $('earnDay').textContent='$'+(est + Math.random()*0.4).toFixed(2);
+        if($('earnWeek')) $('earnWeek').textContent='$'+(est*7*0.92).toFixed(2);
+        if($('earnMonth')) $('earnMonth').textContent='$'+(est*30*0.9).toFixed(2);
+        // update hourly chart simple
+        const vals=Array.from({length:12},(_,i)=>{const base=i<3?0.2:i<6?0.8:i<9?1.2:0.6; return (hourBase*base*(0.7+Math.random()*0.6)).toFixed(2);});
+        renderBarChart('chartEarn', Array.from({length:12},(_,i)=> (i*2)+':00'), vals);
+      }
+      tick();
+      earnInterval=setInterval(tick,1100);
+    }catch(e){log('Earnings error: '+e.message);}
+  }
+
+  async function fetchPreds(){
+    const date=$('dateInput')?.value||todayStr;
+    try{
+      const res=await fetch('/api/predictions?date='+date,{headers:{Accept:'application/json'}});
+      const j=await res.json();
+      if($('predCount')) $('predCount').textContent=(j.predictions||[]).length;
+      if($('apiStatus')) $('apiStatus').textContent='OK '+(j.predictions||[]).length;
+      if($('predList')) $('predList').innerHTML=(j.predictions||[]).slice(0,50).map(p=>`<div class="item"><span>${(p.homeTeam||'')+' vs '+(p.awayTeam||'')} • ${p.market||''} ${p.selection||''}</span><span class="ok">${p.probability||0}%</span></div>`).join('')||'<div class="item">No predictions</div>';
+    }catch(e){
+      if($('predCount')) $('predCount').textContent='0';
+      if($('predList')) $('predList').innerHTML='<div class="item">API not found — deploy /api/predictions.js on Vercel</div>';
+    }
+  }
+
+  function initDashboard(){
+    try{
+      if($('btnRefresh')) $('btnRefresh').addEventListener('click', fetchStats);
+      if($('fetchPredsBtn')) $('fetchPredsBtn').addEventListener('click', fetchPreds);
+      if($('btnSaveAd')) $('btnSaveAd').addEventListener('click', ()=>{localStorage.setItem('adsterra_direct_link', $('adsterraDirect').value); localStorage.setItem('cpmSocial',$('cpmSocial').value); localStorage.setItem('cpmPop',$('cpmPop').value); localStorage.setItem('cpmNative',$('cpmNative').value); localStorage.setItem('cpmDirect',$('cpmDirect').value); alert('Saved'); fetchStats();});
+      if($('btnSaveSet')) $('btnSaveSet').addEventListener('click', ()=>{localStorage.setItem('pacefetch_domain',$('setDomain').value); alert('Saved');});
+      if($('btnChangePw')) $('btnChangePw').addEventListener('click', ()=>{
+        const cur=$('curPw').value; const nw=$('newPw').value; const cf=$('confirmPw').value; const msg=$('pwMsg');
+        if(cur!==getPW() && cur!==localStorage.getItem('pacefetch_admin_pw')){msg.textContent='Current wrong'; msg.className='err'; return;}
+        if(nw.length<6){msg.textContent='Min 6 chars'; msg.className='err'; return;}
+        if(nw!==cf){msg.textContent='Mismatch'; msg.className='err'; return;}
+        localStorage.setItem('pacefetch_admin_pw', nw); msg.textContent='Changed to: '+nw; msg.className='ok';
+      });
+      if($('btnLogout')) $('btnLogout').addEventListener('click', ()=>{localStorage.removeItem('pacefetch_admin_ok'); location.reload();});
+      if($('geoSearch')) $('geoSearch').addEventListener('input', function(){const q=this.value.toLowerCase(); document.querySelectorAll('#geoList .item').forEach(el=>{el.style.display=el.textContent.toLowerCase().includes(q)?'flex':'none';});});
+      // load saved
+      if($('setDomain')) $('setDomain').value=localStorage.getItem('pacefetch_domain')||'pacefetch.com';
+      if($('adsterraDirect')) $('adsterraDirect').value=localStorage.getItem('adsterra_direct_link')||'';
+      if($('cpmSocial')) $('cpmSocial').value=localStorage.getItem('cpmSocial')||'0.70';
+      if($('cpmPop')) $('cpmPop').value=localStorage.getItem('cpmPop')||'1.20';
+      if($('cpmNative')) $('cpmNative').value=localStorage.getItem('cpmNative')||'0.35';
+      if($('cpmDirect')) $('cpmDirect').value=localStorage.getItem('cpmDirect')||'1.50';
+      if($('lastLogin')) $('lastLogin').textContent=localStorage.getItem('pacefetch_last_login')||'—';
+      try{fetch('https://ipapi.co/json/').then(r=>r.json()).then(j=>{ if($('ipInfo')) $('ipInfo').textContent=j.ip||'—'; if($('browserInfo')) $('browserInfo').textContent=navigator.userAgent.slice(0,60); }).catch(()=>{});}catch(e){}
+      fetchStats();
+      fetchPreds();
+    }catch(e){log('Init error: '+e.message);}
+  }
+
+  // expose
+  window.fetchStats=fetchStats;
+  window.calcEarnings=calcEarnings;
+})();
+</script>
+</body>
+</html>
