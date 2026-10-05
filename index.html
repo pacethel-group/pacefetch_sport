@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#03150d">
+<title>PaceFetch — Football Predictions Backed by Data</title>
+<meta name="robots" content="index,follow">
+<meta name="description" content="PaceFetch football predictions backed by available football data, probabilities and transparent prediction history.">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="royal-home">
+<div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+<div id="particleField" class="particle-field" aria-hidden="true"></div>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="/index.html" aria-label="PaceFetch home">
+      <span class="brand-crown" aria-hidden="true">♛</span>
+      <span class="brand-word"><span class="brand-pace">Pace</span><span class="brand-fetch">Fetch</span><small>FOOTBALL PREDICTIONS</small></span>
+    </a>
+    <nav class="desktop-nav" aria-label="Primary navigation">
+      <a href="/index.html" class="active">Home</a>
+      <a href="/predictions.html">Predictions</a>
+      <a href="/countries.html">Countries</a>
+      <a href="/history.html">History</a>
+      <a href="/methodology.html">Methodology</a>
+      <a href="/terms.html">Terms</a>
+    </nav>
+    <div class="header-actions">
+      <div class="live-pill"><span class="live-dot"></span> LIVE DATA</div>
+      <button id="menuButton" class="menu-button" type="button" aria-label="Open navigation" aria-expanded="false">☰</button>
+    </div>
+    <nav id="mobileNav" class="mobile-nav" aria-label="Mobile navigation">
+      <a href="/index.html" class="active">Home</a><a href="/predictions.html">Predictions</a><a href="/countries.html">Countries</a><a href="/history.html">History</a><a href="/methodology.html">Methodology</a><a href="/terms.html">Terms</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page">
+<section class="royal-hero">
+  <div class="hero-copy">
+    <div class="eyebrow"><span>♛</span> THE ROYAL STANDARD OF FOOTBALL ANALYSIS</div>
+    <h1>Smarter <span>Football</span><br>Predictions.</h1>
+    <p>Data. Analysis. Probability. Better decisions. PaceFetch turns available football data into clear, ranked predictions — without manufacturing picks.</p>
+    <div class="hero-feature-row">
+      <div><strong>50%+</strong><small>Only quality picks</small></div>
+      <div><strong>100+</strong><small>Leagues worldwide</small></div>
+      <div><strong>24/7</strong><small>Live data engine</small></div>
+    </div>
+    <div class="hero-actions"><a href="/predictions.html" class="primary-button gold-button">View Today's Predictions <span>→</span></a><a href="/methodology.html" class="secondary-button glass-button"><span class="play-icon">▶</span> How It Works</a></div>
+    <div class="hero-status"><span class="status-light"></span><span id="heroLiveStatus">Connecting to PaceFetch prediction engine…</span></div>
+  </div>
+  <div class="hero-visual" aria-hidden="true">
+    <div class="royal-rays"></div><div class="royal-crown">♛</div>
+    <div class="orb orb-a"></div><div class="orb orb-b"></div><div class="orb orb-c"></div>
+    <div class="ball-glow"></div><div class="hero-ball">⚽</div>
+    <div class="stadium-lines"></div>
+    <div class="floating-chip chip-one">◈ MODEL CONFIDENCE <b>82%</b></div>
+    <div class="floating-chip chip-two">⚡ UPDATED DAILY</div>
+    <div class="floating-chip chip-three">✓ REAL DATA</div>
+  </div>
+</section>
+
+<section class="royal-stats" aria-label="PaceFetch live statistics">
+  <article class="royal-stat"><span class="stat-icon">⚽</span><div><strong id="upcomingStat">—</strong><small>Upcoming Fixtures</small></div><span class="stat-spark"></span></article>
+  <article class="royal-stat"><span class="stat-icon green">▥</span><div><strong id="qualifyingStat">—</strong><small>Qualifying 50%+ Picks</small></div><span class="stat-spark"></span></article>
+  <article class="royal-stat"><span class="stat-icon gold">♛</span><div><strong id="highestStat">—</strong><small>Highest Model Probability</small></div><span class="stat-spark"></span></article>
+  <article class="royal-stat"><span class="stat-icon violet">◎</span><div><strong id="liveClock">--:--</strong><small>Nigeria · GMT+1</small></div><span class="stat-spark"></span></article>
+</section>
+
+<section class="section royal-section">
+  <div class="section-heading royal-heading"><div><div class="section-kicker">♛ CURATED BY PROBABILITY</div><h2>Today's <span>Featured</span> Predictions</h2><p id="homeDate">Loading today's data…</p></div><a href="/predictions.html" class="view-all royal-view">View all <span>→</span></a></div>
+  <div class="search-wrap royal-search"><span>⌕</span><input id="homeSearch" class="search-input" type="search" placeholder="Search teams, leagues..." aria-label="Search predictions"></div>
+  <div id="homeGrid" class="predictions-grid royal-grid"></div>
+  <div id="homeEmpty" class="state-box hidden"><div class="state-text">No qualifying predictions today.</div></div>
+</section>
+
+<section class="section royal-section">
+  <div class="section-heading royal-heading"><div><div class="section-kicker">♜ WHY PACEFETCH</div><h2>Built for <span>clarity.</span></h2></div></div>
+  <div class="royal-benefits">
+    <article class="benefit-card"><div class="benefit-number">01</div><div class="benefit-icon">◈</div><h3>Probability First</h3><p>Every displayed pick is ranked by probability, with a minimum 50% display threshold.</p></article>
+    <article class="benefit-card"><div class="benefit-number">02</div><div class="benefit-icon">♜</div><h3>Multiple Markets</h3><p>1X2, Double Chance, Goals and BTTS — the strongest qualifying market can lead.</p></article>
+    <article class="benefit-card"><div class="benefit-number">03</div><div class="benefit-icon">◉</div><h3>Transparent Data</h3><p>Live football data, model probabilities and historical records are kept separate and visible.</p></article>
+  </div>
+</section>
+
+<section class="royal-banner">
+  <div><div class="section-kicker">♛ THE PACEFETCH EDGE</div><h2>Football data meets <span>clarity.</span></h2><p>No hype. No guaranteed outcomes. Just probability-based analysis from available football data.</p></div>
+  <a href="/methodology.html" class="secondary-button glass-button">Explore Methodology →</a>
+</section>
+
+<div class="disclaimer"><strong>Important:</strong> PaceFetch predictions are model-generated probabilities based on available football data. They are not guarantees of match outcomes and should not be treated as financial or betting advice.</div>
+</main>
+
+<footer class="site-footer"><div class="footer-inner">
+  <div class="footer-crown">♛</div><div class="footer-tagline">PaceFetch · Football predictions backed by data.</div>
+  <nav class="footer-links"><a href="/predictions.html">Predictions</a><a href="/countries.html">Countries</a><a href="/history.html">History</a><a href="/methodology.html">Methodology</a><a href="/terms.html">Terms</a></nav>
+  <div class="copyright">© 2026 PaceFetch. All rights reserved.</div><div class="designed">Designed by <span class="pacethel">Pacethel</span></div>
+</div></footer>
+<script src="/js/app.js" defer></script>
+</body></html>
